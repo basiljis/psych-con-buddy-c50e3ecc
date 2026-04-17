@@ -13,5 +13,5 @@ Disallow: /reset-password
 Disallow: /install
 Disallow: /access-status
 
-Sitemap: https://ppk.lovable.app/sitemap.xml
+Sitemap: https://unvrsm.ru/sitemap.xml
 
