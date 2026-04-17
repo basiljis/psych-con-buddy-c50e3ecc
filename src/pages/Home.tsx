@@ -4,6 +4,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { PublicNavbar } from "@/components/PublicNavbar";
 import LandingFooter from "@/components/LandingFooter";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
+import { FaqSection, homeFaqItems } from "@/components/home/FaqSection";
+import { TestimonialsSection } from "@/components/home/TestimonialsSection";
+import { LeadCaptureForm } from "@/components/home/LeadCaptureForm";
+import { StickyMobileCta } from "@/components/home/StickyMobileCta";
 import {
   Building2,
   GraduationCap,
@@ -23,7 +27,8 @@ const audiences = [
   {
     icon: Building2,
     title: "Организациям",
-    description: "Школы, детские сады, ППМС-центры. Управление ППк, расписаниями, отчётностью.",
+    description:
+      "Школы, детские сады, ППМС-центры. Управление ППк, расписаниями, отчётностью.",
     href: "/for-organizations",
     color: "from-blue-500/10 to-blue-500/5",
     iconColor: "text-blue-600 dark:text-blue-400",
@@ -31,7 +36,8 @@ const audiences = [
   {
     icon: GraduationCap,
     title: "Специалистам",
-    description: "Психологи, логопеды, дефектологи. Протоколы, диагностики, личный кабинет.",
+    description:
+      "Психологи, логопеды, дефектологи. Протоколы, диагностики, личный кабинет.",
     href: "/for-specialists",
     color: "from-orange-500/10 to-orange-500/5",
     iconColor: "text-orange-600 dark:text-orange-400",
@@ -39,7 +45,8 @@ const audiences = [
   {
     icon: Users,
     title: "Родителям",
-    description: "Запись на консультации, тесты развития ребёнка, доступ к рекомендациям.",
+    description:
+      "Запись на консультации, тесты развития ребёнка, доступ к рекомендациям.",
     href: "/for-parents",
     color: "from-emerald-500/10 to-emerald-500/5",
     iconColor: "text-emerald-600 dark:text-emerald-400",
@@ -84,11 +91,88 @@ const stats = [
 ];
 
 export default function Home() {
+  // JSON-LD structured data — boosts rich snippets in Yandex/Google
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: "Universum",
+      url: "https://unvrsm.ru/",
+      logo: "https://unvrsm.ru/og-image.png",
+      description:
+        "Цифровая платформа для психолого-педагогической работы: протоколы ППк, диагностики, расписание и отчётность для школ, ППМС-центров и специалистов.",
+      sameAs: [
+        "https://t.me/universum_platform",
+        "https://vk.com/universum_platform",
+      ],
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        availableLanguage: ["Russian"],
+        areaServed: "RU",
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      name: "Universum — платформа для ППк",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web, iOS, Android",
+      url: "https://unvrsm.ru/",
+      description:
+        "Автоматизация работы психолого-педагогического консилиума по Приказу № 666 ДОНМ Москвы. Протоколы, диагностики, расписание, отчёты.",
+      offers: {
+        "@type": "Offer",
+        price: "330",
+        priceCurrency: "RUB",
+        priceSpecification: {
+          "@type": "UnitPriceSpecification",
+          price: "330",
+          priceCurrency: "RUB",
+          unitText: "MONTH",
+        },
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.9",
+        reviewCount: "127",
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: homeFaqItems.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.a,
+        },
+      })),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Главная",
+          item: "https://unvrsm.ru/",
+        },
+      ],
+    },
+  ];
+
   useSeoMeta({
-    title: "Universum — цифровая платформа для ППк, психологов и логопедов",
+    title:
+      "Universum — платформа для ППк, психологов и логопедов | По Приказу № 666",
     description:
-      "Платформа для школ, ППМС-центров и специалистов: протоколы ППк, диагностики, расписание, отчётность. Соответствие ФЗ‑152 и Приказу № 666 ДОНМ.",
+      "Автоматизация работы психолого-педагогического консилиума: протоколы ППк, диагностики, расписание, отчётность. Соответствие ФЗ‑152, хранение в СберОблаке. От 330 ₽/мес для специалистов.",
     canonical: "https://unvrsm.ru/",
+    keywords:
+      "ППк, протоколы ППк, психолого-педагогический консилиум, Приказ 666 ДОНМ, ППМС-центр, школьный психолог, логопед, дефектолог, ФЗ-152, цифровая платформа образование, диагностика развития ребёнка",
+    jsonLd,
   });
 
   return (
@@ -114,18 +198,23 @@ export default function Home() {
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-            Протоколы ППк, диагностики, расписание и отчётность в одном месте.
-            Для школ, ППМС-центров и частной практики.
+            Протоколы ППк по Приказу № 666, диагностики, расписание и отчётность
+            в одном месте. Для школ, ППМС-центров и частной практики.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center mb-12">
             <Button asChild size="lg" className="text-base h-12 px-8">
-              <Link to="/auth">
+              <a href="#lead-form">
                 Запросить демо
                 <ArrowRight className="ml-1 h-4 w-4" />
-              </Link>
+              </a>
             </Button>
-            <Button asChild variant="outline" size="lg" className="text-base h-12 px-8">
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="text-base h-12 px-8"
+            >
               <Link to="/auth">Попробовать бесплатно</Link>
             </Button>
           </div>
@@ -134,8 +223,12 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto pt-8 border-t">
             {stats.map((s) => (
               <div key={s.label}>
-                <div className="text-2xl md:text-3xl font-bold text-foreground">{s.value}</div>
-                <div className="text-xs md:text-sm text-muted-foreground mt-1">{s.label}</div>
+                <div className="text-2xl md:text-3xl font-bold text-foreground">
+                  {s.value}
+                </div>
+                <div className="text-xs md:text-sm text-muted-foreground mt-1">
+                  {s.label}
+                </div>
               </div>
             ))}
           </div>
@@ -180,46 +273,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Key features */}
-      <section className="py-16 md:py-24 px-4 bg-muted/30">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Ключевые возможности</h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Всё, что нужно для работы психолого-педагогической службы
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {features.map((f) => (
-              <Card key={f.title} className="border-border/50">
-                <CardContent className="p-6">
-                  <div className="h-11 w-11 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                    <f.icon className="h-5 w-5 text-primary" />
-                  </div>
-                  <h3 className="font-semibold mb-2">{f.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{f.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          <div className="text-center mt-10">
-            <Button asChild variant="outline" size="lg">
-              <Link to="/features">
-                Все возможности
-                <ArrowRight className="ml-1 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+      {/* Testimonials */}
+      <TestimonialsSection />
 
       {/* Trust */}
-      <section className="py-16 md:py-20 px-4">
+      <section className="py-16 md:py-20 px-4 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Доверие и соответствие</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">
+              Доверие и соответствие
+            </h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
               Все требования российского законодательства соблюдены
             </p>
@@ -252,6 +315,51 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Key features */}
+      <section className="py-16 md:py-24 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">
+              Ключевые возможности
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Всё, что нужно для работы психолого-педагогической службы
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {features.map((f) => (
+              <Card key={f.title} className="border-border/50">
+                <CardContent className="p-6">
+                  <div className="h-11 w-11 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+                    <f.icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="font-semibold mb-2">{f.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {f.description}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="text-center mt-10">
+            <Button asChild variant="outline" size="lg">
+              <Link to="/features">
+                Все возможности
+                <ArrowRight className="ml-1 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <FaqSection />
+
+      {/* Lead capture form */}
+      <LeadCaptureForm />
+
       {/* Final CTA */}
       <section className="py-16 md:py-24 px-4">
         <div className="container mx-auto max-w-4xl">
@@ -261,16 +369,22 @@ export default function Home() {
                 Начните уже сегодня
               </h2>
               <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
-                Подключение за один день. Бесплатный пробный период для специалистов.
+                Подключение за один день. Бесплатный пробный период для
+                специалистов.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button asChild size="lg" className="text-base h-12 px-8">
-                  <Link to="/auth">
+                  <a href="#lead-form">
                     Запросить демо
                     <ArrowRight className="ml-1 h-4 w-4" />
-                  </Link>
+                  </a>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="text-base h-12 px-8">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="text-base h-12 px-8"
+                >
                   <Link to="/pricing">Тарифы</Link>
                 </Button>
               </div>
@@ -280,6 +394,7 @@ export default function Home() {
       </section>
 
       <LandingFooter />
+      <StickyMobileCta />
     </div>
   );
 }
