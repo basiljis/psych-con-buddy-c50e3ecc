@@ -331,6 +331,25 @@ export default function ForOrganizations() {
         </div>
       </section>
 
+      {/* FAQ for SEO */}
+      <section className="py-16 px-4">
+        <div className="container mx-auto max-w-3xl">
+          <h2 className="text-2xl font-bold mb-8 text-center">Частые вопросы организаций</h2>
+          <div className="space-y-4">
+            {organizationsFaq.map((item) => (
+              <Card key={item.q}>
+                <CardHeader>
+                  <CardTitle className="text-base">{item.q}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">{item.a}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-16 px-4 bg-blue-500/5">
         <div className="container mx-auto max-w-2xl text-center">
