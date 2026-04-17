@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Building, Settings, Download, Upload, FileSpreadsheet, FileText, Users, BarChart3, Mail, CreditCard, Calendar, Briefcase, Shield, ClipboardList, Baby, Globe } from "lucide-react";
+import { Building, Settings, Download, Upload, FileSpreadsheet, FileText, Users, BarChart3, Mail, CreditCard, Calendar, Briefcase, Shield, ClipboardList, Baby, Globe, Megaphone } from "lucide-react";
+import { MarketingModule } from "@/components/MarketingModule";
 import { AdminPanel } from "@/components/AdminPanel";
 import { InstructionsEditor } from "@/components/InstructionsEditor";
 import { OrganizationsManagement } from "@/components/OrganizationsManagement";
@@ -549,6 +550,12 @@ export const Administration = ({ activeSubTab = "access-requests" }: Administrat
             </CardContent>
           </Card>
           <ParentChildrenManagement />
+        </div>
+      )}
+
+      {activeSubTab === "marketing" && (
+        <div className="space-y-6">
+          <MarketingModule />
         </div>
       )}
     </div>

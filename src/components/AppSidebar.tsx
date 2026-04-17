@@ -153,6 +153,7 @@ const adminItems = [
       { id: "administration-school-years", label: "Учебные годы" },
       { id: "administration-workload-report", label: "Загрузка специалистов" },
       { id: "administration-session-notifications", label: "Уведомления" },
+      { id: "administration-marketing", label: "Маркетинг и публикации" },
       { id: "administration-instructions", label: "Инструкции" },
     ]
   },
