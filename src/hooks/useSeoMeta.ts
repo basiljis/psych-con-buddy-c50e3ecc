@@ -10,7 +10,7 @@ interface SeoMeta {
   jsonLd?: object | object[];
 }
 
-const BASE_URL = "https://ppk.lovable.app";
+const BASE_URL = "https://unvrsm.ru";
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.png`;
 
 export function useSeoMeta({
@@ -40,16 +40,27 @@ export function useSeoMeta({
     if (keywords) setMeta("name", "keywords", keywords);
     setMeta("name", "robots", noIndex ? "noindex, nofollow" : "index, follow");
 
+    // Resolve canonical URL: support absolute URLs in `canonical` arg
+    const resolvedUrl = canonical
+      ? (canonical.startsWith("http") ? canonical : `${BASE_URL}${canonical}`)
+      : window.location.href;
+    const resolvedOgImage = ogImage.startsWith("http") ? ogImage : `${BASE_URL}${ogImage}`;
+
     // Open Graph
     setMeta("property", "og:title", title);
     setMeta("property", "og:description", description);
-    setMeta("property", "og:image", ogImage);
-    setMeta("property", "og:url", canonical ? `${BASE_URL}${canonical}` : window.location.href);
+    setMeta("property", "og:image", resolvedOgImage);
+    setMeta("property", "og:image:alt", title);
+    setMeta("property", "og:url", resolvedUrl);
+    setMeta("property", "og:type", "website");
+    setMeta("property", "og:site_name", "Universum");
+    setMeta("property", "og:locale", "ru_RU");
 
     // Twitter
+    setMeta("name", "twitter:card", "summary_large_image");
     setMeta("name", "twitter:title", title);
     setMeta("name", "twitter:description", description);
-    setMeta("name", "twitter:image", ogImage);
+    setMeta("name", "twitter:image", resolvedOgImage);
 
     // Canonical
     let canonicalEl = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
@@ -58,7 +69,7 @@ export function useSeoMeta({
       canonicalEl.setAttribute("rel", "canonical");
       document.head.appendChild(canonicalEl);
     }
-    canonicalEl.setAttribute("href", canonical ? `${BASE_URL}${canonical}` : window.location.href);
+    canonicalEl.setAttribute("href", resolvedUrl);
 
     // JSON-LD — remove all previous
     document.querySelectorAll('[id^="seo-json-ld"]').forEach(el => el.remove());
