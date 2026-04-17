@@ -115,7 +115,7 @@ export function MergeChildrenDialog({
       // Update primary child with merged data
       const { error: updateError } = await supabase
         .from("children")
-        .update(mergedData)
+        .update(mergedData as any)
         .eq("id", primaryChild.id);
 
       if (updateError) throw updateError;

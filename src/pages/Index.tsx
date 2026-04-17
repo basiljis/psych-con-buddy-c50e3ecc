@@ -303,6 +303,7 @@ const Index = () => {
       case "administration-org-admins":
       case "administration-parent-tests":
       case "administration-parent-children":
+      case "administration-marketing":
         return showAdminSection ? (
           <Suspense fallback={loadingFallback}>
             <Administration activeSubTab={activeTab.replace("administration-", "")} />

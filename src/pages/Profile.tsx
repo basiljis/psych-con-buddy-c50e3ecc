@@ -10,12 +10,13 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Upload, User, ArrowLeft, CreditCard, Receipt, Clock } from "lucide-react";
+import { Loader2, Upload, User, ArrowLeft, CreditCard, Receipt, Clock, Send } from "lucide-react";
 import { SubscriptionForm } from "@/components/SubscriptionForm";
 import { PaymentStatusDialog } from "@/components/PaymentStatusDialog";
 import { PaymentHistory } from "@/components/PaymentHistory";
 import { Progress } from "@/components/ui/progress";
 import { useSubscriptionStatus } from "@/hooks/useSubscriptionStatus";
+import { TelegramLinkCard } from "@/components/TelegramLinkCard";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -148,7 +149,7 @@ export default function Profile() {
       </div>
 
       <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="profile" className="gap-2">
             <User className="h-4 w-4" />
             Профиль
@@ -160,6 +161,10 @@ export default function Profile() {
           <TabsTrigger value="payments" className="gap-2">
             <Receipt className="h-4 w-4" />
             История
+          </TabsTrigger>
+          <TabsTrigger value="integrations" className="gap-2">
+            <Send className="h-4 w-4" />
+            Интеграции
           </TabsTrigger>
         </TabsList>
 
@@ -378,6 +383,10 @@ export default function Profile() {
 
         <TabsContent value="payments" className="mt-6">
           <PaymentHistory />
+        </TabsContent>
+
+        <TabsContent value="integrations" className="mt-6 space-y-6">
+          {user && <TelegramLinkCard userId={user.id} linkType="specialist" />}
         </TabsContent>
       </Tabs>
     </div>
