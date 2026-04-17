@@ -384,6 +384,10 @@ export default function Profile() {
         <TabsContent value="payments" className="mt-6">
           <PaymentHistory />
         </TabsContent>
+
+        <TabsContent value="integrations" className="mt-6 space-y-6">
+          {user && <TelegramLinkCard userId={user.id} linkType="specialist" />}
+        </TabsContent>
       </Tabs>
     </div>
   );
