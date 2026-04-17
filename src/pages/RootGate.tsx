@@ -65,8 +65,8 @@ const RootGate = () => {
     return <Navigate to="/app" replace />;
   }
   
-  console.log("[RootGate] Редирект на лендинг");
-  return <Navigate to="/landing" replace />;
+  console.log("[RootGate] Редирект на главную");
+  return <Navigate to="/home" replace />;
 };
 
 export default RootGate;
