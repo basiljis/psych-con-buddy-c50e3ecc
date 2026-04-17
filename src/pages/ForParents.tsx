@@ -75,12 +75,70 @@ const steps = [
   }
 ];
 
+const parentsFaq = [
+  {
+    q: "Сколько стоит личный кабинет родителя?",
+    a: "Личный кабинет родителя на платформе universum. полностью бесплатен. Регистрация, тесты развития, доступ к результатам ППк и запись на консультации — без оплаты."
+  },
+  {
+    q: "Как записаться к психологу или логопеду через universum.?",
+    a: "После регистрации добавьте ребёнка, выберите специалиста по проблематике, организации или ФИО и забронируйте удобное время. Подтверждение придёт на email."
+  },
+  {
+    q: "Безопасно ли передавать данные ребёнка?",
+    a: "Да. Платформа соответствует ФЗ-152, данные хранятся в РФ, шифруются, а вы сами решаете, какую информацию открывать специалистам."
+  },
+  {
+    q: "С какого возраста можно проходить тесты развития?",
+    a: "Тесты развития доступны с раннего возраста — от 0 месяцев. Система автоматически подбирает методику по возрасту ребёнка."
+  }
+];
+
 export default function ForParents() {
   useSeoMeta({
-    title: "Личный кабинет родителя — следите за развитием ребёнка | universum.",
-    description: "Личный кабинет для родителей: подбор специалиста, запись на консультацию, тесты развития ребёнка, доступ к результатам ППк. Полностью бесплатно.",
+    title: "Личный кабинет родителя — тесты развития, запись к психологу | universum.",
+    description: "Бесплатный личный кабинет для родителей: подбор специалиста, онлайн-запись к психологу и логопеду, тесты развития ребёнка от 0 до 18 лет, доступ к протоколам ППк. ФЗ-152.",
     canonical: "/for-parents",
-    keywords: "личный кабинет родителя, развитие ребёнка, запись к логопеду, тест развития дошкольника, психолог для ребёнка, ОВЗ родителям",
+    keywords: "личный кабинет родителя, развитие ребёнка, запись к логопеду, запись к психологу, тест развития ребёнка, психолог для ребёнка онлайн, ОВЗ родителям, ППк родителям, диагностика дошкольника",
+    jsonLd: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: "Личный кабинет родителя universum.",
+        serviceType: "Психолого-педагогическое сопровождение семьи",
+        provider: {
+          "@type": "Organization",
+          name: "Universum",
+          url: "https://unvrsm.ru"
+        },
+        areaServed: { "@type": "Country", name: "Россия" },
+        audience: { "@type": "Audience", audienceType: "Родители детей и подростков" },
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "RUB",
+          availability: "https://schema.org/InStock"
+        },
+        url: "https://unvrsm.ru/for-parents"
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: parentsFaq.map(({ q, a }) => ({
+          "@type": "Question",
+          name: q,
+          acceptedAnswer: { "@type": "Answer", text: a }
+        }))
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Главная", item: "https://unvrsm.ru/" },
+          { "@type": "ListItem", position: 2, name: "Для родителей", item: "https://unvrsm.ru/for-parents" }
+        ]
+      }
+    ],
   });
 
   return (
@@ -254,6 +312,25 @@ export default function ForParents() {
               <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
               Контроль доступа
             </Badge>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ for SEO */}
+      <section className="py-16 px-4">
+        <div className="container mx-auto max-w-3xl">
+          <h2 className="text-2xl font-bold mb-8 text-center">Частые вопросы родителей</h2>
+          <div className="space-y-4">
+            {parentsFaq.map((item) => (
+              <Card key={item.q}>
+                <CardHeader>
+                  <CardTitle className="text-base">{item.q}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">{item.a}</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>

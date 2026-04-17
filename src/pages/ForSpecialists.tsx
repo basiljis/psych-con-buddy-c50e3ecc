@@ -84,12 +84,60 @@ const roles = [
   }
 ];
 
+const specialistsFaq = [
+  {
+    q: "Кому подходит платформа universum.?",
+    a: "Педагогам-психологам, учителям-логопедам, дефектологам, нейропсихологам, социальным педагогам и специалистам АФК — как в составе организации, так и для частной практики."
+  },
+  {
+    q: "Соответствует ли система приказу ДОНМ №666?",
+    a: "Да. Чек-листы, протоколы ППк и формы заключений построены по требованиям приказа ДОНМ №666 и методическим рекомендациям Минздрава РФ."
+  },
+  {
+    q: "Можно ли вести частную практику?",
+    a: "Да. Есть отдельный режим частной практики: публичный профиль, направления работы, расписание, онлайн-запись и приём оплаты от родителей."
+  },
+  {
+    q: "Где хранятся данные детей?",
+    a: "Данные хранятся на серверах в РФ с шифрованием и Row-Level Security. Вы видите только тех детей, к которым у вас есть доступ. Полное соответствие ФЗ-152."
+  }
+];
+
 export default function ForSpecialists() {
   useSeoMeta({
-    title: "Для педагогов-психологов, логопедов и дефектологов — universum.",
-    description: "Инструменты для специалистов ППС: протоколы ППк, журнал учёта занятий, карты детей, KPI и публичный профиль. Частная практика и работа в организации. Соответствие приказу ДОНМ №666.",
+    title: "Платформа для психологов, логопедов и дефектологов | universum.",
+    description: "Личный кабинет специалиста ППС: протоколы ППк по приказу ДОНМ №666, расписание, карты детей, KPI, публичный профиль для частной практики. ФЗ-152, хранение в РФ.",
     canonical: "/for-specialists",
-    keywords: "педагог-психолог, логопед, дефектолог, социальный педагог, протоколы ППк, журнал занятий, частная практика, ЦППМСП, ОВЗ",
+    keywords: "педагог-психолог, учитель-логопед, дефектолог, нейропсихолог, социальный педагог, протоколы ППк, журнал занятий специалиста, частная практика психолога, ЦППМСП, приказ ДОНМ 666, специалист ОВЗ",
+    jsonLd: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: "Платформа universum. для специалистов ППС",
+        serviceType: "Цифровая платформа для педагогов-психологов, логопедов и дефектологов",
+        provider: { "@type": "Organization", name: "Universum", url: "https://unvrsm.ru" },
+        areaServed: { "@type": "Country", name: "Россия" },
+        audience: { "@type": "Audience", audienceType: "Педагоги-психологи, логопеды, дефектологи" },
+        url: "https://unvrsm.ru/for-specialists"
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: specialistsFaq.map(({ q, a }) => ({
+          "@type": "Question",
+          name: q,
+          acceptedAnswer: { "@type": "Answer", text: a }
+        }))
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Главная", item: "https://unvrsm.ru/" },
+          { "@type": "ListItem", position: 2, name: "Для специалистов", item: "https://unvrsm.ru/for-specialists" }
+        ]
+      }
+    ],
   });
 
   return (
@@ -258,6 +306,25 @@ export default function ForSpecialists() {
                 </ul>
               </CardContent>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ for SEO */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto max-w-3xl">
+          <h2 className="text-2xl font-bold mb-8 text-center">Вопросы и ответы</h2>
+          <div className="space-y-4">
+            {specialistsFaq.map((item) => (
+              <Card key={item.q}>
+                <CardHeader>
+                  <CardTitle className="text-base">{item.q}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">{item.a}</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>

@@ -79,12 +79,75 @@ const pricing = [
   }
 ];
 
+const organizationsFaq = [
+  {
+    q: "Сколько стоит подписка для организации?",
+    a: "От 2 500 ₽/мес или 25 500 ₽/год за всю организацию. Подписка распространяется на всех сотрудников. Доступен бесплатный пробный период на 7 дней."
+  },
+  {
+    q: "Можно ли установить universum. на серверы организации (on-premise)?",
+    a: "Да. Мы разворачиваем платформу на инфраструктуре заказчика с интеграцией в ЕКИС, АИС и внутренние системы. Стоимость и сроки рассчитываем индивидуально."
+  },
+  {
+    q: "Соответствует ли система ФЗ-152 и приказу ДОНМ №666?",
+    a: "Да. Хранение в РФ, шифрование, RLS, регулярные бэкапы. Чек-листы и протоколы ППк построены по требованиям приказа ДОНМ №666 и методическим рекомендациям Минздрава."
+  },
+  {
+    q: "Подходит ли система для детских садов и ППМС-центров?",
+    a: "Да. Платформа адаптирована под школы, детские сады, ЦППМСП, ППМС-центры и инклюзивные образовательные организации с учётом возрастных особенностей и форм работы."
+  }
+];
+
 export default function ForOrganizations() {
   useSeoMeta({
-    title: "Автоматизация ППк для школ и ППМС-центров — universum.",
-    description: "Цифровая система для психолого-педагогических служб: протоколы ППк по приказу ДОНМ №666, журнал занятий, управление сотрудниками. Соответствие ФЗ-152. On-premise и облако.",
+    title: "Автоматизация ППк для школ, ППМС-центров и ДОУ | universum.",
+    description: "Платформа для психолого-педагогических служб: протоколы ППк по приказу ДОНМ №666, журнал занятий, KPI специалистов, аналитика. ФЗ-152, on-premise и облако. От 2 500 ₽/мес.",
     canonical: "/for-organizations",
-    keywords: "ППк автоматизация, ЦППМСП, ППМС-центр, психолого-педагогический консилиум, школа Москва, протоколы ППк, ФЗ-152, ОВЗ, приказ ДОНМ 666",
+    keywords: "ППк автоматизация, ЦППМСП, ППМС-центр, психолого-педагогический консилиум, протоколы ППк школа, журнал занятий школьного психолога, ФЗ-152 школа, ОВЗ автоматизация, приказ ДОНМ 666, on-premise образование",
+    jsonLd: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        name: "Universum. — система автоматизации ППС",
+        description: "Цифровая платформа для психолого-педагогических служб школ, детских садов и ППМС-центров.",
+        brand: { "@type": "Brand", name: "Universum" },
+        offers: [
+          {
+            "@type": "Offer",
+            name: "Ежемесячная подписка",
+            price: "2500",
+            priceCurrency: "RUB",
+            url: "https://unvrsm.ru/for-organizations#pricing",
+            availability: "https://schema.org/InStock"
+          },
+          {
+            "@type": "Offer",
+            name: "Годовая подписка",
+            price: "25500",
+            priceCurrency: "RUB",
+            url: "https://unvrsm.ru/for-organizations#pricing",
+            availability: "https://schema.org/InStock"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: organizationsFaq.map(({ q, a }) => ({
+          "@type": "Question",
+          name: q,
+          acceptedAnswer: { "@type": "Answer", text: a }
+        }))
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Главная", item: "https://unvrsm.ru/" },
+          { "@type": "ListItem", position: 2, name: "Для организаций", item: "https://unvrsm.ru/for-organizations" }
+        ]
+      }
+    ],
   });
 
   return (
@@ -264,6 +327,25 @@ export default function ForOrganizations() {
             <p className="text-sm text-muted-foreground">
               Руководства по установке, системные требования и рекомендации по безопасности
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ for SEO */}
+      <section className="py-16 px-4">
+        <div className="container mx-auto max-w-3xl">
+          <h2 className="text-2xl font-bold mb-8 text-center">Частые вопросы организаций</h2>
+          <div className="space-y-4">
+            {organizationsFaq.map((item) => (
+              <Card key={item.q}>
+                <CardHeader>
+                  <CardTitle className="text-base">{item.q}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">{item.a}</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
