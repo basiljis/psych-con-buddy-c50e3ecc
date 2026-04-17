@@ -38,6 +38,7 @@ const NotFound = lazyWithRetry(() => import("./pages/NotFound"));
 const ResetPassword = lazyWithRetry(() => import("./pages/ResetPassword"));
 const Install = lazyWithRetry(() => import("./pages/Install"));
 const Landing = lazyWithRetry(() => import("./pages/Landing"));
+const Home = lazyWithRetry(() => import("./pages/Home"));
 const ForOrganizations = lazyWithRetry(() => import("./pages/ForOrganizations"));
 const ForSpecialists = lazyWithRetry(() => import("./pages/ForSpecialists"));
 const ForParents = lazyWithRetry(() => import("./pages/ForParents"));
@@ -80,6 +81,7 @@ const App = () => (
                   <Suspense fallback={<Preloader />}>
                     <Routes>
                       <Route path="/" element={<RootGate />} />
+                      <Route path="/home" element={<Home />} />
                       <Route path="/landing" element={<Landing />} />
                       <Route path="/about" element={<About />} />
                       <Route path="/features" element={<Features />} />
