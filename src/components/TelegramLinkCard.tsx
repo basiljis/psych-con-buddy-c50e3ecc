@@ -22,7 +22,7 @@ interface ChatLink {
   is_active: boolean;
 }
 
-const BOT_USERNAME = "universum_psy_bot"; // TODO: replace with real bot username after BotFather setup
+const BOT_USERNAME = "unvrsmru_bot";
 
 export const TelegramLinkCard = ({ userId, parentUserId, linkType = "specialist" }: TelegramLinkCardProps) => {
   const [link, setLink] = useState<ChatLink | null>(null);
