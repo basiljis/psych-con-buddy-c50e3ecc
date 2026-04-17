@@ -1395,6 +1395,62 @@ export type Database = {
           },
         ]
       }
+      marketing_posts: {
+        Row: {
+          content: string
+          created_at: string
+          created_by: string
+          id: string
+          image_url: string | null
+          organization_id: string | null
+          publish_results: Json | null
+          published_at: string | null
+          scheduled_for: string | null
+          status: string
+          target_channels: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          created_by: string
+          id?: string
+          image_url?: string | null
+          organization_id?: string | null
+          publish_results?: Json | null
+          published_at?: string | null
+          scheduled_for?: string | null
+          status?: string
+          target_channels?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          image_url?: string | null
+          organization_id?: string | null
+          publish_results?: Json | null
+          published_at?: string | null
+          scheduled_for?: string | null
+          status?: string
+          target_channels?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketing_posts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organization_addresses: {
         Row: {
           address_type: string
@@ -2988,6 +3044,150 @@ export type Database = {
           },
         ]
       }
+      telegram_bot_state: {
+        Row: {
+          id: number
+          update_offset: number
+          updated_at: string
+        }
+        Insert: {
+          id: number
+          update_offset?: number
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          update_offset?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      telegram_chat_links: {
+        Row: {
+          chat_id: number
+          created_at: string
+          first_name: string | null
+          id: string
+          is_active: boolean
+          link_code: string
+          link_type: string
+          linked_at: string | null
+          parent_user_id: string | null
+          updated_at: string
+          user_id: string | null
+          username: string | null
+        }
+        Insert: {
+          chat_id: number
+          created_at?: string
+          first_name?: string | null
+          id?: string
+          is_active?: boolean
+          link_code: string
+          link_type?: string
+          linked_at?: string | null
+          parent_user_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+          username?: string | null
+        }
+        Update: {
+          chat_id?: number
+          created_at?: string
+          first_name?: string | null
+          id?: string
+          is_active?: boolean
+          link_code?: string
+          link_type?: string
+          linked_at?: string | null
+          parent_user_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
+      telegram_messages: {
+        Row: {
+          chat_id: number
+          created_at: string
+          processed: boolean
+          processing_result: string | null
+          raw_update: Json
+          text: string | null
+          update_id: number
+          username: string | null
+        }
+        Insert: {
+          chat_id: number
+          created_at?: string
+          processed?: boolean
+          processing_result?: string | null
+          raw_update: Json
+          text?: string | null
+          update_id: number
+          username?: string | null
+        }
+        Update: {
+          chat_id?: number
+          created_at?: string
+          processed?: boolean
+          processing_result?: string | null
+          raw_update?: Json
+          text?: string | null
+          update_id?: number
+          username?: string | null
+        }
+        Relationships: []
+      }
+      telegram_notifications_queue: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          id: string
+          message_text: string
+          metadata: Json | null
+          notification_type: string
+          parse_mode: string | null
+          recipient_chat_id: number | null
+          recipient_parent_id: string | null
+          recipient_user_id: string | null
+          sent_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          message_text: string
+          metadata?: Json | null
+          notification_type: string
+          parse_mode?: string | null
+          recipient_chat_id?: number | null
+          recipient_parent_id?: string | null
+          recipient_user_id?: string | null
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          message_text?: string
+          metadata?: Json | null
+          notification_type?: string
+          parse_mode?: string | null
+          recipient_chat_id?: number | null
+          recipient_parent_id?: string | null
+          recipient_user_id?: string | null
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -3097,6 +3297,7 @@ export type Database = {
         }[]
       }
       generate_protocol_number: { Args: never; Returns: string }
+      generate_telegram_link_code: { Args: never; Returns: string }
       generate_verification_code: { Args: never; Returns: string }
       get_organization_subscription_end_date: {
         Args: { _user_id: string }
