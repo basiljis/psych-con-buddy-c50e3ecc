@@ -75,7 +75,7 @@ export const useProtocols = () => {
     async (protocolData) => {
       const { data, error } = await supabase
         .from('protocols')
-        .insert(protocolData)
+        .insert(protocolData as any)
         .select()
         .single();
 
@@ -105,7 +105,7 @@ export const useProtocols = () => {
     async ({ id, updates }) => {
       const { data, error } = await supabase
         .from('protocols')
-        .update(updates)
+        .update(updates as any)
         .eq('id', id)
         .select()
         .single();
