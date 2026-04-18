@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { PublicNavbar } from "@/components/PublicNavbar";
-import { LandingFooter } from "@/components/LandingFooter";
+import LandingFooter from "@/components/LandingFooter";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
