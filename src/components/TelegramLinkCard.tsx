@@ -31,17 +31,28 @@ export const TelegramLinkCard = ({ userId, parentUserId, linkType = "specialist"
 
   const loadLink = async () => {
     setLoading(true);
-    let query = supabase
-      .from("telegram_chat_links")
-      .select("id, link_code, chat_id, username, linked_at, is_active")
-      .eq("is_active", true);
+    try {
+      let query = supabase
+        .from("telegram_chat_links")
+        .select("id, link_code, chat_id, username, linked_at, is_active")
+        .eq("is_active", true)
+        .order("created_at", { ascending: false })
+        .limit(1);
 
-    if (userId) query = query.eq("user_id", userId);
-    else if (parentUserId) query = query.eq("parent_user_id", parentUserId);
+      if (userId) query = query.eq("user_id", userId);
+      else if (parentUserId) query = query.eq("parent_user_id", parentUserId);
 
-    const { data } = await query.maybeSingle();
-    setLink(data as ChatLink | null);
-    setLoading(false);
+      const { data, error } = await query.maybeSingle();
+      if (error) {
+        console.error("[TelegramLinkCard] loadLink error:", error);
+        toast({ title: "Ошибка загрузки", description: error.message, variant: "destructive" });
+      }
+      setLink((data as ChatLink | null) ?? null);
+    } catch (err: any) {
+      console.error("[TelegramLinkCard] loadLink exception:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
