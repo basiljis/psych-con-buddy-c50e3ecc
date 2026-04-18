@@ -57,6 +57,7 @@ const SpecialistDetail = lazy(() => import("./pages/SpecialistDetail"));
 const About = lazyWithRetry(() => import("./pages/About"));
 const Features = lazyWithRetry(() => import("./pages/Features"));
 const Pricing = lazyWithRetry(() => import("./pages/Pricing"));
+const Instructions = lazyWithRetry(() => import("./pages/Instructions"));
 
 const App = () => {
   // Stable QueryClient instance per App mount (prevents re-instantiation on HMR)
@@ -89,6 +90,7 @@ const App = () => {
                       <Route path="/about" element={<About />} />
                       <Route path="/features" element={<Features />} />
                       <Route path="/pricing" element={<Pricing />} />
+                      <Route path="/instructions" element={<Instructions />} />
                       <Route path="/for-organizations" element={<ForOrganizations />} />
                       <Route path="/for-specialists" element={<ForSpecialists />} />
                       <Route path="/for-parents" element={<ForParents />} />
