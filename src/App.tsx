@@ -57,6 +57,7 @@ const SpecialistDetail = lazy(() => import("./pages/SpecialistDetail"));
 const About = lazyWithRetry(() => import("./pages/About"));
 const Features = lazyWithRetry(() => import("./pages/Features"));
 const Pricing = lazyWithRetry(() => import("./pages/Pricing"));
+const Instructions = lazyWithRetry(() => import("./pages/Instructions"));
 
 const App = () => {
   // Stable QueryClient instance per App mount (prevents re-instantiation on HMR)
