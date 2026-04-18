@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -58,21 +58,24 @@ const About = lazyWithRetry(() => import("./pages/About"));
 const Features = lazyWithRetry(() => import("./pages/Features"));
 const Pricing = lazyWithRetry(() => import("./pages/Pricing"));
 
-const queryClient = new QueryClient();
+const App = () => {
+  // Stable QueryClient instance per App mount (prevents re-instantiation on HMR)
+  const [queryClient] = useState(() => new QueryClient());
 
-const App = () => (
-  <ErrorBoundary componentName="App">
-    <QueryClientProvider client={queryClient}>
-      <OfflineProvider>
-        <Suspense fallback={<Preloader />}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+  return (
+    <ErrorBoundary componentName="App">
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <QueryClientProvider client={queryClient}>
+          <OfflineProvider>
             <TooltipProvider>
               <Toaster />
               <Sonner />
-              <OfflineIndicator />
+              <Suspense fallback={null}>
+                <OfflineIndicator />
+              </Suspense>
               <BrowserRouter>
-                <a 
-                  href="#main-content" 
+                <a
+                  href="#main-content"
                   className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 >
                   Перейти к основному контенту
@@ -118,11 +121,11 @@ const App = () => (
                 </main>
               </BrowserRouter>
             </TooltipProvider>
-          </ThemeProvider>
-        </Suspense>
-      </OfflineProvider>
-    </QueryClientProvider>
-  </ErrorBoundary>
-);
+          </OfflineProvider>
+        </QueryClientProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
+  );
+};
 
 export default App;
