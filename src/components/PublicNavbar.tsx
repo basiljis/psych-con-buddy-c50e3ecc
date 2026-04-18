@@ -4,12 +4,12 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { NavbarBackground } from "@/components/NavbarBackground";
 import { 
-  Heart, Menu, GraduationCap, Building2, Home 
+  Heart, Menu, GraduationCap, Building2, Home, BookOpen 
 } from "lucide-react";
 
 interface PublicNavbarProps {
   showHomeButton?: boolean;
-  currentPage?: 'organizations' | 'specialists' | 'parents' | 'auth' | 'landing' | 'catalog-specialists' | 'catalog-organizations' | 'privacy' | 'partnership' | 'other';
+  currentPage?: 'organizations' | 'specialists' | 'parents' | 'auth' | 'landing' | 'catalog-specialists' | 'catalog-organizations' | 'privacy' | 'partnership' | 'instructions' | 'other';
   showSecondaryNav?: boolean;
   authLink?: string;
 }
@@ -54,6 +54,12 @@ export function PublicNavbar({
               className={`text-sm ${currentPage === 'parents' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
             >
               Родителям
+            </Link>
+            <Link 
+              to="/instructions" 
+              className={`text-sm ${currentPage === 'instructions' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
+            >
+              Инструкции
             </Link>
           </nav>
 
@@ -118,6 +124,13 @@ export function PublicNavbar({
                     >
                       <Heart className="h-4 w-4" />
                       Родителям
+                    </Link>
+                    <Link 
+                      to="/instructions" 
+                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'instructions' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
+                    >
+                      <BookOpen className="h-4 w-4" />
+                      Инструкции
                     </Link>
                   </div>
                   
