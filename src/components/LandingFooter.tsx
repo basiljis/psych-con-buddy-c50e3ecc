@@ -23,7 +23,8 @@ export default function LandingFooter() {
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link to="/for-organizations" className="hover:text-foreground transition-colors">Организациям</Link></li>
               <li><Link to="/for-specialists" className="hover:text-foreground transition-colors">Педагогам</Link></li>
-              <li><Link to="/for-parents" className="hover:text-foreground transition-colors">Родителям</Link></li>
+             <li><Link to="/for-parents" className="hover:text-foreground transition-colors">Родителям</Link></li>
+             <li><Link to="/instructions" className="hover:text-foreground transition-colors">Инструкции</Link></li>
             </ul>
           </div>
           
