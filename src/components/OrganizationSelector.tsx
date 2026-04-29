@@ -3,7 +3,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
-import { useOrganizations, Organization } from '@/hooks/useOrganizations';
+import { useOrganizationsFast, FastOrganization } from '@/hooks/useOrganizationsFast';
+import { Organization } from '@/hooks/useOrganizations';
 interface OrganizationSelectorProps {
   value?: string;
   onChange: (value: string) => void;
