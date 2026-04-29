@@ -47,6 +47,7 @@ const PartnershipOffer = lazyWithRetry(() => import("./pages/PartnershipOffer"))
 const Documents = lazyWithRetry(() => import("./pages/Documents"));
 const Installation = lazyWithRetry(() => import("./pages/Installation"));
 const Registry = lazyWithRetry(() => import("./pages/Registry"));
+const Patents = lazyWithRetry(() => import("./pages/Patents"));
 const AccessRequestStatus = lazy(() => import("@/components/AccessRequestStatus").then(m => ({ default: m.AccessRequestStatus })));
 const RootGate = lazy(() => import("./pages/RootGate").then(m => ({ default: m.default })));
 const OfflineIndicator = lazy(() => import("@/components/OfflineIndicator"));
@@ -103,6 +104,7 @@ const App = () => {
                       <Route path="/documents" element={<Documents />} />
                       <Route path="/installation" element={<Installation />} />
                       <Route path="/registry" element={<Registry />} />
+                      <Route path="/patents" element={<Patents />} />
                       <Route path="/app" element={<Index />} />
                       <Route path="/auth" element={<Auth />} />
                       <Route path="/parent-auth" element={<ParentAuth />} />
