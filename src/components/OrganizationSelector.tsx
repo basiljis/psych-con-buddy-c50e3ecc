@@ -24,14 +24,13 @@ export const OrganizationSelector: React.FC<OrganizationSelectorProps> = ({
   organizations: providedOrganizations
 }) => {
   const {
-    organizations: allOrganizations,
+    organizations: fastOrganizations,
     loading,
-    searchOrganizations
-  } = useOrganizations();
+  } = useOrganizationsFast(providedOrganizations ? undefined : regionFilter);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Use provided organizations if available, otherwise use all organizations
-  const organizations = providedOrganizations || allOrganizations;
+  // Use provided organizations if available, otherwise use region-filtered ones
+  const organizations = (providedOrganizations || fastOrganizations) as (Organization | FastOrganization)[];
 
   // Filter organizations by region if regionFilter is provided
   let filteredOrganizations = searchQuery 
