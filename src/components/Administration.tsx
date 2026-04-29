@@ -7,6 +7,7 @@ import { InstructionsEditor } from "@/components/InstructionsEditor";
 import { OrganizationsManagement } from "@/components/OrganizationsManagement";
 import { UserManagementEnhanced } from "@/components/UserManagementEnhanced";
 import { AccessRequestsManagement } from "@/components/AccessRequestsManagement";
+import { RegistrationApprovalSettings } from "@/components/RegistrationApprovalSettings";
 import { CommercialOfferRequestsManagement } from "@/components/CommercialOfferRequestsManagement";
 import { AdminStatisticsPanel } from "@/components/AdminStatisticsPanel";
 import { SchoolYearsManagement } from "@/components/SchoolYearsManagement";
@@ -169,6 +170,7 @@ export const Administration = ({ activeSubTab = "access-requests" }: Administrat
 
       {activeSubTab === "access-requests" && (
         <div className="space-y-6">
+          <RegistrationApprovalSettings />
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
