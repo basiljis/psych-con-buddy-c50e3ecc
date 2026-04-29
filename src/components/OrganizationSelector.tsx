@@ -3,7 +3,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
-import { useOrganizations, Organization } from '@/hooks/useOrganizations';
+import { useOrganizationsFast, FastOrganization } from '@/hooks/useOrganizationsFast';
+import { Organization } from '@/hooks/useOrganizations';
 interface OrganizationSelectorProps {
   value?: string;
   onChange: (value: string) => void;
@@ -23,14 +24,13 @@ export const OrganizationSelector: React.FC<OrganizationSelectorProps> = ({
   organizations: providedOrganizations
 }) => {
   const {
-    organizations: allOrganizations,
+    organizations: fastOrganizations,
     loading,
-    searchOrganizations
-  } = useOrganizations();
+  } = useOrganizationsFast(providedOrganizations ? undefined : regionFilter);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Use provided organizations if available, otherwise use all organizations
-  const organizations = providedOrganizations || allOrganizations;
+  // Use provided organizations if available, otherwise use region-filtered ones
+  const organizations = (providedOrganizations || fastOrganizations) as (Organization | FastOrganization)[];
 
   // Filter organizations by region if regionFilter is provided
   let filteredOrganizations = searchQuery 
