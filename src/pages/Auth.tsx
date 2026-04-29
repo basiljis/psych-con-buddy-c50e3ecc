@@ -284,20 +284,47 @@ const Auth = () => {
       if (authError) throw authError;
       if (!authData.user) throw new Error("Не удалось создать пользователя");
 
-      // Create access request instead of profile
-      const { error: requestError } = await supabase.from("access_requests").insert({
-        user_id: authData.user.id,
-        full_name: validatedData.fullName,
-        phone: validatedData.phone,
-        email: validatedData.email,
-        position_id: validatedData.positionId,
-        region_id: validatedData.regionId,
-        organization_id: validatedData.organizationId,
-        role: validatedData.role,
-        status: "pending",
-      });
+      // Check global setting: auto-approve org users (skip admin validation)
+      const autoApprove = await fetchSystemSetting<boolean>(
+        'auto_approve_org_users',
+        true
+      );
 
-      if (requestError) throw requestError;
+      if (autoApprove) {
+        // Direct profile creation — no access request
+        const { error: profileError } = await supabase.from("profiles").insert({
+          id: authData.user.id,
+          full_name: validatedData.fullName,
+          phone: validatedData.phone,
+          email: validatedData.email,
+          position_id: validatedData.positionId,
+          region_id: validatedData.regionId,
+          organization_id: validatedData.organizationId,
+          is_blocked: false,
+        });
+        if (profileError) throw profileError;
+
+        // Assign chosen role directly
+        const { error: roleError } = await supabase.from("user_roles").insert({
+          user_id: authData.user.id,
+          role: validatedData.role,
+        });
+        if (roleError) throw roleError;
+      } else {
+        // Legacy flow: create access request for manual approval
+        const { error: requestError } = await supabase.from("access_requests").insert({
+          user_id: authData.user.id,
+          full_name: validatedData.fullName,
+          phone: validatedData.phone,
+          email: validatedData.email,
+          position_id: validatedData.positionId,
+          region_id: validatedData.regionId,
+          organization_id: validatedData.organizationId,
+          role: validatedData.role,
+          status: "pending",
+        });
+        if (requestError) throw requestError;
+      }
 
       // Send registration confirmation email
       try {
@@ -319,19 +346,27 @@ const Auth = () => {
         // Don't fail registration if email fails
       }
 
-      // Сохранить user_id для страницы статуса
-      console.log("[Auth] Saving pending_user_id to localStorage:", authData.user.id);
-      localStorage.setItem("pending_user_id", authData.user.id);
-      
-      // Показать модальное окно с уведомлением
-      setSuccessDialogOpen(true);
-      
-      // Автоматически закрыть модальное окно и перейти на страницу статуса через 5 секунд
-      setTimeout(() => {
-        setSuccessDialogOpen(false);
-        console.log("[Auth] Navigating to /access-status");
-        navigate("/access-status");
-      }, 5000);
+      if (autoApprove) {
+        toast({
+          title: "Регистрация успешна!",
+          description: "Вы можете войти в систему с указанными данными.",
+        });
+        navigate("/");
+      } else {
+        // Сохранить user_id для страницы статуса
+        console.log("[Auth] Saving pending_user_id to localStorage:", authData.user.id);
+        localStorage.setItem("pending_user_id", authData.user.id);
+
+        // Показать модальное окно с уведомлением
+        setSuccessDialogOpen(true);
+
+        // Автоматически закрыть модальное окно и перейти на страницу статуса через 5 секунд
+        setTimeout(() => {
+          setSuccessDialogOpen(false);
+          console.log("[Auth] Navigating to /access-status");
+          navigate("/access-status");
+        }, 5000);
+      }
 
       // Clear form
       setSignupData({
