@@ -635,21 +635,21 @@ const Auth = () => {
               <div className="flex gap-2 mb-4">
                 <Button
                   type="button"
-                  variant={registrationMode === 'organization' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setRegistrationMode('organization')}
-                  className="flex-1"
-                >
-                  Для организаций
-                </Button>
-                <Button
-                  type="button"
                   variant={registrationMode === 'private' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setRegistrationMode('private')}
                   className="flex-1"
                 >
                   Частная практика
+                </Button>
+                <Button
+                  type="button"
+                  variant={registrationMode === 'organization' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setRegistrationMode('organization')}
+                  className="flex-1"
+                >
+                  Для организаций
                 </Button>
               </div>
 
