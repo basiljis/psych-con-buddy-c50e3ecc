@@ -6,6 +6,7 @@ import { NavbarBackground } from "@/components/NavbarBackground";
 import { 
   Heart, Menu, GraduationCap, Building2, Home, BookOpen 
 } from "lucide-react";
+import brandLogo from "@/assets/brand-logo.png";
 
 interface PublicNavbarProps {
   showHomeButton?: boolean;
@@ -30,9 +31,7 @@ export function PublicNavbar({
         <NavbarBackground />
         <div className="container mx-auto flex h-16 items-center px-4 relative z-10">
           <Link to="/" className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center">
-              <Heart className="h-4 w-4 text-primary-foreground" />
-            </div>
+            <img src={brandLogo} alt="universum." className="h-9 w-9 object-contain" />
             <span className="text-xl font-bold">universum.</span>
           </Link>
           
