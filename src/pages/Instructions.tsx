@@ -209,9 +209,9 @@ const Instructions = () => {
   const initialRole = (searchParams.get("role") as RoleKey) || "org-admin";
 
   useSeoMeta({
-    title: "Инструкции — как работает Universum для школ, специалистов и родителей",
+    title: "Инструкции — как работает universum. для школ, специалистов и родителей",
     description:
-      "Пошаговые инструкции по работе с платформой Universum: регистрация организации, ведение ППк, расписание и кабинет родителя.",
+      "Пошаговые инструкции по работе с платформой universum.: регистрация организации, ведение ППк, расписание и кабинет родителя.",
     canonical: "https://www.unvrsm.ru/instructions",
   });
 
@@ -249,7 +249,7 @@ const Instructions = () => {
                 Демонстрация работы системы
               </Badge>
               <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
-                Инструкции по&nbsp;работе с&nbsp;Universum
+                Инструкции по&nbsp;работе с&nbsp;universum.
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
                 Подробный гид по платформе для каждой роли: администратора организации,
@@ -275,7 +275,7 @@ const Instructions = () => {
             <div className="relative">
               <img
                 src={heroImage}
-                alt="Иллюстрация инструкций Universum"
+                alt="Иллюстрация инструкций universum."
                 width={1280}
                 height={512}
                 className="w-full h-auto rounded-2xl shadow-lg"
@@ -379,7 +379,7 @@ const Instructions = () => {
           <Card className="bg-gradient-to-br from-primary/10 via-background to-accent/10 border-2">
             <CardContent className="p-8 md:p-12 text-center">
               <h2 className="text-2xl md:text-3xl font-bold mb-3">
-                Готовы попробовать Universum?
+                Готовы попробовать universum.?
               </h2>
               <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
                 Зарегистрируйтесь и получите 14 дней бесплатного доступа ко всем
