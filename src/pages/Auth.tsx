@@ -18,6 +18,7 @@ import { SystemInfoDialog } from "@/components/SystemInfoDialog";
 import { SupportDialog } from "@/components/SupportDialog";
 import { AuthFooter } from "@/components/AuthFooter";
 import { PublicNavbar } from "@/components/PublicNavbar";
+import { fetchSystemSetting } from "@/hooks/useSystemSetting";
 
 // Schema for organization users
 const signupSchema = z.object({
@@ -128,7 +129,7 @@ const Auth = () => {
   const [welcomeUserName, setWelcomeUserName] = useState("");
 
   // Registration mode: 'organization' or 'private'
-  const [registrationMode, setRegistrationMode] = useState<'organization' | 'private'>('organization');
+  const [registrationMode, setRegistrationMode] = useState<'organization' | 'private'>('private');
   
   // Private signup form
   const [privateSignupData, setPrivateSignupData] = useState({
