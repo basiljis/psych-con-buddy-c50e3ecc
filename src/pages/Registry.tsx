@@ -7,10 +7,10 @@ import { Badge } from "@/components/ui/badge";
 
 export default function Registry() {
   useSeoMeta({
-    title: "Реестр отечественного ПО — АИС СПТ №3607428 | universum.",
-    description: "Сведения о включении АИС СПТ (АИС социально-психологического тестирования) в Единый реестр российского ПО Минцифры России. Реестровая запись №3607428.",
+    title: "Реестр отечественного ПО — АИС «Профилактика» №3607428 | universum.",
+    description: "Сведения о включении АИС «Профилактика» в Единый реестр российского ПО Минцифры России. Реестровая запись №3607428.",
     canonical: "/registry",
-    keywords: "реестр отечественного ПО, Минцифры, АИС СПТ, российское программное обеспечение, образование, 3607428",
+    keywords: "реестр отечественного ПО, Минцифры, АИС Профилактика, российское программное обеспечение, образование, 3607428",
   });
 
   return (
@@ -40,7 +40,7 @@ export default function Registry() {
                       <CheckCircle className="h-5 w-5 text-primary" />
                     </div>
                     <CardTitle className="text-base leading-tight">
-                      АИС СПТ — Автоматизированная информационная система социально-психологического тестирования
+                      АИС «Профилактика»
                     </CardTitle>
                   </div>
                   <Badge variant="secondary" className="flex-shrink-0 text-xs">
