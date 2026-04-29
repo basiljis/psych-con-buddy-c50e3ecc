@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Heart, Mail, Phone, FileText } from "lucide-react";
+import { Mail, Phone, FileText } from "lucide-react";
+import brandLogo from "@/assets/brand-logo.png";
 
 export default function LandingFooter() {
   return (
@@ -8,9 +9,7 @@ export default function LandingFooter() {
         <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-8">
           <div>
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center">
-                <Heart className="h-4 w-4 text-primary-foreground" />
-              </div>
+              <img src={brandLogo} alt="universum." className="h-9 w-9 object-contain" />
               <span className="text-xl font-bold">universum.</span>
             </Link>
             <p className="text-sm text-muted-foreground">
