@@ -897,6 +897,7 @@ const Auth = () => {
               ) : (
                 /* Private practice registration form */
                 <form onSubmit={handlePrivateSignup} className="space-y-3">
+                  <AutoApproveStatusHint mode="private" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div className="space-y-2 md:col-span-2">
                       <Label htmlFor="privateFullName" className="text-sm">ФИО *</Label>
