@@ -19,6 +19,7 @@ import { SupportDialog } from "@/components/SupportDialog";
 import { AuthFooter } from "@/components/AuthFooter";
 import { PublicNavbar } from "@/components/PublicNavbar";
 import { fetchSystemSetting } from "@/hooks/useSystemSetting";
+import { AutoApproveStatusHint } from "@/components/AutoApproveStatusHint";
 
 // Schema for organization users
 const signupSchema = z.object({
@@ -690,6 +691,7 @@ const Auth = () => {
 
               {registrationMode === 'organization' ? (
                 <form onSubmit={handleSignup} className="space-y-3">
+                  <AutoApproveStatusHint mode="organization" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div className="space-y-2 md:col-span-2">
                       <Label htmlFor="fullName" className="text-sm">ФИО *</Label>
@@ -895,6 +897,7 @@ const Auth = () => {
               ) : (
                 /* Private practice registration form */
                 <form onSubmit={handlePrivateSignup} className="space-y-3">
+                  <AutoApproveStatusHint mode="private" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div className="space-y-2 md:col-span-2">
                       <Label htmlFor="privateFullName" className="text-sm">ФИО *</Label>
