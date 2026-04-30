@@ -691,6 +691,7 @@ const Auth = () => {
 
               {registrationMode === 'organization' ? (
                 <form onSubmit={handleSignup} className="space-y-3">
+                  <AutoApproveStatusHint mode="organization" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div className="space-y-2 md:col-span-2">
                       <Label htmlFor="fullName" className="text-sm">ФИО *</Label>
