@@ -19,6 +19,7 @@ import { SupportDialog } from "@/components/SupportDialog";
 import { AuthFooter } from "@/components/AuthFooter";
 import { PublicNavbar } from "@/components/PublicNavbar";
 import { fetchSystemSetting } from "@/hooks/useSystemSetting";
+import { AutoApproveStatusHint } from "@/components/AutoApproveStatusHint";
 
 // Schema for organization users
 const signupSchema = z.object({
