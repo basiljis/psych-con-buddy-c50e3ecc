@@ -12,7 +12,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { 
   User, Calendar, School, Search, Filter, CalendarIcon, 
-  CheckCircle, XCircle, TrendingUp, FileText, Users, Plus, ExternalLink
+  CheckCircle, XCircle, TrendingUp, FileText, Users, Plus, ExternalLink,
+  Info, Hand, Mic, Brain, MessageCircle, Heart
 } from "lucide-react";
 import { ChildProfileRadarChart } from "@/components/ChildProfileRadarChart";
 import { ChildProfileBarChart } from "@/components/ChildProfileBarChart";
