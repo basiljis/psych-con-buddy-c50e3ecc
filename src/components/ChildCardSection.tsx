@@ -12,7 +12,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { 
   User, Calendar, School, Search, Filter, CalendarIcon, 
-  CheckCircle, XCircle, TrendingUp, FileText, Users, Plus, ExternalLink
+  CheckCircle, XCircle, TrendingUp, FileText, Users, Plus, ExternalLink,
+  Info, Hand, Mic, Brain, MessageCircle, Heart
 } from "lucide-react";
 import { ChildProfileRadarChart } from "@/components/ChildProfileRadarChart";
 import { ChildProfileBarChart } from "@/components/ChildProfileBarChart";
@@ -281,6 +282,60 @@ export function ChildCardSection() {
           Добавить ребёнка
         </Button>
       </div>
+
+      {/* Section description */}
+      <Card className="border-primary/20 bg-primary/5">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base flex items-center gap-2">
+            <Info className="h-5 w-5 text-primary" />
+            О разделе «Карточка ребёнка»
+          </CardTitle>
+          <CardDescription className="text-sm leading-relaxed">
+            Раздел объединяет всю информацию о ребёнке: персональные данные, историю обследований ППк,
+            динамику развития по протоколам и статистику посещаемости занятий. Здесь специалист может
+            оценить профиль развития ребёнка по пяти ключевым сферам и сформировать рекомендации.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            <div className="flex items-start gap-2 p-3 rounded-lg bg-background/60 border">
+              <Hand className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-medium text-sm">Моторика</p>
+                <p className="text-xs text-muted-foreground">Крупная и мелкая моторика, координация движений</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-2 p-3 rounded-lg bg-background/60 border">
+              <Mic className="h-5 w-5 text-green-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-medium text-sm">Речь</p>
+                <p className="text-xs text-muted-foreground">Звукопроизношение, словарный запас, связная речь</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-2 p-3 rounded-lg bg-background/60 border">
+              <Brain className="h-5 w-5 text-purple-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-medium text-sm">Познание</p>
+                <p className="text-xs text-muted-foreground">Внимание, память, мышление и восприятие</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-2 p-3 rounded-lg bg-background/60 border">
+              <MessageCircle className="h-5 w-5 text-orange-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-medium text-sm">Общение</p>
+                <p className="text-xs text-muted-foreground">Коммуникация и социальное взаимодействие</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-2 p-3 rounded-lg bg-background/60 border">
+              <Heart className="h-5 w-5 text-pink-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-medium text-sm">Эмоции</p>
+                <p className="text-xs text-muted-foreground">Эмоционально-волевая сфера и саморегуляция</p>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Child Selection */}
       <Card>
