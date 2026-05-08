@@ -63,7 +63,7 @@ export const TestModeDialog = () => {
             </div>
           </div>
           <DialogTitle className="text-center text-2xl font-bold">
-            Добро пожаловать в АИС ППК!
+            Добро пожаловать в universum.!
           </DialogTitle>
           <DialogDescription className="text-center text-base">
             Вы получили доступ к пробному периоду
