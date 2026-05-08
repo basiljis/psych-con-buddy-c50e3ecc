@@ -54,6 +54,7 @@ export function PublicNavbar({
             >
               Родителям
             </Link>
+            <span className="h-5 w-px bg-border mx-2" aria-hidden="true" />
             <Link 
               to="/instructions" 
               className={`text-sm ${currentPage === 'instructions' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
