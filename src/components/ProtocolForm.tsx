@@ -320,6 +320,62 @@ export const ProtocolForm = ({
     return isRequiredFieldEmpty(value) ? "border-destructive focus:border-destructive" : "";
   };
 
+  const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+  const isValidPhone = (value: string) => {
+    const digits = value.replace(/\D/g, "");
+    return digits.length >= 10 && digits.length <= 15;
+  };
+  const isFutureDate = (value: string) => {
+    if (!value) return false;
+    const d = new Date(value);
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    return d.getTime() > today.getTime();
+  };
+  const isTooOldBirthDate = (value: string) => {
+    if (!value) return false;
+    const d = new Date(value);
+    return d.getFullYear() < 1900;
+  };
+
+  const FieldError = ({ messageKey }: { messageKey: string | null }) =>
+    messageKey ? (
+      <p className="text-xs text-destructive mt-1" role="alert">
+        {t(`protocolForm.validation.${messageKey}`)}
+      </p>
+    ) : null;
+
+  const childErrorKey = (field: keyof ChildData): string | null => {
+    const v = (formData.childData[field] || "") as string;
+    switch (field) {
+      case "fullName": return isRequiredFieldEmpty(v) ? "requiredFullName" : null;
+      case "birthDate":
+        if (isRequiredFieldEmpty(v)) return "requiredBirthDate";
+        if (isFutureDate(v)) return "futureBirthDate";
+        if (isTooOldBirthDate(v)) return "tooOldBirthDate";
+        return null;
+      case "age": return isRequiredFieldEmpty(v) ? "requiredAge" : null;
+      case "gender": return isRequiredFieldEmpty(v) ? "requiredGender" : null;
+      case "classNumber": return isRequiredFieldEmpty(v) ? "requiredClassGroup" : null;
+      case "educationalOrganization": return isRequiredFieldEmpty(v) ? "requiredOrganization" : null;
+      case "address": return isRequiredFieldEmpty(v) ? "requiredAddress" : null;
+      case "parentName": return isRequiredFieldEmpty(v) ? "requiredParentName" : null;
+      case "parentPhone":
+        if (isRequiredFieldEmpty(v)) return "requiredParentPhone";
+        if (!isValidPhone(v)) return "invalidPhone";
+        return null;
+      case "parentEmail":
+        if (!v) return null;
+        return isValidEmail(v) ? null : "invalidEmail";
+      case "whobrought": return isRequiredFieldEmpty(v) ? "requiredWhobrought" : null;
+      case "relationship":
+        if (formData.childData.whobrought === "other" && isRequiredFieldEmpty(v)) return "requiredRelationship";
+        return null;
+      default: return null;
+    }
+  };
+
+
   const canSaveProtocol = () => {
     const requiredFields = [
       formData.childData.fullName,
