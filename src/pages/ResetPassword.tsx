@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { FloatingLanguageToggle } from "@/components/ui/floating-language-toggle";
 
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
