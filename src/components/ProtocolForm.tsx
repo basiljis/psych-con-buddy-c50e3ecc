@@ -593,8 +593,8 @@ export const ProtocolForm = ({
         await updateProtocol(protocolId, protocolData);
         if (!isDraft) {
           toast({
-            title: "🎉 Протокол успешно завершён!",
-            description: `Протокол для ${formData.childData.fullName} сохранён и готов к использованию.`,
+            title: t('protocolForm.toasts.completedTitle'),
+            description: t('protocolForm.toasts.completedDesc', { name: formData.childData.fullName }),
             duration: 8000,
           });
         }
@@ -606,8 +606,8 @@ export const ProtocolForm = ({
           console.log('Saved new protocol with ID:', result.id);
         }
         toast({
-          title: isDraft ? "Черновик сохранен" : "Протокол сохранен",
-          description: isDraft ? "Изменения сохранены" : "Протокол успешно создан"
+          title: isDraft ? t('protocolForm.toasts.draftSaved') : t('protocolForm.toasts.protocolSaved'),
+          description: isDraft ? t('protocolForm.toasts.draftChanges') : t('protocolForm.toasts.protocolCreated')
         });
       }
 
