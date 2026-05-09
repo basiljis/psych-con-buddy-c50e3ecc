@@ -1144,6 +1144,7 @@ export const ProtocolForm = ({
                   selectedLevel={selectedLevel}
                   onLevelChange={setSelectedLevel}
                 />
+                <FieldError messageKey={!selectedLevel ? "requiredEducationLevel" : null} />
               </div>
 
               <div>
