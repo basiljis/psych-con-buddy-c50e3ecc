@@ -14,7 +14,7 @@ import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { 
   User, Calendar, School, Search, Filter, CalendarIcon, 
   CheckCircle, XCircle, TrendingUp, FileText, Users, Plus, ExternalLink,
-  Info, Hand, Mic, Brain, MessageCircle, Heart
+  Info, Hand, Mic, Brain, MessageCircle, Heart, ClipboardList
 } from "lucide-react";
 import { ChildProfileRadarChart } from "@/components/ChildProfileRadarChart";
 import { ChildProfileBarChart } from "@/components/ChildProfileBarChart";
