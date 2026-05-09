@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 import notFoundImage from "@/assets/404-illustration.png";
+import { FloatingLanguageToggle } from "@/components/ui/floating-language-toggle";
 
 const NotFound = () => {
   const location = useLocation();
