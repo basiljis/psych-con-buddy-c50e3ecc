@@ -517,8 +517,8 @@ export const ProtocolForm = ({
     // Проверка доступа для новых протоколов (не применяется к админам и региональным операторам)
     if (!editingProtocol && !savedProtocolId && !isAdmin && !isRegionalOperator && !subscriptionStatus.canCreateProtocols) {
       toast({
-        title: "Доступ ограничен",
-        description: "Пробный период истек. Оформите подписку для создания новых протоколов.",
+        title: t('protocolForm.access.restricted'),
+        description: t('protocolForm.access.trialEndedShort'),
         variant: "destructive"
       });
       return;
@@ -526,8 +526,8 @@ export const ProtocolForm = ({
 
     if (!canSaveProtocol() && !isDraft) {
       toast({
-        title: "Ошибка",
-        description: "Заполните все обязательные поля данных об обучающемся",
+        title: t('protocolForm.common.error'),
+        description: t('protocolForm.toasts.fillRequiredChild'),
         variant: "destructive"
       });
       return;
@@ -535,8 +535,8 @@ export const ProtocolForm = ({
 
     if (!isDraft && !canFinalizeProtocol()) {
       toast({
-        title: "Протокол не готов к завершению",
-        description: "Заполните все обязательные поля: данные обучающегося, документы, причина направления и обязательные пункты чек-листа",
+        title: t('protocolForm.toasts.notReadyTitle'),
+        description: t('protocolForm.toasts.notReadyDesc'),
         variant: "destructive"
       });
       return;
