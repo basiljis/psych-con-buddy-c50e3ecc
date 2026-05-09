@@ -59,6 +59,7 @@ interface Protocol {
 
 export function ChildCardSection() {
   const { profile, isAdmin, roles } = useAuth();
+  const navigate = useNavigate();
   const { schoolYearsFormatted } = useSchoolYears();
   
   const [selectedChildId, setSelectedChildId] = useState<string>("");
