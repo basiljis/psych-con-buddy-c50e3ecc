@@ -264,6 +264,39 @@ export function ChildCardSection() {
     setDateTo(undefined);
   };
 
+  const normalizeEducationLevel = (level: string | null): "preschool" | "elementary" | "middle" | "high" | null => {
+    if (!level) return null;
+    const allowed = ["preschool", "elementary", "middle", "high"];
+    if (allowed.includes(level)) return level as any;
+    const map: Record<string, "preschool" | "elementary" | "middle" | "high"> = {
+      "Дошкольное образование": "preschool",
+      "Начальное общее образование": "elementary",
+      "Основное общее образование": "middle",
+      "Среднее общее образование": "high",
+      "ДО": "preschool", "НОО": "elementary", "ОО": "middle", "СОО": "high",
+    };
+    return map[level] ?? null;
+  };
+
+  const handleGoToPpk = () => {
+    if (!selectedChild) return;
+    const level = normalizeEducationLevel(selectedChild.education_level);
+    sessionStorage.setItem(
+      "ppk_prefill_child",
+      JSON.stringify({
+        fullName: selectedChild.full_name,
+        birthDate: selectedChild.birth_date || "",
+        gender: selectedChild.gender || "",
+        parentName: selectedChild.parent_name || "",
+        parentPhone: selectedChild.parent_phone || "",
+        parentEmail: selectedChild.parent_email || "",
+        educationalOrganization: selectedChild.organization_id || "",
+        educationLevel: level,
+      })
+    );
+    navigate("/?tab=protocol");
+  };
+
   const age = selectedChild?.birth_date ? calculateAge(selectedChild.birth_date) : null;
 
   return (
