@@ -823,29 +823,26 @@ export const ProtocolForm = ({
           <AlertDescription>
             {subscriptionStatus.trialEndDate ? (
               <>
-                Пробный период завершился {subscriptionStatus.trialEndDate.toLocaleDateString('ru-RU')}. 
-                Создание новых протоколов доступно только при активной подписке. 
-                Созданные ранее протоколы доступны для просмотра в течение 3 лет.
+                {t('protocolForm.access.trialEndedOn', { date: subscriptionStatus.trialEndDate.toLocaleDateString('ru-RU') })}
                 <Button 
                   variant="outline" 
                   size="sm" 
                   onClick={() => navigate('/profile')}
                   className="ml-4"
                 >
-                  Оформить подписку
+                  {t('protocolForm.common.subscribe')}
                 </Button>
               </>
             ) : (
               <>
-                Для создания протоколов необходима активная подписка. 
-                Созданные ранее протоколы доступны для просмотра в течение 3 лет.
+                {t('protocolForm.access.subscriptionRequired')}
                 <Button 
                   variant="outline" 
                   size="sm" 
                   onClick={() => navigate('/profile')}
                   className="ml-4"
                 >
-                  Оформить подписку
+                  {t('protocolForm.common.subscribe')}
                 </Button>
               </>
             )}
