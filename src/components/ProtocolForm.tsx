@@ -1179,6 +1179,7 @@ export const ProtocolForm = ({
                     )}
                   </SelectContent>
                 </Select>
+                <FieldError messageKey={childErrorKey("classNumber")} />
               </div>
 
               <div>
