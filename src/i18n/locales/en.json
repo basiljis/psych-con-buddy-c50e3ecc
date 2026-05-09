@@ -1,0 +1,20 @@
+{
+  "nav": {
+    "organizations": "For Organizations",
+    "specialists": "For Educators",
+    "parents": "For Parents",
+    "instructions": "Guides",
+    "login": "Sign in",
+    "menu": "Menu",
+    "catalog": "Catalog",
+    "info": "Information",
+    "findSpecialist": "Find a specialist",
+    "findOrganization": "Find an organization",
+    "home": "Home"
+  },
+  "language": {
+    "switchTo": "Switch language",
+    "ru": "Russian",
+    "en": "English"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "nav": {
+    "organizations": "Организациям",
+    "specialists": "Педагогам",
+    "parents": "Родителям",
+    "instructions": "Инструкции",
+    "login": "Вход",
+    "menu": "Меню",
+    "catalog": "Каталог",
+    "info": "Информация",
+    "findSpecialist": "Найти специалиста",
+    "findOrganization": "Найти организацию",
+    "home": "На главную"
+  },
+  "language": {
+    "switchTo": "Сменить язык",
+    "ru": "Русский",
+    "en": "English"
+  }
+}
