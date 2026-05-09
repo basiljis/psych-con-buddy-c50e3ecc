@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useSubscriptionStatus } from "@/hooks/useSubscriptionStatus";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -101,6 +102,7 @@ export const ProtocolForm = ({
   onProtocolSave: (data: ProtocolData) => void;
   editingProtocol?: any;
 }) => {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedLevel, setSelectedLevel] = useState<"preschool" | "elementary" | "middle" | "high">("elementary");
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -204,8 +206,8 @@ export const ProtocolForm = ({
         },
       }));
       toast({
-        title: "Данные ребёнка подтянуты",
-        description: "Карточка ребёнка автоматически заполнила сведения. Проверьте и продолжите заполнение чек-листа.",
+        title: t('protocolForm.toasts.prefillTitle'),
+        description: t('protocolForm.toasts.prefillDesc'),
       });
     } catch (e) {
       console.error("Failed to apply ppk prefill:", e);
@@ -227,8 +229,8 @@ export const ProtocolForm = ({
       if (hasUnsavedChanges && canSaveProtocol()) {
         saveProtocolData(true);
         toast({
-          title: "Автосохранение",
-          description: "Черновик автоматически сохранен"
+          title: t('protocolForm.toasts.autosaveTitle'),
+          description: t('protocolForm.toasts.autosaveDesc')
         });
       }
     }, 120000);
@@ -367,8 +369,8 @@ export const ProtocolForm = ({
   const generateConsent = () => {
     if (!canSaveProtocol()) {
       toast({
-        title: "Ошибка",
-        description: "Заполните все обязательные поля для генерации согласия",
+        title: t('protocolForm.common.error'),
+        description: t('protocolForm.toasts.fillRequiredForConsent'),
         variant: "destructive"
       });
       return;
@@ -376,8 +378,8 @@ export const ProtocolForm = ({
 
     generateConsentPDF(formData.childData);
     toast({
-      title: "Согласие сгенерировано",
-      description: "PDF документ готов к скачиванию"
+      title: t('protocolForm.toasts.consentGenerated'),
+      description: t('protocolForm.toasts.consentReady')
     });
   };
 
@@ -412,8 +414,8 @@ export const ProtocolForm = ({
       if (currentStep === 1 && canSaveProtocol()) {
         await saveProtocolData(true);
         toast({
-          title: "Черновик сохранён",
-          description: "Данные автоматически сохранены"
+          title: t('protocolForm.toasts.draftSavedTitle'),
+          description: t('protocolForm.toasts.draftSavedDesc')
         });
       }
       setCurrentStep(currentStep + 1);
@@ -515,8 +517,8 @@ export const ProtocolForm = ({
     // Проверка доступа для новых протоколов (не применяется к админам и региональным операторам)
     if (!editingProtocol && !savedProtocolId && !isAdmin && !isRegionalOperator && !subscriptionStatus.canCreateProtocols) {
       toast({
-        title: "Доступ ограничен",
-        description: "Пробный период истек. Оформите подписку для создания новых протоколов.",
+        title: t('protocolForm.access.restricted'),
+        description: t('protocolForm.access.trialEndedShort'),
         variant: "destructive"
       });
       return;
@@ -524,8 +526,8 @@ export const ProtocolForm = ({
 
     if (!canSaveProtocol() && !isDraft) {
       toast({
-        title: "Ошибка",
-        description: "Заполните все обязательные поля данных об обучающемся",
+        title: t('protocolForm.common.error'),
+        description: t('protocolForm.toasts.fillRequiredChild'),
         variant: "destructive"
       });
       return;
@@ -533,8 +535,8 @@ export const ProtocolForm = ({
 
     if (!isDraft && !canFinalizeProtocol()) {
       toast({
-        title: "Протокол не готов к завершению",
-        description: "Заполните все обязательные поля: данные обучающегося, документы, причина направления и обязательные пункты чек-листа",
+        title: t('protocolForm.toasts.notReadyTitle'),
+        description: t('protocolForm.toasts.notReadyDesc'),
         variant: "destructive"
       });
       return;
@@ -591,8 +593,8 @@ export const ProtocolForm = ({
         await updateProtocol(protocolId, protocolData);
         if (!isDraft) {
           toast({
-            title: "🎉 Протокол успешно завершён!",
-            description: `Протокол для ${formData.childData.fullName} сохранён и готов к использованию.`,
+            title: t('protocolForm.toasts.completedTitle'),
+            description: t('protocolForm.toasts.completedDesc', { name: formData.childData.fullName }),
             duration: 8000,
           });
         }
@@ -604,8 +606,8 @@ export const ProtocolForm = ({
           console.log('Saved new protocol with ID:', result.id);
         }
         toast({
-          title: isDraft ? "Черновик сохранен" : "Протокол сохранен",
-          description: isDraft ? "Изменения сохранены" : "Протокол успешно создан"
+          title: isDraft ? t('protocolForm.toasts.draftSaved') : t('protocolForm.toasts.protocolSaved'),
+          description: isDraft ? t('protocolForm.toasts.draftChanges') : t('protocolForm.toasts.protocolCreated')
         });
       }
 
@@ -631,8 +633,8 @@ export const ProtocolForm = ({
     } catch (error) {
       console.error('Error saving protocol:', error);
       toast({
-        title: "Ошибка",
-        description: "Не удалось сохранить протокол",
+        title: t('protocolForm.common.error'),
+        description: t('protocolForm.toasts.saveFailed'),
         variant: "destructive"
       });
     } finally {
@@ -749,22 +751,22 @@ export const ProtocolForm = ({
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-destructive">
             <AlertCircle className="h-5 w-5" />
-            Доступ ограничен
+            {t('protocolForm.access.restricted')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              Пробный период завершен. Для создания новых протоколов необходимо оформить подписку.
+              {t('protocolForm.access.trialEnded')}
             </AlertDescription>
           </Alert>
           <div className="flex gap-4">
             <Button onClick={() => navigate('/profile')} className="flex-1">
-              Оформить подписку
+              {t('protocolForm.common.subscribe')}
             </Button>
             <Button variant="outline" onClick={() => navigate('/')} className="flex-1">
-              На главную
+              {t('protocolForm.common.toHome')}
             </Button>
           </div>
         </CardContent>
@@ -775,35 +777,35 @@ export const ProtocolForm = ({
   const steps = [
     { 
       number: 1, 
-      title: "Данные об обучающемся", 
+      title: t('protocolForm.steps.step1'), 
       icon: User,
       isComplete: () => !getStepMissingRequiredFields(1),
       hasMissingRequired: () => getStepMissingRequiredFields(1)
     },
     { 
       number: 2, 
-      title: "Данные протокола", 
+      title: t('protocolForm.steps.step2'), 
       icon: FileText,
       isComplete: () => !getStepMissingRequiredFields(2),
       hasMissingRequired: () => getStepMissingRequiredFields(2)
     },
     { 
       number: 3, 
-      title: "Документы обучающегося", 
+      title: t('protocolForm.steps.step3'), 
       icon: FileText,
       isComplete: () => !getStepMissingRequiredFields(3),
       hasMissingRequired: () => getStepMissingRequiredFields(3)
     },
     { 
       number: 4, 
-      title: "Чек-лист обследования", 
+      title: t('protocolForm.steps.step4'), 
       icon: ClipboardList,
       isComplete: () => !getStepMissingRequiredFields(4),
       hasMissingRequired: () => getStepMissingRequiredFields(4)
     },
     { 
       number: 5, 
-      title: "Результаты и заключение", 
+      title: t('protocolForm.steps.step5'), 
       icon: CheckCircle,
       isComplete: () => !getStepMissingRequiredFields(5),
       hasMissingRequired: () => getStepMissingRequiredFields(5)
@@ -821,29 +823,26 @@ export const ProtocolForm = ({
           <AlertDescription>
             {subscriptionStatus.trialEndDate ? (
               <>
-                Пробный период завершился {subscriptionStatus.trialEndDate.toLocaleDateString('ru-RU')}. 
-                Создание новых протоколов доступно только при активной подписке. 
-                Созданные ранее протоколы доступны для просмотра в течение 3 лет.
+                {t('protocolForm.access.trialEndedOn', { date: subscriptionStatus.trialEndDate.toLocaleDateString('ru-RU') })}
                 <Button 
                   variant="outline" 
                   size="sm" 
                   onClick={() => navigate('/profile')}
                   className="ml-4"
                 >
-                  Оформить подписку
+                  {t('protocolForm.common.subscribe')}
                 </Button>
               </>
             ) : (
               <>
-                Для создания протоколов необходима активная подписка. 
-                Созданные ранее протоколы доступны для просмотра в течение 3 лет.
+                {t('protocolForm.access.subscriptionRequired')}
                 <Button 
                   variant="outline" 
                   size="sm" 
                   onClick={() => navigate('/profile')}
                   className="ml-4"
                 >
-                  Оформить подписку
+                  {t('protocolForm.common.subscribe')}
                 </Button>
               </>
             )}
@@ -854,17 +853,17 @@ export const ProtocolForm = ({
       <AlertDialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Сохранить изменения?</AlertDialogTitle>
+            <AlertDialogTitle>{t('protocolForm.saveDialog.title')}</AlertDialogTitle>
             <AlertDialogDescription>
-              У вас есть несохраненные изменения. Хотите сохранить их перед переходом?
+              {t('protocolForm.saveDialog.desc')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={handleContinueWithoutSaving}>
-              Не сохранять
+              {t('protocolForm.saveDialog.discard')}
             </AlertDialogCancel>
             <AlertDialogAction onClick={handleSaveAndContinue}>
-              Сохранить
+              {t('protocolForm.common.save')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -878,16 +877,16 @@ export const ProtocolForm = ({
               <div className="p-3 rounded-full bg-green-100">
                 <CheckCircle className="h-8 w-8 text-green-600" />
               </div>
-              Протокол завершён!
+              {t('protocolForm.completion.title')}
             </DialogTitle>
             <DialogDescription asChild>
               <div className="space-y-4 pt-4">
                 <div className="p-4 rounded-lg bg-green-50 border border-green-200">
                   <p className="text-lg font-medium text-green-800">
-                    Протокол для {formData.childData.fullName} успешно сохранён
+                    {t('protocolForm.completion.savedFor', { name: formData.childData.fullName })}
                   </p>
                   <p className="text-sm text-green-700 mt-1">
-                    Все данные и заключение готовы к использованию
+                    {t('protocolForm.completion.ready')}
                   </p>
                 </div>
               </div>
@@ -903,7 +902,7 @@ export const ProtocolForm = ({
                 navigate('/');
               }}
             >
-              Перейти к списку ППк
+              {t('protocolForm.completion.goToList')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -960,7 +959,7 @@ export const ProtocolForm = ({
       {currentStep === 1 && (
         <Card>
           <CardHeader>
-            <CardTitle>Данные об обучающемся</CardTitle>
+            <CardTitle>{t('protocolForm.steps.step1')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Уведомления о подписке - только для пользователей без активной подписки */}
@@ -970,13 +969,13 @@ export const ProtocolForm = ({
                   <Alert variant="destructive" className="mb-4">
                     <AlertCircle className="h-4 w-4" />
                     <AlertDescription className="flex items-center justify-between">
-                      <span>Пробный период истек. Оформите подписку для создания новых протоколов.</span>
+                      <span>{t('protocolForm.access.trialEndedShort')}</span>
                       <Button 
                         variant="outline" 
                         size="sm"
                         onClick={() => navigate('/profile')}
                       >
-                        Оформить подписку
+                        {t('protocolForm.common.subscribe')}
                       </Button>
                     </AlertDescription>
                   </Alert>
@@ -988,13 +987,13 @@ export const ProtocolForm = ({
                       <Alert className="mb-4">
                         <AlertCircle className="h-4 w-4" />
                         <AlertDescription className="flex items-center justify-between">
-                          <span>Пробный период истекает через {daysLeft} {daysLeft === 1 ? 'день' : daysLeft < 5 ? 'дня' : 'дней'}. Оформите подписку.</span>
+                          <span>{t('protocolForm.access.trialEndingSoon', { days: daysLeft, unit: daysLeft === 1 ? t('protocolForm.access.dayOne') : daysLeft < 5 ? t('protocolForm.access.dayFew') : t('protocolForm.access.dayMany') })}</span>
                           <Button 
                             variant="outline" 
                             size="sm"
                             onClick={() => navigate('/profile')}
                           >
-                            Оформить подписку
+                            {t('protocolForm.common.subscribe')}
                           </Button>
                         </AlertDescription>
                       </Alert>
@@ -1006,7 +1005,7 @@ export const ProtocolForm = ({
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-2">
                 <div className="flex items-center justify-between mb-2">
-                  <Label htmlFor="fullName">ФИО обучающегося *</Label>
+                  <Label htmlFor="fullName">{t('protocolForm.child.fullName')} *</Label>
                   <ChildSelector
                     onSelect={(child) => {
                       updateChildData("fullName", child.fullName);
@@ -1018,7 +1017,7 @@ export const ProtocolForm = ({
                         const today = new Date();
                         const years = differenceInYears(today, birthDate);
                         const months = differenceInMonths(today, birthDate) % 12;
-                        updateChildData("age", `${years} лет ${months} мес.`);
+                        updateChildData("age", t('protocolForm.child.ageFmt', { years, months }));
                       }
                     }}
                   />
@@ -1028,12 +1027,12 @@ export const ProtocolForm = ({
                   value={formData.childData.fullName}
                   onChange={(e) => updateChildData("fullName", e.target.value)}
                   className={getRequiredFieldClass(formData.childData.fullName)}
-                  placeholder="Иванов Иван Иванович"
+                  placeholder={t('protocolForm.child.fullNamePh')}
                 />
               </div>
 
               <div>
-                <Label htmlFor="birthDate">Дата рождения *</Label>
+                <Label htmlFor="birthDate">{t('protocolForm.child.birthDate')} *</Label>
                 <Input
                   id="birthDate"
                   type="date"
@@ -1045,7 +1044,7 @@ export const ProtocolForm = ({
                       const today = new Date();
                       const years = differenceInYears(today, birthDate);
                       const months = differenceInMonths(today, birthDate) % 12;
-                      updateChildData("age", `${years} лет ${months} мес.`);
+                      updateChildData("age", t('protocolForm.child.ageFmt', { years, months }));
                     }
                   }}
                   className={getRequiredFieldClass(formData.childData.birthDate)}
@@ -1053,34 +1052,34 @@ export const ProtocolForm = ({
               </div>
 
               <div>
-                <Label htmlFor="age">Возраст *</Label>
+                <Label htmlFor="age">{t('protocolForm.child.age')} *</Label>
                 <Input
                   id="age"
                   value={formData.childData.age}
                   onChange={(e) => updateChildData("age", e.target.value)}
                   className={getRequiredFieldClass(formData.childData.age)}
-                  placeholder="7 лет 6 мес."
+                  placeholder={t('protocolForm.child.agePh')}
                 />
               </div>
 
               <div>
-                <Label htmlFor="gender">Пол *</Label>
+                <Label htmlFor="gender">{t('protocolForm.child.gender')} *</Label>
                 <Select
                   value={formData.childData.gender}
                   onValueChange={(value) => updateChildData('gender', value)}
                 >
                   <SelectTrigger className={getRequiredFieldClass(formData.childData.gender)}>
-                    <SelectValue placeholder="Выберите пол" />
+                    <SelectValue placeholder={t('protocolForm.child.genderPh')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="male">Мужской</SelectItem>
-                    <SelectItem value="female">Женский</SelectItem>
+                    <SelectItem value="male">{t('protocolForm.child.male')}</SelectItem>
+                    <SelectItem value="female">{t('protocolForm.child.female')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="col-span-2 py-4">
-                <Label className="mb-3 block">Уровень образования *</Label>
+                <Label className="mb-3 block">{t('protocolForm.child.educationLevel')} *</Label>
                 <EducationLevelSelector
                   selectedLevel={selectedLevel}
                   onLevelChange={setSelectedLevel}
@@ -1088,7 +1087,7 @@ export const ProtocolForm = ({
               </div>
 
               <div>
-                <Label htmlFor="classNumber">Класс/Группа *</Label>
+                <Label htmlFor="classNumber">{t('protocolForm.child.classGroup')} *</Label>
                 <Select
                   value={formData.childData.classNumber}
                   onValueChange={(value) => updateChildData('classNumber', value)}
@@ -1096,23 +1095,23 @@ export const ProtocolForm = ({
                   <SelectTrigger className={getRequiredFieldClass(formData.childData.classNumber)}>
                     <SelectValue placeholder={
                       selectedLevel === 'preschool' 
-                        ? 'Выберите группу' 
-                        : 'Выберите класс'
+                        ? t('protocolForm.child.selectGroup')
+                        : t('protocolForm.child.selectClass')
                     } />
                   </SelectTrigger>
                   <SelectContent>
                     {selectedLevel === 'preschool' ? (
                       <>
-                        <SelectItem value="Младшая группа">Младшая группа</SelectItem>
-                        <SelectItem value="Средняя группа">Средняя группа</SelectItem>
-                        <SelectItem value="Старшая группа">Старшая группа</SelectItem>
-                        <SelectItem value="Подготовительная группа">Подготовительная группа</SelectItem>
+                        <SelectItem value="Младшая группа">{t('protocolForm.child.groupYounger')}</SelectItem>
+                        <SelectItem value="Средняя группа">{t('protocolForm.child.groupMiddle')}</SelectItem>
+                        <SelectItem value="Старшая группа">{t('protocolForm.child.groupOlder')}</SelectItem>
+                        <SelectItem value="Подготовительная группа">{t('protocolForm.child.groupPrep')}</SelectItem>
                       </>
                     ) : (
                       <>
                         {Array.from({ length: 11 }, (_, i) => (
                           <SelectItem key={i + 1} value={(i + 1).toString()}>
-                            {i + 1} класс
+                            {t('protocolForm.child.classN', { n: i + 1 })}
                           </SelectItem>
                         ))}
                       </>
@@ -1122,17 +1121,17 @@ export const ProtocolForm = ({
               </div>
 
               <div>
-                <Label htmlFor="classLetter">Литера класса/Номер группы</Label>
+                <Label htmlFor="classLetter">{t('protocolForm.child.classLetter')}</Label>
                 <Input
                   id="classLetter"
                   value={formData.childData.classLetter}
                   onChange={(e) => updateChildData("classLetter", e.target.value)}
-                  placeholder={selectedLevel === 'preschool' ? 'Номер группы' : 'А, Б, В...'}
+                  placeholder={selectedLevel === 'preschool' ? t('protocolForm.child.groupNumberPh') : t('protocolForm.child.letterPh')}
                 />
               </div>
 
               <div className="col-span-2">
-                <Label htmlFor="educationalOrganization">Образовательная организация *</Label>
+                <Label htmlFor="educationalOrganization">{t('protocolForm.child.organization')} *</Label>
                 <OrganizationSelector
                   value={formData.childData.educationalOrganization}
                   onChange={(value) => updateChildData("educationalOrganization", value)}
@@ -1142,13 +1141,13 @@ export const ProtocolForm = ({
               </div>
 
               <div className="col-span-2">
-                <Label htmlFor="address">Адрес проживания *</Label>
+                <Label htmlFor="address">{t('protocolForm.child.address')} *</Label>
                 <Textarea
                   id="address"
                   value={formData.childData.address}
                   onChange={(e) => updateChildData("address", e.target.value)}
                   className={getRequiredFieldClass(formData.childData.address)}
-                  placeholder="г. Москва, ул. Примерная, д. 1, кв. 1"
+                  placeholder={t('protocolForm.child.addressPh')}
                   rows={2}
                 />
               </div>
@@ -1165,84 +1164,84 @@ export const ProtocolForm = ({
                   }}
                 />
                 <Label htmlFor="sameAsAddress" className="font-normal cursor-pointer">
-                  Адрес регистрации совпадает с адресом проживания
+                  {t('protocolForm.child.sameAddress')}
                 </Label>
               </div>
 
               {!formData.childData.sameAsAddress && (
                 <div className="col-span-2">
-                  <Label htmlFor="registrationAddress">Адрес регистрации</Label>
+                  <Label htmlFor="registrationAddress">{t('protocolForm.child.registrationAddress')}</Label>
                   <Textarea
                     id="registrationAddress"
                     value={formData.childData.registrationAddress}
                     onChange={(e) => updateChildData("registrationAddress", e.target.value)}
-                    placeholder="г. Москва, ул. Примерная, д. 1, кв. 1"
+                    placeholder={t('protocolForm.child.addressPh')}
                     rows={2}
                   />
                 </div>
               )}
 
               <div className="col-span-2">
-                <Label htmlFor="parentName">ФИО родителя (законного представителя) *</Label>
+                <Label htmlFor="parentName">{t('protocolForm.child.parentName')} *</Label>
                 <Input
                   id="parentName"
                   value={formData.childData.parentName}
                   onChange={(e) => updateChildData("parentName", e.target.value)}
                   className={getRequiredFieldClass(formData.childData.parentName)}
-                  placeholder="Иванов Иван Иванович"
+                  placeholder={t('protocolForm.child.fullNamePh')}
                 />
               </div>
 
               <div>
-                <Label htmlFor="parentPhone">Телефон родителя *</Label>
+                <Label htmlFor="parentPhone">{t('protocolForm.child.parentPhone')} *</Label>
                 <Input
                   id="parentPhone"
                   type="tel"
                   value={formData.childData.parentPhone}
                   onChange={(e) => updateChildData("parentPhone", e.target.value)}
                   className={getRequiredFieldClass(formData.childData.parentPhone)}
-                  placeholder="+7 (999) 123-45-67"
+                  placeholder={t('protocolForm.child.parentPhonePh')}
                 />
               </div>
 
               <div>
-                <Label htmlFor="parentEmail">Email родителя</Label>
+                <Label htmlFor="parentEmail">{t('protocolForm.child.parentEmail')}</Label>
                 <Input
                   id="parentEmail"
                   type="email"
                   value={formData.childData.parentEmail}
                   onChange={(e) => updateChildData("parentEmail", e.target.value)}
-                  placeholder="parent@example.com"
+                  placeholder={t('protocolForm.child.parentEmailPh')}
                 />
               </div>
 
               <div>
-                <Label htmlFor="whobrought">Кто привел на консультацию *</Label>
+                <Label htmlFor="whobrought">{t('protocolForm.child.whobrought')} *</Label>
                 <Select
                   value={formData.childData.whobrought}
                   onValueChange={(value) => updateChildData("whobrought", value)}
                 >
                   <SelectTrigger className={getRequiredFieldClass(formData.childData.whobrought)}>
-                    <SelectValue placeholder="Выберите" />
+                    <SelectValue placeholder={t('protocolForm.common.select')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="mother">Мать</SelectItem>
-                    <SelectItem value="father">Отец</SelectItem>
-                    <SelectItem value="guardian">Опекун</SelectItem>
-                    <SelectItem value="representative">Законный представитель</SelectItem>
-                    <SelectItem value="other">Другое</SelectItem>
+                    <SelectItem value="mother">{t('protocolForm.child.mother')}</SelectItem>
+                    <SelectItem value="father">{t('protocolForm.child.father')}</SelectItem>
+                    <SelectItem value="guardian">{t('protocolForm.child.guardian')}</SelectItem>
+                    <SelectItem value="representative">{t('protocolForm.child.representative')}</SelectItem>
+                    <SelectItem value="other">{t('protocolForm.child.other')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               {formData.childData.whobrought === "other" && (
                 <div className="col-span-2">
-                  <Label htmlFor="relationship">Укажите кто привел</Label>
+                  <Label htmlFor="relationship">{t('protocolForm.child.relationship')}</Label>
                   <Input
                     id="relationship"
                     value={formData.childData.relationship}
                     onChange={(e) => updateChildData("relationship", e.target.value)}
-                    placeholder="Например: бабушка, дедушка, тетя"
+                    placeholder={t('protocolForm.child.relationshipPh')}
                   />
                 </div>
               )}
@@ -1255,11 +1254,11 @@ export const ProtocolForm = ({
       {currentStep === 2 && (
         <Card>
           <CardHeader>
-            <CardTitle>Данные протокола</CardTitle>
+            <CardTitle>{t('protocolForm.protocol.title')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="consultationType">Тип консультации *</Label>
+              <Label htmlFor="consultationType">{t('protocolForm.protocol.consultationType')} *</Label>
               <RadioGroup
                 value={formData.consultationType}
                 onValueChange={(value: "primary" | "secondary") =>
@@ -1268,23 +1267,23 @@ export const ProtocolForm = ({
               >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="primary" id="primary" />
-                  <Label htmlFor="primary">Первичная</Label>
+                  <Label htmlFor="primary">{t('protocolForm.protocol.primary')}</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="secondary" id="secondary" />
-                  <Label htmlFor="secondary">Вторичная</Label>
+                  <Label htmlFor="secondary">{t('protocolForm.protocol.secondary')}</Label>
                 </div>
               </RadioGroup>
             </div>
 
             {formData.consultationType === "secondary" && previousProtocols.length > 0 && (
               <div>
-                <Label>Предыдущие протоколы</Label>
+                <Label>{t('protocolForm.protocol.previousProtocols')}</Label>
                 <div className="space-y-2 mt-2">
                   {previousProtocols.map((protocol) => (
                     <div key={protocol.id} className="flex items-center justify-between p-3 rounded-lg border">
                       <div>
-                        <p className="font-medium">Протокол №{protocol.ppk_number || "б/н"}</p>
+                        <p className="font-medium">{t('protocolForm.protocol.protocolNo', { n: protocol.ppk_number || t('protocolForm.protocol.noNumber') })}</p>
                         <p className="text-sm text-muted-foreground">
                           {new Date(protocol.created_at).toLocaleDateString("ru-RU")}
                         </p>
@@ -1298,7 +1297,7 @@ export const ProtocolForm = ({
                         }}
                       >
                         <Eye className="h-4 w-4 mr-2" />
-                        Просмотр
+                        {t('protocolForm.common.view')}
                       </Button>
                     </div>
                   ))}
@@ -1313,19 +1312,19 @@ export const ProtocolForm = ({
 
             {formData.consultationType === "secondary" && (
               <div>
-                <Label htmlFor="previousConsultations">История предыдущих консультаций</Label>
+                <Label htmlFor="previousConsultations">{t('protocolForm.protocol.history')}</Label>
                 <Textarea
                   id="previousConsultations"
                   value={formData.previousConsultations}
                   onChange={(e) => setFormData(prev => ({ ...prev, previousConsultations: e.target.value }))}
                   rows={6}
-                  placeholder="История предыдущих консультаций..."
+                  placeholder={t('protocolForm.protocol.historyPh')}
                 />
               </div>
             )}
 
             <div>
-              <Label htmlFor="consultationDate">Дата консультации *</Label>
+              <Label htmlFor="consultationDate">{t('protocolForm.protocol.consultationDate')} *</Label>
               <Input
                 id="consultationDate"
                 type="date"
@@ -1336,48 +1335,48 @@ export const ProtocolForm = ({
             </div>
 
             <div>
-              <Label htmlFor="reason">Причина направления на ППк *</Label>
+              <Label htmlFor="reason">{t('protocolForm.protocol.reason')} *</Label>
               <Textarea
                 id="reason"
                 value={formData.reason}
                 onChange={(e) => setFormData(prev => ({ ...prev, reason: e.target.value }))}
                 className={getRequiredFieldClass(formData.reason)}
-                placeholder="Опишите причину направления..."
+                placeholder={t('protocolForm.protocol.reasonPh')}
                 rows={4}
               />
             </div>
 
             <div>
-              <Label htmlFor="sessionTopic">Тема заседания</Label>
+              <Label htmlFor="sessionTopic">{t('protocolForm.protocol.sessionTopic')}</Label>
               <Select
                 value={formData.sessionTopic}
                 onValueChange={(value) => setFormData({ ...formData, sessionTopic: value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Выберите тему заседания" />
+                  <SelectValue placeholder={t('protocolForm.protocol.sessionTopicPh')} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Определение необходимости психолого-педагогической помощи">
-                    Определение необходимости психолого-педагогической помощи
+                    {t('protocolForm.protocol.topic1')}
                   </SelectItem>
                   <SelectItem value="Определение направления психолого-педагогической помощи">
-                    Определение направления психолого-педагогической помощи
+                    {t('protocolForm.protocol.topic2')}
                   </SelectItem>
                   <SelectItem value="Оценка эффективности психолого-педагогической помощи">
-                    Оценка эффективности психолого-педагогической помощи
+                    {t('protocolForm.protocol.topic3')}
                   </SelectItem>
                   <SelectItem value="Психолого-педагогическое сопровождение обучающихся с ОВЗ">
-                    Психолого-педагогическое сопровождение обучающихся с ОВЗ
+                    {t('protocolForm.protocol.topic4')}
                   </SelectItem>
                   <SelectItem value="Подготовка рекомендаций по АООП">
-                    Подготовка рекомендаций по АООП
+                    {t('protocolForm.protocol.topic5')}
                   </SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div>
-              <Label htmlFor="meetingType">Тип заседания</Label>
+              <Label htmlFor="meetingType">{t('protocolForm.protocol.meetingType')}</Label>
               <Select
                 value={formData.meetingType || "scheduled"}
                 onValueChange={(value: "scheduled" | "unscheduled") =>
@@ -1388,22 +1387,22 @@ export const ProtocolForm = ({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="scheduled">Плановое</SelectItem>
-                  <SelectItem value="unscheduled">Внеплановое</SelectItem>
+                  <SelectItem value="scheduled">{t('protocolForm.protocol.scheduled')}</SelectItem>
+                  <SelectItem value="unscheduled">{t('protocolForm.protocol.unscheduled')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div>
-              <Label htmlFor="ppkNumber">Номер протокола ППк</Label>
+              <Label htmlFor="ppkNumber">{t('protocolForm.protocol.ppkNumber')}</Label>
               <Input
                 id="ppkNumber"
                 value={formData.ppkNumber || ""}
                 onChange={(e) => setFormData(prev => ({ ...prev, ppkNumber: e.target.value }))}
-                placeholder="Автоматически при сохранении"
+                placeholder={t('protocolForm.protocol.ppkNumberPh')}
               />
               <p className="text-xs text-muted-foreground mt-1">
-                Оставьте пустым для автоматической генерации
+                {t('protocolForm.protocol.ppkNumberHint')}
               </p>
             </div>
 
@@ -1411,7 +1410,7 @@ export const ProtocolForm = ({
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <FileText className="h-5 w-5" />
-                  Согласие родителя (законного представителя)
+                  {t('protocolForm.protocol.consentTitle')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -1425,10 +1424,10 @@ export const ProtocolForm = ({
                       }
                     />
                     <Label htmlFor="parentConsent" className="font-normal cursor-pointer">
-                      Получено согласие родителя (законного представителя) на обработку персональных данных
+                      {t('protocolForm.protocol.consentText')}
                     </Label>
                     <Badge variant={formData.parentConsent ? "default" : "secondary"} className="ml-auto">
-                      {formData.parentConsent ? "Да" : "Нет"}
+                      {formData.parentConsent ? t('protocolForm.common.yes') : t('protocolForm.common.no')}
                     </Badge>
                   </div>
                 </div>
@@ -1442,7 +1441,7 @@ export const ProtocolForm = ({
       {currentStep === 3 && (
         <Card>
           <CardHeader>
-            <CardTitle>Документы обучающегося</CardTitle>
+            <CardTitle>{t('protocolForm.documents.title')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
@@ -1455,12 +1454,12 @@ export const ProtocolForm = ({
                       onCheckedChange={(checked) => updateDocument(doc.id, Boolean(checked))}
                     />
                     <Label htmlFor={doc.id} className="font-normal cursor-pointer">
-                      {doc.name}
+                      {t(`protocolForm.documents.${doc.id}`, { defaultValue: doc.name })}
                       {doc.required && <span className="text-destructive ml-1">*</span>}
                     </Label>
                   </div>
                   <Badge variant={doc.present ? "default" : "secondary"}>
-                    {doc.present ? "Есть" : "Нет"}
+                    {doc.present ? t('protocolForm.common.present') : t('protocolForm.common.absent')}
                   </Badge>
                 </div>
               ))}
@@ -1520,7 +1519,7 @@ export const ProtocolForm = ({
           variant="outline"
         >
           <ChevronLeft className="mr-2 h-4 w-4" />
-          Назад
+          {t('protocolForm.common.back')}
         </Button>
 
         <div className="flex gap-2">
@@ -1530,12 +1529,12 @@ export const ProtocolForm = ({
             disabled={!canSaveProtocol()}
           >
             <Save className="mr-2 h-4 w-4" />
-            Сохранить черновик
+            {t('protocolForm.common.saveDraft')}
           </Button>
 
           {currentStep < 5 ? (
             <Button onClick={nextStep}>
-              Далее
+              {t('protocolForm.common.next')}
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           ) : (
@@ -1544,7 +1543,7 @@ export const ProtocolForm = ({
               disabled={!canFinalizeProtocol()}
             >
               <CheckCircle className="mr-2 h-4 w-4" />
-              Завершить протокол
+              {t('protocolForm.common.finalize')}
             </Button>
           )}
         </div>
