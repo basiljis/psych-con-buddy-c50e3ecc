@@ -431,17 +431,28 @@ export function ChildCardSection() {
         <>
           {/* Child Info Card */}
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-2">
               <CardTitle className="text-xl">Информация о ребенке</CardTitle>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => setShowInfoDialog(true)}
-                className="gap-2"
-              >
-                <ExternalLink className="h-4 w-4" />
-                Подробнее
-              </Button>
+              <div className="flex gap-2 flex-wrap">
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={handleGoToPpk}
+                  className="gap-2"
+                >
+                  <ClipboardList className="h-4 w-4" />
+                  Перейти к ППк
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowInfoDialog(true)}
+                  className="gap-2"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  Подробнее
+                </Button>
+              </div>
             </CardHeader>
             <CardContent className="grid gap-4 md:grid-cols-4">
               <div className="flex items-center gap-3">
