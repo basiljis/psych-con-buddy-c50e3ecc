@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -13,7 +14,7 @@ import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { 
   User, Calendar, School, Search, Filter, CalendarIcon, 
   CheckCircle, XCircle, TrendingUp, FileText, Users, Plus, ExternalLink,
-  Info, Hand, Mic, Brain, MessageCircle, Heart
+  Info, Hand, Mic, Brain, MessageCircle, Heart, ClipboardList
 } from "lucide-react";
 import { ChildProfileRadarChart } from "@/components/ChildProfileRadarChart";
 import { ChildProfileBarChart } from "@/components/ChildProfileBarChart";
@@ -58,6 +59,7 @@ interface Protocol {
 
 export function ChildCardSection() {
   const { profile, isAdmin, roles } = useAuth();
+  const navigate = useNavigate();
   const { schoolYearsFormatted } = useSchoolYears();
   
   const [selectedChildId, setSelectedChildId] = useState<string>("");
@@ -262,6 +264,39 @@ export function ChildCardSection() {
     setDateTo(undefined);
   };
 
+  const normalizeEducationLevel = (level: string | null): "preschool" | "elementary" | "middle" | "high" | null => {
+    if (!level) return null;
+    const allowed = ["preschool", "elementary", "middle", "high"];
+    if (allowed.includes(level)) return level as any;
+    const map: Record<string, "preschool" | "elementary" | "middle" | "high"> = {
+      "Дошкольное образование": "preschool",
+      "Начальное общее образование": "elementary",
+      "Основное общее образование": "middle",
+      "Среднее общее образование": "high",
+      "ДО": "preschool", "НОО": "elementary", "ОО": "middle", "СОО": "high",
+    };
+    return map[level] ?? null;
+  };
+
+  const handleGoToPpk = () => {
+    if (!selectedChild) return;
+    const level = normalizeEducationLevel(selectedChild.education_level);
+    sessionStorage.setItem(
+      "ppk_prefill_child",
+      JSON.stringify({
+        fullName: selectedChild.full_name,
+        birthDate: selectedChild.birth_date || "",
+        gender: selectedChild.gender || "",
+        parentName: selectedChild.parent_name || "",
+        parentPhone: selectedChild.parent_phone || "",
+        parentEmail: selectedChild.parent_email || "",
+        educationalOrganization: selectedChild.organization_id || "",
+        educationLevel: level,
+      })
+    );
+    navigate("/?tab=protocol");
+  };
+
   const age = selectedChild?.birth_date ? calculateAge(selectedChild.birth_date) : null;
 
   return (
@@ -396,17 +431,28 @@ export function ChildCardSection() {
         <>
           {/* Child Info Card */}
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-2">
               <CardTitle className="text-xl">Информация о ребенке</CardTitle>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => setShowInfoDialog(true)}
-                className="gap-2"
-              >
-                <ExternalLink className="h-4 w-4" />
-                Подробнее
-              </Button>
+              <div className="flex gap-2 flex-wrap">
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={handleGoToPpk}
+                  className="gap-2"
+                >
+                  <ClipboardList className="h-4 w-4" />
+                  Перейти к ППк
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowInfoDialog(true)}
+                  className="gap-2"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  Подробнее
+                </Button>
+              </div>
             </CardHeader>
             <CardContent className="grid gap-4 md:grid-cols-4">
               <div className="flex items-center gap-3">
