@@ -877,16 +877,16 @@ export const ProtocolForm = ({
               <div className="p-3 rounded-full bg-green-100">
                 <CheckCircle className="h-8 w-8 text-green-600" />
               </div>
-              Протокол завершён!
+              {t('protocolForm.completion.title')}
             </DialogTitle>
             <DialogDescription asChild>
               <div className="space-y-4 pt-4">
                 <div className="p-4 rounded-lg bg-green-50 border border-green-200">
                   <p className="text-lg font-medium text-green-800">
-                    Протокол для {formData.childData.fullName} успешно сохранён
+                    {t('protocolForm.completion.savedFor', { name: formData.childData.fullName })}
                   </p>
                   <p className="text-sm text-green-700 mt-1">
-                    Все данные и заключение готовы к использованию
+                    {t('protocolForm.completion.ready')}
                   </p>
                 </div>
               </div>
@@ -902,7 +902,7 @@ export const ProtocolForm = ({
                 navigate('/');
               }}
             >
-              Перейти к списку ППк
+              {t('protocolForm.completion.goToList')}
             </Button>
           </DialogFooter>
         </DialogContent>
