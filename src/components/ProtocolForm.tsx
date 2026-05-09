@@ -102,6 +102,7 @@ export const ProtocolForm = ({
   onProtocolSave: (data: ProtocolData) => void;
   editingProtocol?: any;
 }) => {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedLevel, setSelectedLevel] = useState<"preschool" | "elementary" | "middle" | "high">("elementary");
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
