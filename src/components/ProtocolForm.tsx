@@ -633,8 +633,8 @@ export const ProtocolForm = ({
     } catch (error) {
       console.error('Error saving protocol:', error);
       toast({
-        title: "Ошибка",
-        description: "Не удалось сохранить протокол",
+        title: t('protocolForm.common.error'),
+        description: t('protocolForm.toasts.saveFailed'),
         variant: "destructive"
       });
     } finally {
