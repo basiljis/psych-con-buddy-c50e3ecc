@@ -969,13 +969,13 @@ export const ProtocolForm = ({
                   <Alert variant="destructive" className="mb-4">
                     <AlertCircle className="h-4 w-4" />
                     <AlertDescription className="flex items-center justify-between">
-                      <span>Пробный период истек. Оформите подписку для создания новых протоколов.</span>
+                      <span>{t('protocolForm.access.trialEndedShort')}</span>
                       <Button 
                         variant="outline" 
                         size="sm"
                         onClick={() => navigate('/profile')}
                       >
-                        Оформить подписку
+                        {t('protocolForm.common.subscribe')}
                       </Button>
                     </AlertDescription>
                   </Alert>
