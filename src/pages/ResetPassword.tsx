@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,30 +16,30 @@ const ResetPassword = () => {
   const [isValidSession, setIsValidSession] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation("pages");
 
   useEffect(() => {
-    // Check if user came from password reset email
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         setIsValidSession(true);
       } else {
         toast({
-          title: "Недействительная ссылка",
-          description: "Ссылка для сброса пароля истекла или недействительна",
+          title: t("resetPassword.invalidLinkTitle"),
+          description: t("resetPassword.invalidLinkDesc"),
           variant: "destructive",
         });
         navigate("/auth");
       }
     });
-  }, [navigate, toast]);
+  }, [navigate, toast, t]);
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
       toast({
-        title: "Ошибка",
-        description: "Пароли не совпадают",
+        title: t("common.error"),
+        description: t("resetPassword.passwordsDontMatch"),
         variant: "destructive",
       });
       return;
@@ -46,8 +47,8 @@ const ResetPassword = () => {
 
     if (newPassword.length < 6) {
       toast({
-        title: "Ошибка",
-        description: "Пароль должен содержать минимум 6 символов",
+        title: t("common.error"),
+        description: t("resetPassword.tooShort"),
         variant: "destructive",
       });
       return;
@@ -56,24 +57,20 @@ const ResetPassword = () => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.updateUser({
-        password: newPassword,
-      });
-
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
       if (error) throw error;
 
       toast({
-        title: "Пароль изменен",
-        description: "Ваш пароль успешно изменен. Теперь вы можете войти с новым паролем.",
+        title: t("resetPassword.successTitle"),
+        description: t("resetPassword.successDesc"),
       });
 
-      // Sign out and redirect to login
       await supabase.auth.signOut();
       navigate("/auth");
     } catch (error: any) {
       toast({
-        title: "Ошибка",
-        description: error.message || "Не удалось изменить пароль",
+        title: t("common.error"),
+        description: error.message || t("resetPassword.failed"),
         variant: "destructive",
       });
     } finally {
@@ -90,19 +87,17 @@ const ResetPassword = () => {
       <FloatingLanguageToggle />
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Создание нового пароля</CardTitle>
-          <CardDescription>
-            Введите новый пароль для вашего аккаунта
-          </CardDescription>
+          <CardTitle>{t("resetPassword.title")}</CardTitle>
+          <CardDescription>{t("resetPassword.description")}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleResetPassword} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="new-password">Новый пароль</Label>
+              <Label htmlFor="new-password">{t("resetPassword.newPassword")}</Label>
               <Input
                 id="new-password"
                 type="password"
-                placeholder="Минимум 6 символов"
+                placeholder={t("resetPassword.newPasswordPh")}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 required
@@ -111,11 +106,11 @@ const ResetPassword = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirm-password">Подтвердите пароль</Label>
+              <Label htmlFor="confirm-password">{t("resetPassword.confirmPassword")}</Label>
               <Input
                 id="confirm-password"
                 type="password"
-                placeholder="Повторите пароль"
+                placeholder={t("resetPassword.confirmPasswordPh")}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
@@ -124,7 +119,7 @@ const ResetPassword = () => {
             </div>
 
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Сохранение..." : "Сохранить новый пароль"}
+              {loading ? t("resetPassword.submitting") : t("resetPassword.submit")}
             </Button>
           </form>
         </CardContent>
