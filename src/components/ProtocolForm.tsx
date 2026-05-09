@@ -1118,6 +1118,7 @@ export const ProtocolForm = ({
                   className={getRequiredFieldClass(formData.childData.age)}
                   placeholder={t('protocolForm.child.agePh')}
                 />
+                <FieldError messageKey={childErrorKey("age")} />
               </div>
 
               <div>
