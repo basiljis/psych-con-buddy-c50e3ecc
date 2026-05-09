@@ -320,6 +320,62 @@ export const ProtocolForm = ({
     return isRequiredFieldEmpty(value) ? "border-destructive focus:border-destructive" : "";
   };
 
+  const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+  const isValidPhone = (value: string) => {
+    const digits = value.replace(/\D/g, "");
+    return digits.length >= 10 && digits.length <= 15;
+  };
+  const isFutureDate = (value: string) => {
+    if (!value) return false;
+    const d = new Date(value);
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    return d.getTime() > today.getTime();
+  };
+  const isTooOldBirthDate = (value: string) => {
+    if (!value) return false;
+    const d = new Date(value);
+    return d.getFullYear() < 1900;
+  };
+
+  const FieldError = ({ messageKey }: { messageKey: string | null }) =>
+    messageKey ? (
+      <p className="text-xs text-destructive mt-1" role="alert">
+        {t(`protocolForm.validation.${messageKey}`)}
+      </p>
+    ) : null;
+
+  const childErrorKey = (field: keyof ChildData): string | null => {
+    const v = (formData.childData[field] || "") as string;
+    switch (field) {
+      case "fullName": return isRequiredFieldEmpty(v) ? "requiredFullName" : null;
+      case "birthDate":
+        if (isRequiredFieldEmpty(v)) return "requiredBirthDate";
+        if (isFutureDate(v)) return "futureBirthDate";
+        if (isTooOldBirthDate(v)) return "tooOldBirthDate";
+        return null;
+      case "age": return isRequiredFieldEmpty(v) ? "requiredAge" : null;
+      case "gender": return isRequiredFieldEmpty(v) ? "requiredGender" : null;
+      case "classNumber": return isRequiredFieldEmpty(v) ? "requiredClassGroup" : null;
+      case "educationalOrganization": return isRequiredFieldEmpty(v) ? "requiredOrganization" : null;
+      case "address": return isRequiredFieldEmpty(v) ? "requiredAddress" : null;
+      case "parentName": return isRequiredFieldEmpty(v) ? "requiredParentName" : null;
+      case "parentPhone":
+        if (isRequiredFieldEmpty(v)) return "requiredParentPhone";
+        if (!isValidPhone(v)) return "invalidPhone";
+        return null;
+      case "parentEmail":
+        if (!v) return null;
+        return isValidEmail(v) ? null : "invalidEmail";
+      case "whobrought": return isRequiredFieldEmpty(v) ? "requiredWhobrought" : null;
+      case "relationship":
+        if (formData.childData.whobrought === "other" && isRequiredFieldEmpty(v)) return "requiredRelationship";
+        return null;
+      default: return null;
+    }
+  };
+
+
   const canSaveProtocol = () => {
     const requiredFields = [
       formData.childData.fullName,
@@ -1029,6 +1085,7 @@ export const ProtocolForm = ({
                   className={getRequiredFieldClass(formData.childData.fullName)}
                   placeholder={t('protocolForm.child.fullNamePh')}
                 />
+                <FieldError messageKey={childErrorKey("fullName")} />
               </div>
 
               <div>
@@ -1049,6 +1106,7 @@ export const ProtocolForm = ({
                   }}
                   className={getRequiredFieldClass(formData.childData.birthDate)}
                 />
+                <FieldError messageKey={childErrorKey("birthDate")} />
               </div>
 
               <div>
@@ -1060,6 +1118,7 @@ export const ProtocolForm = ({
                   className={getRequiredFieldClass(formData.childData.age)}
                   placeholder={t('protocolForm.child.agePh')}
                 />
+                <FieldError messageKey={childErrorKey("age")} />
               </div>
 
               <div>
@@ -1076,6 +1135,7 @@ export const ProtocolForm = ({
                     <SelectItem value="female">{t('protocolForm.child.female')}</SelectItem>
                   </SelectContent>
                 </Select>
+                <FieldError messageKey={childErrorKey("gender")} />
               </div>
 
               <div className="col-span-2 py-4">
@@ -1084,6 +1144,7 @@ export const ProtocolForm = ({
                   selectedLevel={selectedLevel}
                   onLevelChange={setSelectedLevel}
                 />
+                <FieldError messageKey={!selectedLevel ? "requiredEducationLevel" : null} />
               </div>
 
               <div>
@@ -1118,6 +1179,7 @@ export const ProtocolForm = ({
                     )}
                   </SelectContent>
                 </Select>
+                <FieldError messageKey={childErrorKey("classNumber")} />
               </div>
 
               <div>
@@ -1138,6 +1200,7 @@ export const ProtocolForm = ({
                   disabled={!isAdmin && !isRegionalOperator && !!profile?.organization_id}
                   label=""
                 />
+                <FieldError messageKey={childErrorKey("educationalOrganization")} />
               </div>
 
               <div className="col-span-2">
@@ -1150,6 +1213,7 @@ export const ProtocolForm = ({
                   placeholder={t('protocolForm.child.addressPh')}
                   rows={2}
                 />
+                <FieldError messageKey={childErrorKey("address")} />
               </div>
 
               <div className="col-span-2 flex items-center space-x-2">
@@ -1190,6 +1254,7 @@ export const ProtocolForm = ({
                   className={getRequiredFieldClass(formData.childData.parentName)}
                   placeholder={t('protocolForm.child.fullNamePh')}
                 />
+                <FieldError messageKey={childErrorKey("parentName")} />
               </div>
 
               <div>
@@ -1202,6 +1267,7 @@ export const ProtocolForm = ({
                   className={getRequiredFieldClass(formData.childData.parentPhone)}
                   placeholder={t('protocolForm.child.parentPhonePh')}
                 />
+                <FieldError messageKey={childErrorKey("parentPhone")} />
               </div>
 
               <div>
@@ -1213,6 +1279,7 @@ export const ProtocolForm = ({
                   onChange={(e) => updateChildData("parentEmail", e.target.value)}
                   placeholder={t('protocolForm.child.parentEmailPh')}
                 />
+                <FieldError messageKey={childErrorKey("parentEmail")} />
               </div>
 
               <div>
@@ -1232,6 +1299,7 @@ export const ProtocolForm = ({
                     <SelectItem value="other">{t('protocolForm.child.other')}</SelectItem>
                   </SelectContent>
                 </Select>
+                <FieldError messageKey={childErrorKey("whobrought")} />
               </div>
 
               {formData.childData.whobrought === "other" && (
@@ -1243,6 +1311,7 @@ export const ProtocolForm = ({
                     onChange={(e) => updateChildData("relationship", e.target.value)}
                     placeholder={t('protocolForm.child.relationshipPh')}
                   />
+                  <FieldError messageKey={childErrorKey("relationship")} />
                 </div>
               )}
             </div>
@@ -1332,6 +1401,11 @@ export const ProtocolForm = ({
                 onChange={(e) => setFormData(prev => ({ ...prev, consultationDate: e.target.value }))}
                 className={getRequiredFieldClass(formData.consultationDate)}
               />
+              <FieldError messageKey={
+                isRequiredFieldEmpty(formData.consultationDate)
+                  ? "requiredConsultationDate"
+                  : isFutureDate(formData.consultationDate) ? "futureConsultationDate" : null
+              } />
             </div>
 
             <div>
@@ -1344,15 +1418,16 @@ export const ProtocolForm = ({
                 placeholder={t('protocolForm.protocol.reasonPh')}
                 rows={4}
               />
+              <FieldError messageKey={isRequiredFieldEmpty(formData.reason) ? "requiredReason" : null} />
             </div>
 
             <div>
-              <Label htmlFor="sessionTopic">{t('protocolForm.protocol.sessionTopic')}</Label>
+              <Label htmlFor="sessionTopic">{t('protocolForm.protocol.sessionTopic')} *</Label>
               <Select
                 value={formData.sessionTopic}
                 onValueChange={(value) => setFormData({ ...formData, sessionTopic: value })}
               >
-                <SelectTrigger>
+                <SelectTrigger className={getRequiredFieldClass(formData.sessionTopic || '')}>
                   <SelectValue placeholder={t('protocolForm.protocol.sessionTopicPh')} />
                 </SelectTrigger>
                 <SelectContent>
@@ -1373,6 +1448,7 @@ export const ProtocolForm = ({
                   </SelectItem>
                 </SelectContent>
               </Select>
+              <FieldError messageKey={isRequiredFieldEmpty(formData.sessionTopic || '') ? "requiredSessionTopic" : null} />
             </div>
 
             <div>
@@ -1430,6 +1506,7 @@ export const ProtocolForm = ({
                       {formData.parentConsent ? t('protocolForm.common.yes') : t('protocolForm.common.no')}
                     </Badge>
                   </div>
+                  <FieldError messageKey={!formData.parentConsent ? "requiredConsent" : null} />
                 </div>
                 
               </CardContent>
@@ -1464,6 +1541,7 @@ export const ProtocolForm = ({
                 </div>
               ))}
             </div>
+            <FieldError messageKey={getStepMissingRequiredFields(3) ? "requiredDocuments" : null} />
           </CardContent>
         </Card>
       )}
