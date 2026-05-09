@@ -751,22 +751,22 @@ export const ProtocolForm = ({
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-destructive">
             <AlertCircle className="h-5 w-5" />
-            Доступ ограничен
+            {t('protocolForm.access.restricted')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              Пробный период завершен. Для создания новых протоколов необходимо оформить подписку.
+              {t('protocolForm.access.trialEnded')}
             </AlertDescription>
           </Alert>
           <div className="flex gap-4">
             <Button onClick={() => navigate('/profile')} className="flex-1">
-              Оформить подписку
+              {t('protocolForm.common.subscribe')}
             </Button>
             <Button variant="outline" onClick={() => navigate('/')} className="flex-1">
-              На главную
+              {t('protocolForm.common.toHome')}
             </Button>
           </div>
         </CardContent>
