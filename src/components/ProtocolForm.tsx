@@ -1005,7 +1005,7 @@ export const ProtocolForm = ({
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-2">
                 <div className="flex items-center justify-between mb-2">
-                  <Label htmlFor="fullName">ФИО обучающегося *</Label>
+                  <Label htmlFor="fullName">{t('protocolForm.child.fullName')} *</Label>
                   <ChildSelector
                     onSelect={(child) => {
                       updateChildData("fullName", child.fullName);
@@ -1017,7 +1017,7 @@ export const ProtocolForm = ({
                         const today = new Date();
                         const years = differenceInYears(today, birthDate);
                         const months = differenceInMonths(today, birthDate) % 12;
-                        updateChildData("age", `${years} лет ${months} мес.`);
+                        updateChildData("age", t('protocolForm.child.ageFmt', { years, months }));
                       }
                     }}
                   />
@@ -1027,12 +1027,12 @@ export const ProtocolForm = ({
                   value={formData.childData.fullName}
                   onChange={(e) => updateChildData("fullName", e.target.value)}
                   className={getRequiredFieldClass(formData.childData.fullName)}
-                  placeholder="Иванов Иван Иванович"
+                  placeholder={t('protocolForm.child.fullNamePh')}
                 />
               </div>
 
               <div>
-                <Label htmlFor="birthDate">Дата рождения *</Label>
+                <Label htmlFor="birthDate">{t('protocolForm.child.birthDate')} *</Label>
                 <Input
                   id="birthDate"
                   type="date"
@@ -1044,7 +1044,7 @@ export const ProtocolForm = ({
                       const today = new Date();
                       const years = differenceInYears(today, birthDate);
                       const months = differenceInMonths(today, birthDate) % 12;
-                      updateChildData("age", `${years} лет ${months} мес.`);
+                      updateChildData("age", t('protocolForm.child.ageFmt', { years, months }));
                     }
                   }}
                   className={getRequiredFieldClass(formData.childData.birthDate)}
@@ -1052,34 +1052,34 @@ export const ProtocolForm = ({
               </div>
 
               <div>
-                <Label htmlFor="age">Возраст *</Label>
+                <Label htmlFor="age">{t('protocolForm.child.age')} *</Label>
                 <Input
                   id="age"
                   value={formData.childData.age}
                   onChange={(e) => updateChildData("age", e.target.value)}
                   className={getRequiredFieldClass(formData.childData.age)}
-                  placeholder="7 лет 6 мес."
+                  placeholder={t('protocolForm.child.agePh')}
                 />
               </div>
 
               <div>
-                <Label htmlFor="gender">Пол *</Label>
+                <Label htmlFor="gender">{t('protocolForm.child.gender')} *</Label>
                 <Select
                   value={formData.childData.gender}
                   onValueChange={(value) => updateChildData('gender', value)}
                 >
                   <SelectTrigger className={getRequiredFieldClass(formData.childData.gender)}>
-                    <SelectValue placeholder="Выберите пол" />
+                    <SelectValue placeholder={t('protocolForm.child.genderPh')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="male">Мужской</SelectItem>
-                    <SelectItem value="female">Женский</SelectItem>
+                    <SelectItem value="male">{t('protocolForm.child.male')}</SelectItem>
+                    <SelectItem value="female">{t('protocolForm.child.female')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="col-span-2 py-4">
-                <Label className="mb-3 block">Уровень образования *</Label>
+                <Label className="mb-3 block">{t('protocolForm.child.educationLevel')} *</Label>
                 <EducationLevelSelector
                   selectedLevel={selectedLevel}
                   onLevelChange={setSelectedLevel}
