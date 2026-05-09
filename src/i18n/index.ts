@@ -3,15 +3,19 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import ru from "./locales/ru.json";
 import en from "./locales/en.json";
+import pagesRu from "./locales/pages.ru.json";
+import pagesEn from "./locales/pages.en.json";
 
 void i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources: {
-      ru: { translation: ru },
-      en: { translation: en },
+      ru: { translation: ru, pages: pagesRu },
+      en: { translation: en, pages: pagesEn },
     },
+    ns: ["translation", "pages"],
+    defaultNS: "translation",
     fallbackLng: "ru",
     supportedLngs: ["ru", "en"],
     interpolation: { escapeValue: false },
