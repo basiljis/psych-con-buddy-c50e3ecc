@@ -18,6 +18,7 @@ const NotFound = () => {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-background p-4">
+      <FloatingLanguageToggle />
       <div className="text-center max-w-2xl mx-auto">
         <img 
           src={notFoundImage} 
