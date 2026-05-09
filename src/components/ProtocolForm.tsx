@@ -206,8 +206,8 @@ export const ProtocolForm = ({
         },
       }));
       toast({
-        title: "Данные ребёнка подтянуты",
-        description: "Карточка ребёнка автоматически заполнила сведения. Проверьте и продолжите заполнение чек-листа.",
+        title: t('protocolForm.toasts.prefillTitle'),
+        description: t('protocolForm.toasts.prefillDesc'),
       });
     } catch (e) {
       console.error("Failed to apply ppk prefill:", e);
