@@ -959,7 +959,7 @@ export const ProtocolForm = ({
       {currentStep === 1 && (
         <Card>
           <CardHeader>
-            <CardTitle>Данные об обучающемся</CardTitle>
+            <CardTitle>{t('protocolForm.steps.step1')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Уведомления о подписке - только для пользователей без активной подписки */}
