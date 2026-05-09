@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { FloatingLanguageToggle } from "@/components/ui/floating-language-toggle";
 
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -86,6 +87,7 @@ const ResetPassword = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
+      <FloatingLanguageToggle />
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Создание нового пароля</CardTitle>

@@ -20,6 +20,17 @@ void i18n
       caches: ["localStorage"],
       lookupLocalStorage: "i18nextLng",
     },
+  })
+  .then(() => {
+    if (typeof document !== "undefined") {
+      document.documentElement.lang = (i18n.resolvedLanguage || i18n.language || "ru").slice(0, 2);
+    }
   });
+
+i18n.on("languageChanged", (lng) => {
+  if (typeof document !== "undefined") {
+    document.documentElement.lang = (lng || "ru").slice(0, 2);
+  }
+});
 
 export default i18n;

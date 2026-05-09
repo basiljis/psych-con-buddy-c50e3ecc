@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 import notFoundImage from "@/assets/404-illustration.png";
+import { FloatingLanguageToggle } from "@/components/ui/floating-language-toggle";
 
 const NotFound = () => {
   const location = useLocation();
@@ -17,6 +18,7 @@ const NotFound = () => {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-background p-4">
+      <FloatingLanguageToggle />
       <div className="text-center max-w-2xl mx-auto">
         <img 
           src={notFoundImage} 

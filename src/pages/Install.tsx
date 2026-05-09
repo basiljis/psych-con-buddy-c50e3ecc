@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, Smartphone, Share, MoreVertical, Plus, Check, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { FloatingLanguageToggle } from "@/components/ui/floating-language-toggle";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -54,6 +55,7 @@ const Install = () => {
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
+      <FloatingLanguageToggle />
       <div className="max-w-2xl mx-auto space-y-6">
         <Button 
           variant="ghost" 
