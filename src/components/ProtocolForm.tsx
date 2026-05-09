@@ -1254,6 +1254,7 @@ export const ProtocolForm = ({
                   className={getRequiredFieldClass(formData.childData.parentName)}
                   placeholder={t('protocolForm.child.fullNamePh')}
                 />
+                <FieldError messageKey={childErrorKey("parentName")} />
               </div>
 
               <div>
@@ -1266,6 +1267,7 @@ export const ProtocolForm = ({
                   className={getRequiredFieldClass(formData.childData.parentPhone)}
                   placeholder={t('protocolForm.child.parentPhonePh')}
                 />
+                <FieldError messageKey={childErrorKey("parentPhone")} />
               </div>
 
               <div>
@@ -1277,6 +1279,7 @@ export const ProtocolForm = ({
                   onChange={(e) => updateChildData("parentEmail", e.target.value)}
                   placeholder={t('protocolForm.child.parentEmailPh')}
                 />
+                <FieldError messageKey={childErrorKey("parentEmail")} />
               </div>
 
               <div>
@@ -1296,6 +1299,7 @@ export const ProtocolForm = ({
                     <SelectItem value="other">{t('protocolForm.child.other')}</SelectItem>
                   </SelectContent>
                 </Select>
+                <FieldError messageKey={childErrorKey("whobrought")} />
               </div>
 
               {formData.childData.whobrought === "other" && (
