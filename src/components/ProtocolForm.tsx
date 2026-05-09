@@ -1135,6 +1135,7 @@ export const ProtocolForm = ({
                     <SelectItem value="female">{t('protocolForm.child.female')}</SelectItem>
                   </SelectContent>
                 </Select>
+                <FieldError messageKey={childErrorKey("gender")} />
               </div>
 
               <div className="col-span-2 py-4">
