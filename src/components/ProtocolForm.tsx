@@ -1506,6 +1506,7 @@ export const ProtocolForm = ({
                       {formData.parentConsent ? t('protocolForm.common.yes') : t('protocolForm.common.no')}
                     </Badge>
                   </div>
+                  <FieldError messageKey={!formData.parentConsent ? "requiredConsent" : null} />
                 </div>
                 
               </CardContent>
