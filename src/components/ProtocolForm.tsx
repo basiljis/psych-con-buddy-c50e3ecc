@@ -1106,6 +1106,7 @@ export const ProtocolForm = ({
                   }}
                   className={getRequiredFieldClass(formData.childData.birthDate)}
                 />
+                <FieldError messageKey={childErrorKey("birthDate")} />
               </div>
 
               <div>
