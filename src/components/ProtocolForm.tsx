@@ -1401,6 +1401,11 @@ export const ProtocolForm = ({
                 onChange={(e) => setFormData(prev => ({ ...prev, consultationDate: e.target.value }))}
                 className={getRequiredFieldClass(formData.consultationDate)}
               />
+              <FieldError messageKey={
+                isRequiredFieldEmpty(formData.consultationDate)
+                  ? "requiredConsultationDate"
+                  : isFutureDate(formData.consultationDate) ? "futureConsultationDate" : null
+              } />
             </div>
 
             <div>
@@ -1413,15 +1418,16 @@ export const ProtocolForm = ({
                 placeholder={t('protocolForm.protocol.reasonPh')}
                 rows={4}
               />
+              <FieldError messageKey={isRequiredFieldEmpty(formData.reason) ? "requiredReason" : null} />
             </div>
 
             <div>
-              <Label htmlFor="sessionTopic">{t('protocolForm.protocol.sessionTopic')}</Label>
+              <Label htmlFor="sessionTopic">{t('protocolForm.protocol.sessionTopic')} *</Label>
               <Select
                 value={formData.sessionTopic}
                 onValueChange={(value) => setFormData({ ...formData, sessionTopic: value })}
               >
-                <SelectTrigger>
+                <SelectTrigger className={getRequiredFieldClass(formData.sessionTopic || '')}>
                   <SelectValue placeholder={t('protocolForm.protocol.sessionTopicPh')} />
                 </SelectTrigger>
                 <SelectContent>
@@ -1442,6 +1448,7 @@ export const ProtocolForm = ({
                   </SelectItem>
                 </SelectContent>
               </Select>
+              <FieldError messageKey={isRequiredFieldEmpty(formData.sessionTopic || '') ? "requiredSessionTopic" : null} />
             </div>
 
             <div>
