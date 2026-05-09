@@ -777,35 +777,35 @@ export const ProtocolForm = ({
   const steps = [
     { 
       number: 1, 
-      title: "Данные об обучающемся", 
+      title: t('protocolForm.steps.step1'), 
       icon: User,
       isComplete: () => !getStepMissingRequiredFields(1),
       hasMissingRequired: () => getStepMissingRequiredFields(1)
     },
     { 
       number: 2, 
-      title: "Данные протокола", 
+      title: t('protocolForm.steps.step2'), 
       icon: FileText,
       isComplete: () => !getStepMissingRequiredFields(2),
       hasMissingRequired: () => getStepMissingRequiredFields(2)
     },
     { 
       number: 3, 
-      title: "Документы обучающегося", 
+      title: t('protocolForm.steps.step3'), 
       icon: FileText,
       isComplete: () => !getStepMissingRequiredFields(3),
       hasMissingRequired: () => getStepMissingRequiredFields(3)
     },
     { 
       number: 4, 
-      title: "Чек-лист обследования", 
+      title: t('protocolForm.steps.step4'), 
       icon: ClipboardList,
       isComplete: () => !getStepMissingRequiredFields(4),
       hasMissingRequired: () => getStepMissingRequiredFields(4)
     },
     { 
       number: 5, 
-      title: "Результаты и заключение", 
+      title: t('protocolForm.steps.step5'), 
       icon: CheckCircle,
       isComplete: () => !getStepMissingRequiredFields(5),
       hasMissingRequired: () => getStepMissingRequiredFields(5)
