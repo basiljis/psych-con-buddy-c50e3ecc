@@ -1085,6 +1085,7 @@ export const ProtocolForm = ({
                   className={getRequiredFieldClass(formData.childData.fullName)}
                   placeholder={t('protocolForm.child.fullNamePh')}
                 />
+                <FieldError messageKey={childErrorKey("fullName")} />
               </div>
 
               <div>
