@@ -1519,7 +1519,7 @@ export const ProtocolForm = ({
           variant="outline"
         >
           <ChevronLeft className="mr-2 h-4 w-4" />
-          Назад
+          {t('protocolForm.common.back')}
         </Button>
 
         <div className="flex gap-2">
@@ -1529,12 +1529,12 @@ export const ProtocolForm = ({
             disabled={!canSaveProtocol()}
           >
             <Save className="mr-2 h-4 w-4" />
-            Сохранить черновик
+            {t('protocolForm.common.saveDraft')}
           </Button>
 
           {currentStep < 5 ? (
             <Button onClick={nextStep}>
-              Далее
+              {t('protocolForm.common.next')}
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           ) : (
@@ -1543,7 +1543,7 @@ export const ProtocolForm = ({
               disabled={!canFinalizeProtocol()}
             >
               <CheckCircle className="mr-2 h-4 w-4" />
-              Завершить протокол
+              {t('protocolForm.common.finalize')}
             </Button>
           )}
         </div>
