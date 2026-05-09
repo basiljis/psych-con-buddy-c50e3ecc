@@ -1087,7 +1087,7 @@ export const ProtocolForm = ({
               </div>
 
               <div>
-                <Label htmlFor="classNumber">Класс/Группа *</Label>
+                <Label htmlFor="classNumber">{t('protocolForm.child.classGroup')} *</Label>
                 <Select
                   value={formData.childData.classNumber}
                   onValueChange={(value) => updateChildData('classNumber', value)}
@@ -1095,23 +1095,23 @@ export const ProtocolForm = ({
                   <SelectTrigger className={getRequiredFieldClass(formData.childData.classNumber)}>
                     <SelectValue placeholder={
                       selectedLevel === 'preschool' 
-                        ? 'Выберите группу' 
-                        : 'Выберите класс'
+                        ? t('protocolForm.child.selectGroup')
+                        : t('protocolForm.child.selectClass')
                     } />
                   </SelectTrigger>
                   <SelectContent>
                     {selectedLevel === 'preschool' ? (
                       <>
-                        <SelectItem value="Младшая группа">Младшая группа</SelectItem>
-                        <SelectItem value="Средняя группа">Средняя группа</SelectItem>
-                        <SelectItem value="Старшая группа">Старшая группа</SelectItem>
-                        <SelectItem value="Подготовительная группа">Подготовительная группа</SelectItem>
+                        <SelectItem value="Младшая группа">{t('protocolForm.child.groupYounger')}</SelectItem>
+                        <SelectItem value="Средняя группа">{t('protocolForm.child.groupMiddle')}</SelectItem>
+                        <SelectItem value="Старшая группа">{t('protocolForm.child.groupOlder')}</SelectItem>
+                        <SelectItem value="Подготовительная группа">{t('protocolForm.child.groupPrep')}</SelectItem>
                       </>
                     ) : (
                       <>
                         {Array.from({ length: 11 }, (_, i) => (
                           <SelectItem key={i + 1} value={(i + 1).toString()}>
-                            {i + 1} класс
+                            {t('protocolForm.child.classN', { n: i + 1 })}
                           </SelectItem>
                         ))}
                       </>
@@ -1121,17 +1121,17 @@ export const ProtocolForm = ({
               </div>
 
               <div>
-                <Label htmlFor="classLetter">Литера класса/Номер группы</Label>
+                <Label htmlFor="classLetter">{t('protocolForm.child.classLetter')}</Label>
                 <Input
                   id="classLetter"
                   value={formData.childData.classLetter}
                   onChange={(e) => updateChildData("classLetter", e.target.value)}
-                  placeholder={selectedLevel === 'preschool' ? 'Номер группы' : 'А, Б, В...'}
+                  placeholder={selectedLevel === 'preschool' ? t('protocolForm.child.groupNumberPh') : t('protocolForm.child.letterPh')}
                 />
               </div>
 
               <div className="col-span-2">
-                <Label htmlFor="educationalOrganization">Образовательная организация *</Label>
+                <Label htmlFor="educationalOrganization">{t('protocolForm.child.organization')} *</Label>
                 <OrganizationSelector
                   value={formData.childData.educationalOrganization}
                   onChange={(value) => updateChildData("educationalOrganization", value)}
@@ -1141,13 +1141,13 @@ export const ProtocolForm = ({
               </div>
 
               <div className="col-span-2">
-                <Label htmlFor="address">Адрес проживания *</Label>
+                <Label htmlFor="address">{t('protocolForm.child.address')} *</Label>
                 <Textarea
                   id="address"
                   value={formData.childData.address}
                   onChange={(e) => updateChildData("address", e.target.value)}
                   className={getRequiredFieldClass(formData.childData.address)}
-                  placeholder="г. Москва, ул. Примерная, д. 1, кв. 1"
+                  placeholder={t('protocolForm.child.addressPh')}
                   rows={2}
                 />
               </div>
@@ -1164,84 +1164,84 @@ export const ProtocolForm = ({
                   }}
                 />
                 <Label htmlFor="sameAsAddress" className="font-normal cursor-pointer">
-                  Адрес регистрации совпадает с адресом проживания
+                  {t('protocolForm.child.sameAddress')}
                 </Label>
               </div>
 
               {!formData.childData.sameAsAddress && (
                 <div className="col-span-2">
-                  <Label htmlFor="registrationAddress">Адрес регистрации</Label>
+                  <Label htmlFor="registrationAddress">{t('protocolForm.child.registrationAddress')}</Label>
                   <Textarea
                     id="registrationAddress"
                     value={formData.childData.registrationAddress}
                     onChange={(e) => updateChildData("registrationAddress", e.target.value)}
-                    placeholder="г. Москва, ул. Примерная, д. 1, кв. 1"
+                    placeholder={t('protocolForm.child.addressPh')}
                     rows={2}
                   />
                 </div>
               )}
 
               <div className="col-span-2">
-                <Label htmlFor="parentName">ФИО родителя (законного представителя) *</Label>
+                <Label htmlFor="parentName">{t('protocolForm.child.parentName')} *</Label>
                 <Input
                   id="parentName"
                   value={formData.childData.parentName}
                   onChange={(e) => updateChildData("parentName", e.target.value)}
                   className={getRequiredFieldClass(formData.childData.parentName)}
-                  placeholder="Иванов Иван Иванович"
+                  placeholder={t('protocolForm.child.fullNamePh')}
                 />
               </div>
 
               <div>
-                <Label htmlFor="parentPhone">Телефон родителя *</Label>
+                <Label htmlFor="parentPhone">{t('protocolForm.child.parentPhone')} *</Label>
                 <Input
                   id="parentPhone"
                   type="tel"
                   value={formData.childData.parentPhone}
                   onChange={(e) => updateChildData("parentPhone", e.target.value)}
                   className={getRequiredFieldClass(formData.childData.parentPhone)}
-                  placeholder="+7 (999) 123-45-67"
+                  placeholder={t('protocolForm.child.parentPhonePh')}
                 />
               </div>
 
               <div>
-                <Label htmlFor="parentEmail">Email родителя</Label>
+                <Label htmlFor="parentEmail">{t('protocolForm.child.parentEmail')}</Label>
                 <Input
                   id="parentEmail"
                   type="email"
                   value={formData.childData.parentEmail}
                   onChange={(e) => updateChildData("parentEmail", e.target.value)}
-                  placeholder="parent@example.com"
+                  placeholder={t('protocolForm.child.parentEmailPh')}
                 />
               </div>
 
               <div>
-                <Label htmlFor="whobrought">Кто привел на консультацию *</Label>
+                <Label htmlFor="whobrought">{t('protocolForm.child.whobrought')} *</Label>
                 <Select
                   value={formData.childData.whobrought}
                   onValueChange={(value) => updateChildData("whobrought", value)}
                 >
                   <SelectTrigger className={getRequiredFieldClass(formData.childData.whobrought)}>
-                    <SelectValue placeholder="Выберите" />
+                    <SelectValue placeholder={t('protocolForm.common.select')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="mother">Мать</SelectItem>
-                    <SelectItem value="father">Отец</SelectItem>
-                    <SelectItem value="guardian">Опекун</SelectItem>
-                    <SelectItem value="representative">Законный представитель</SelectItem>
-                    <SelectItem value="other">Другое</SelectItem>
+                    <SelectItem value="mother">{t('protocolForm.child.mother')}</SelectItem>
+                    <SelectItem value="father">{t('protocolForm.child.father')}</SelectItem>
+                    <SelectItem value="guardian">{t('protocolForm.child.guardian')}</SelectItem>
+                    <SelectItem value="representative">{t('protocolForm.child.representative')}</SelectItem>
+                    <SelectItem value="other">{t('protocolForm.child.other')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               {formData.childData.whobrought === "other" && (
                 <div className="col-span-2">
-                  <Label htmlFor="relationship">Укажите кто привел</Label>
+                  <Label htmlFor="relationship">{t('protocolForm.child.relationship')}</Label>
                   <Input
                     id="relationship"
                     value={formData.childData.relationship}
                     onChange={(e) => updateChildData("relationship", e.target.value)}
-                    placeholder="Например: бабушка, дедушка, тетя"
+                    placeholder={t('protocolForm.child.relationshipPh')}
                   />
                 </div>
               )}
