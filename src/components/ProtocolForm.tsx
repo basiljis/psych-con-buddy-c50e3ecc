@@ -414,8 +414,8 @@ export const ProtocolForm = ({
       if (currentStep === 1 && canSaveProtocol()) {
         await saveProtocolData(true);
         toast({
-          title: "Черновик сохранён",
-          description: "Данные автоматически сохранены"
+          title: t('protocolForm.toasts.draftSavedTitle'),
+          description: t('protocolForm.toasts.draftSavedDesc')
         });
       }
       setCurrentStep(currentStep + 1);
