@@ -168,6 +168,33 @@
       "products": "Results of productive activity",
       "cpmpk": "Moscow CPMPC report (if any)",
       "ipr": "Individual rehabilitation and habilitation program for a child with disability (if any)"
+    },
+    "validation": {
+      "required": "Required field",
+      "requiredFullName": "Enter the student's full name",
+      "requiredBirthDate": "Enter the date of birth",
+      "futureBirthDate": "Date of birth cannot be in the future",
+      "tooOldBirthDate": "Please check the date of birth",
+      "requiredAge": "Enter the student's age",
+      "requiredGender": "Select gender",
+      "requiredEducationLevel": "Select an education level",
+      "requiredClassGroup": "Select a class or group",
+      "requiredOrganization": "Specify the educational organization",
+      "requiredAddress": "Enter the residential address",
+      "requiredParentName": "Enter the parent (legal guardian) full name",
+      "requiredParentPhone": "Enter the parent's phone number",
+      "invalidPhone": "Enter a valid phone number, e.g. +1 (555) 123-4567",
+      "invalidEmail": "Enter a valid email address",
+      "requiredWhobrought": "Specify who accompanied the student",
+      "requiredRelationship": "Specify the accompanying person",
+      "requiredConsultationDate": "Enter the consultation date",
+      "futureConsultationDate": "Consultation date cannot be in the future",
+      "requiredReason": "Describe the referral reason for PPC",
+      "requiredSessionTopic": "Select a session topic",
+      "requiredDocuments": "Mark all required documents",
+      "requiredConsent": "Parent consent confirmation is required",
+      "requiredChecklist": "Fill in and confirm the examination checklist",
+      "stepHasErrors": "This step has missing required fields"
     }
   }
 }
