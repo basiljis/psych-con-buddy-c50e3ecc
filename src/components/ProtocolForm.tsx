@@ -369,8 +369,8 @@ export const ProtocolForm = ({
   const generateConsent = () => {
     if (!canSaveProtocol()) {
       toast({
-        title: "Ошибка",
-        description: "Заполните все обязательные поля для генерации согласия",
+        title: t('protocolForm.common.error'),
+        description: t('protocolForm.toasts.fillRequiredForConsent'),
         variant: "destructive"
       });
       return;
@@ -378,8 +378,8 @@ export const ProtocolForm = ({
 
     generateConsentPDF(formData.childData);
     toast({
-      title: "Согласие сгенерировано",
-      description: "PDF документ готов к скачиванию"
+      title: t('protocolForm.toasts.consentGenerated'),
+      description: t('protocolForm.toasts.consentReady')
     });
   };
 
