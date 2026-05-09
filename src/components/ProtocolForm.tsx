@@ -1200,6 +1200,7 @@ export const ProtocolForm = ({
                   disabled={!isAdmin && !isRegionalOperator && !!profile?.organization_id}
                   label=""
                 />
+                <FieldError messageKey={childErrorKey("educationalOrganization")} />
               </div>
 
               <div className="col-span-2">
@@ -1212,6 +1213,7 @@ export const ProtocolForm = ({
                   placeholder={t('protocolForm.child.addressPh')}
                   rows={2}
                 />
+                <FieldError messageKey={childErrorKey("address")} />
               </div>
 
               <div className="col-span-2 flex items-center space-x-2">
