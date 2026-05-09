@@ -229,8 +229,8 @@ export const ProtocolForm = ({
       if (hasUnsavedChanges && canSaveProtocol()) {
         saveProtocolData(true);
         toast({
-          title: "Автосохранение",
-          description: "Черновик автоматически сохранен"
+          title: t('protocolForm.toasts.autosaveTitle'),
+          description: t('protocolForm.toasts.autosaveDesc')
         });
       }
     }, 120000);
