@@ -1311,6 +1311,7 @@ export const ProtocolForm = ({
                     onChange={(e) => updateChildData("relationship", e.target.value)}
                     placeholder={t('protocolForm.child.relationshipPh')}
                   />
+                  <FieldError messageKey={childErrorKey("relationship")} />
                 </div>
               )}
             </div>
