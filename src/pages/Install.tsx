@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, Smartphone, Share, MoreVertical, Plus, Check, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { FloatingLanguageToggle } from "@/components/ui/floating-language-toggle";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
