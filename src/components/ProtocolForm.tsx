@@ -179,6 +179,40 @@ export const ProtocolForm = ({
     }
   }, [editingProtocol, selectedLevel]);
 
+  // Прелоад данных ребёнка из карточки ребёнка
+  useEffect(() => {
+    if (editingProtocol) return;
+    try {
+      const raw = sessionStorage.getItem("ppk_prefill_child");
+      if (!raw) return;
+      sessionStorage.removeItem("ppk_prefill_child");
+      const prefill = JSON.parse(raw);
+      if (prefill?.educationLevel) {
+        setSelectedLevel(prefill.educationLevel);
+      }
+      setFormData(prev => ({
+        ...prev,
+        childData: {
+          ...prev.childData,
+          fullName: prefill.fullName || prev.childData.fullName,
+          birthDate: prefill.birthDate || prev.childData.birthDate,
+          gender: prefill.gender || prev.childData.gender,
+          parentName: prefill.parentName || prev.childData.parentName,
+          parentPhone: prefill.parentPhone || prev.childData.parentPhone,
+          parentEmail: prefill.parentEmail || prev.childData.parentEmail,
+          educationalOrganization: prefill.educationalOrganization || prev.childData.educationalOrganization,
+        },
+      }));
+      toast({
+        title: "Данные ребёнка подтянуты",
+        description: "Карточка ребёнка автоматически заполнила сведения. Проверьте и продолжите заполнение чек-листа.",
+      });
+    } catch (e) {
+      console.error("Failed to apply ppk prefill:", e);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     initialFormDataRef.current = JSON.stringify(formData);
   }, [editingProtocol]);
