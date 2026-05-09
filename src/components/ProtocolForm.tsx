@@ -1541,6 +1541,7 @@ export const ProtocolForm = ({
                 </div>
               ))}
             </div>
+            <FieldError messageKey={getStepMissingRequiredFields(3) ? "requiredDocuments" : null} />
           </CardContent>
         </Card>
       )}
