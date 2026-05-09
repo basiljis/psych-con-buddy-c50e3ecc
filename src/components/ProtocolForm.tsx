@@ -853,17 +853,17 @@ export const ProtocolForm = ({
       <AlertDialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Сохранить изменения?</AlertDialogTitle>
+            <AlertDialogTitle>{t('protocolForm.saveDialog.title')}</AlertDialogTitle>
             <AlertDialogDescription>
-              У вас есть несохраненные изменения. Хотите сохранить их перед переходом?
+              {t('protocolForm.saveDialog.desc')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={handleContinueWithoutSaving}>
-              Не сохранять
+              {t('protocolForm.saveDialog.discard')}
             </AlertDialogCancel>
             <AlertDialogAction onClick={handleSaveAndContinue}>
-              Сохранить
+              {t('protocolForm.common.save')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
