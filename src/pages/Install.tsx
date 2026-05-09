@@ -55,6 +55,7 @@ const Install = () => {
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
+      <FloatingLanguageToggle />
       <div className="max-w-2xl mx-auto space-y-6">
         <Button 
           variant="ghost" 
