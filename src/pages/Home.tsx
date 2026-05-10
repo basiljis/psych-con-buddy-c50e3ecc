@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PublicNavbar } from "@/components/PublicNavbar";
@@ -23,74 +24,75 @@ import {
   Lock,
 } from "lucide-react";
 
-const audiences = [
-  {
-    icon: Building2,
-    title: "Организациям",
-    description:
-      "Школы, детские сады, ППМС-центры. Управление ППк, расписаниями, отчётностью.",
-    href: "/for-organizations",
-    color: "from-blue-500/10 to-blue-500/5",
-    iconColor: "text-blue-600 dark:text-blue-400",
-  },
-  {
-    icon: GraduationCap,
-    title: "Специалистам",
-    description:
-      "Психологи, логопеды, дефектологи. Протоколы, диагностики, личный кабинет.",
-    href: "/for-specialists",
-    color: "from-orange-500/10 to-orange-500/5",
-    iconColor: "text-orange-600 dark:text-orange-400",
-  },
-  {
-    icon: Users,
-    title: "Родителям",
-    description:
-      "Запись на консультации, тесты развития ребёнка, доступ к рекомендациям.",
-    href: "/for-parents",
-    color: "from-emerald-500/10 to-emerald-500/5",
-    iconColor: "text-emerald-600 dark:text-emerald-400",
-  },
-];
-
-const features = [
-  {
-    icon: ClipboardCheck,
-    title: "Протоколы ППк",
-    description: "По Приказу № 666 ДОНМ. Чек-листы, выводы, рекомендации.",
-  },
-  {
-    icon: CalendarDays,
-    title: "Расписание",
-    description: "Индивидуальные и групповые занятия, напоминания родителям.",
-  },
-  {
-    icon: FileText,
-    title: "Диагностики",
-    description: "Тесты развития, методики Минздрава, экспорт результатов.",
-  },
-  {
-    icon: BarChart3,
-    title: "Аналитика и отчёты",
-    description: "Статистика по специалистам, нагрузка, динамика учеников.",
-  },
-];
-
-const trust = [
-  { icon: ShieldCheck, label: "ФЗ‑152", sub: "УЗ‑1, СберОблако" },
-  { icon: Award, label: "Реестр ПО РФ", sub: "Отечественное ПО" },
-  { icon: Lock, label: "Защита данных", sub: "RLS, 2FA, IP-фильтр" },
-  { icon: Sparkles, label: "Приказ № 666", sub: "ДОНМ Москвы" },
-];
-
-const stats = [
-  { value: "150+", label: "организаций" },
-  { value: "2 000+", label: "специалистов" },
-  { value: "50 000+", label: "протоколов" },
-  { value: "5 лет", label: "хранение данных" },
-];
-
 export default function Home() {
+  const { t, i18n } = useTranslation("pages");
+
+  const audiences = [
+    {
+      icon: Building2,
+      title: t("homePage.audiences.orgTitle"),
+      description: t("homePage.audiences.orgDesc"),
+      href: "/for-organizations",
+      color: "from-blue-500/10 to-blue-500/5",
+      iconColor: "text-blue-600 dark:text-blue-400",
+    },
+    {
+      icon: GraduationCap,
+      title: t("homePage.audiences.specTitle"),
+      description: t("homePage.audiences.specDesc"),
+      href: "/for-specialists",
+      color: "from-orange-500/10 to-orange-500/5",
+      iconColor: "text-orange-600 dark:text-orange-400",
+    },
+    {
+      icon: Users,
+      title: t("homePage.audiences.parTitle"),
+      description: t("homePage.audiences.parDesc"),
+      href: "/for-parents",
+      color: "from-emerald-500/10 to-emerald-500/5",
+      iconColor: "text-emerald-600 dark:text-emerald-400",
+    },
+  ];
+
+  const features = [
+    {
+      icon: ClipboardCheck,
+      title: t("homePage.features.protocolsTitle"),
+      description: t("homePage.features.protocolsDesc"),
+    },
+    {
+      icon: CalendarDays,
+      title: t("homePage.features.scheduleTitle"),
+      description: t("homePage.features.scheduleDesc"),
+    },
+    {
+      icon: FileText,
+      title: t("homePage.features.diagnosticsTitle"),
+      description: t("homePage.features.diagnosticsDesc"),
+    },
+    {
+      icon: BarChart3,
+      title: t("homePage.features.analyticsTitle"),
+      description: t("homePage.features.analyticsDesc"),
+    },
+  ];
+
+  const trust = [
+    { icon: ShieldCheck, label: t("homePage.trust.fzLabel"), sub: t("homePage.trust.fzSub") },
+    { icon: Award, label: t("homePage.trust.registryLabel"), sub: t("homePage.trust.registrySub") },
+    { icon: Lock, label: t("homePage.trust.securityLabel"), sub: t("homePage.trust.securitySub") },
+    { icon: Sparkles, label: t("homePage.trust.orderLabel"), sub: t("homePage.trust.orderSub") },
+  ];
+
+  const stats = [
+    { value: "150+", label: t("homePage.stats.organizations") },
+    { value: "2 000+", label: t("homePage.stats.specialists") },
+    { value: "50 000+", label: t("homePage.stats.protocols") },
+    { value: t("homePage.stats.fiveYears"), label: t("homePage.stats.storageYears") },
+  ];
+
+  const isEn = i18n.resolvedLanguage === "en" || i18n.language?.startsWith("en");
+
   // JSON-LD structured data — boosts rich snippets in Yandex/Google
   const jsonLd = [
     {
@@ -99,8 +101,7 @@ export default function Home() {
       name: "Universum",
       url: "https://unvrsm.ru/",
       logo: "https://unvrsm.ru/og-image.png",
-      description:
-        "Цифровая платформа для психолого-педагогической работы: протоколы ППк, диагностики, расписание и отчётность для школ, ППМС-центров и специалистов.",
+      description: t("homePage.seoDescription"),
       sameAs: [
         "https://t.me/universum_platform",
         "https://vk.com/universum_platform",
@@ -108,19 +109,18 @@ export default function Home() {
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "sales",
-        availableLanguage: ["Russian"],
+        availableLanguage: isEn ? ["English", "Russian"] : ["Russian"],
         areaServed: "RU",
       },
     },
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      name: "Universum — платформа для ППк",
+      name: "Universum",
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web, iOS, Android",
       url: "https://unvrsm.ru/",
-      description:
-        "Автоматизация работы психолого-педагогического консилиума по Приказу № 666 ДОНМ Москвы. Протоколы, диагностики, расписание, отчёты.",
+      description: t("homePage.seoDescription"),
       offers: {
         "@type": "Offer",
         price: "330",
@@ -144,34 +144,15 @@ export default function Home() {
       mainEntity: homeFaqItems.map((item) => ({
         "@type": "Question",
         name: item.q,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: item.a,
-        },
+        acceptedAnswer: { "@type": "Answer", text: item.a },
       })),
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Главная",
-          item: "https://unvrsm.ru/",
-        },
-      ],
     },
   ];
 
   useSeoMeta({
-    title:
-      "Universum — платформа для ППк, психологов и логопедов | По Приказу № 666",
-    description:
-      "Автоматизация работы психолого-педагогического консилиума: протоколы ППк, диагностики, расписание, отчётность. Соответствие ФЗ‑152, хранение в СберОблаке. От 330 ₽/мес для специалистов.",
+    title: t("homePage.seoTitle"),
+    description: t("homePage.seoDescription"),
     canonical: "https://unvrsm.ru/",
-    keywords:
-      "ППк, протоколы ППк, психолого-педагогический консилиум, Приказ 666 ДОНМ, ППМС-центр, школьный психолог, логопед, дефектолог, ФЗ-152, цифровая платформа образование, диагностика развития ребёнка",
     jsonLd,
   });
 
@@ -187,25 +168,24 @@ export default function Home() {
         <div className="container mx-auto max-w-5xl text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border bg-background/50 backdrop-blur text-sm text-muted-foreground mb-6">
             <Sparkles className="h-3.5 w-3.5 text-primary" />
-            Развитие. Для каждого.
+            {t("homePage.badge")}
           </div>
 
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
-            Цифровая платформа{" "}
+            {t("homePage.heroTitle1")}{" "}
             <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              для психолого-педагогической работы
+              {t("homePage.heroTitle2")}
             </span>
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-            Протоколы ППк по Приказу № 666, диагностики, расписание и отчётность
-            в одном месте. Для школ, ППМС-центров и частной практики.
+            {t("homePage.heroSubtitle")}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center mb-12">
             <Button asChild size="lg" className="text-base h-12 px-8">
               <a href="#lead-form">
-                Запросить демо
+                {t("homePage.ctaDemo")}
                 <ArrowRight className="ml-1 h-4 w-4" />
               </a>
             </Button>
@@ -215,7 +195,7 @@ export default function Home() {
               size="lg"
               className="text-base h-12 px-8"
             >
-              <Link to="/auth">Попробовать бесплатно</Link>
+              <Link to="/auth">{t("homePage.ctaTryFree")}</Link>
             </Button>
           </div>
 
@@ -239,9 +219,11 @@ export default function Home() {
       <section className="py-16 md:py-24 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Кому подходит</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">
+              {t("homePage.audiences.title")}
+            </h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Выберите свою роль — и узнайте, как платформа упростит вашу работу
+              {t("homePage.audiences.subtitle")}
             </p>
           </div>
 
@@ -262,7 +244,7 @@ export default function Home() {
                       {a.description}
                     </p>
                     <div className="flex items-center gap-1 text-sm font-medium text-primary">
-                      Подробнее
+                      {t("homePage.audiences.more")}
                       <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                     </div>
                   </CardContent>
@@ -281,35 +263,35 @@ export default function Home() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-10">
             <h2 className="text-3xl md:text-4xl font-bold mb-3">
-              Доверие и соответствие
+              {t("homePage.trust.title")}
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Все требования российского законодательства соблюдены
+              {t("homePage.trust.subtitle")}
             </p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {trust.map((t) => (
+            {trust.map((tr) => (
               <div
-                key={t.label}
+                key={tr.label}
                 className="flex flex-col items-center text-center p-6 rounded-xl border bg-card"
               >
-                <t.icon className="h-8 w-8 text-primary mb-3" />
-                <div className="font-semibold text-sm">{t.label}</div>
-                <div className="text-xs text-muted-foreground mt-1">{t.sub}</div>
+                <tr.icon className="h-8 w-8 text-primary mb-3" />
+                <div className="font-semibold text-sm">{tr.label}</div>
+                <div className="text-xs text-muted-foreground mt-1">{tr.sub}</div>
               </div>
             ))}
           </div>
 
           <div className="flex flex-wrap justify-center gap-3 mt-8">
             <Button asChild variant="ghost" size="sm">
-              <Link to="/documents">Сертификация</Link>
+              <Link to="/documents">{t("homePage.trust.certification")}</Link>
             </Button>
             <Button asChild variant="ghost" size="sm">
-              <Link to="/registry">Реестр отечественного ПО</Link>
+              <Link to="/registry">{t("homePage.trust.registry")}</Link>
             </Button>
             <Button asChild variant="ghost" size="sm">
-              <Link to="/privacy-policy">Политика конфиденциальности</Link>
+              <Link to="/privacy-policy">{t("homePage.trust.privacy")}</Link>
             </Button>
           </div>
         </div>
@@ -320,10 +302,10 @@ export default function Home() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-3">
-              Ключевые возможности
+              {t("homePage.features.title")}
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Всё, что нужно для работы психолого-педагогической службы
+              {t("homePage.features.subtitle")}
             </p>
           </div>
 
@@ -346,7 +328,7 @@ export default function Home() {
           <div className="text-center mt-10">
             <Button asChild variant="outline" size="lg">
               <Link to="/features">
-                Все возможности
+                {t("homePage.features.all")}
                 <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
@@ -366,16 +348,15 @@ export default function Home() {
           <Card className="border-primary/20 bg-gradient-to-br from-primary/5 via-background to-primary/5 overflow-hidden">
             <CardContent className="p-10 md:p-16 text-center">
               <h2 className="text-3xl md:text-5xl font-bold mb-4">
-                Начните уже сегодня
+                {t("homePage.finalCta.title")}
               </h2>
               <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
-                Подключение за один день. Бесплатный пробный период для
-                специалистов.
+                {t("homePage.finalCta.subtitle")}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button asChild size="lg" className="text-base h-12 px-8">
                   <a href="#lead-form">
-                    Запросить демо
+                    {t("homePage.ctaDemo")}
                     <ArrowRight className="ml-1 h-4 w-4" />
                   </a>
                 </Button>
@@ -385,7 +366,7 @@ export default function Home() {
                   size="lg"
                   className="text-base h-12 px-8"
                 >
-                  <Link to="/pricing">Тарифы</Link>
+                  <Link to="/pricing">{t("homePage.finalCta.pricing")}</Link>
                 </Button>
               </div>
             </CardContent>

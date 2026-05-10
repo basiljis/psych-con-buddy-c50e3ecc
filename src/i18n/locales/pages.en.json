@@ -366,5 +366,66 @@
     "validity": "Effective until cancelled.",
     "acceptTitle": "Acceptance of the offer",
     "acceptText": "Registration in the partner program means full and unconditional acceptance by the Partner of the terms of this public offer."
+  },
+  "homePage": {
+    "seoTitle": "Universum — platform for school psychology councils, psychologists and speech therapists | Order No. 666 compliant",
+    "seoDescription": "Automate the work of the psychological-pedagogical council: PPC protocols, diagnostics, scheduling and reporting. FZ‑152 compliant, hosted in SberCloud. From 330 RUB/month for specialists.",
+    "badge": "Development. For everyone.",
+    "heroTitle1": "Digital platform",
+    "heroTitle2": "for psychological-pedagogical work",
+    "heroSubtitle": "PPC protocols under Order No. 666, diagnostics, scheduling and reporting in one place. For schools, PPMS centers and private practice.",
+    "ctaDemo": "Request a demo",
+    "ctaTryFree": "Try for free",
+    "stats": {
+      "organizations": "organizations",
+      "specialists": "specialists",
+      "protocols": "protocols",
+      "storageYears": "data storage",
+      "fiveYears": "5 years"
+    },
+    "audiences": {
+      "title": "Who it's for",
+      "subtitle": "Choose your role and see how the platform simplifies your work",
+      "more": "Learn more",
+      "orgTitle": "For Organizations",
+      "orgDesc": "Schools, kindergartens, PPMS centers. Manage councils, schedules and reporting.",
+      "specTitle": "For Specialists",
+      "specDesc": "Psychologists, speech therapists, defectologists. Protocols, diagnostics, personal account.",
+      "parTitle": "For Parents",
+      "parDesc": "Book consultations, child development tests, access to recommendations."
+    },
+    "trust": {
+      "title": "Trust and compliance",
+      "subtitle": "All Russian regulatory requirements are met",
+      "fzLabel": "FZ‑152",
+      "fzSub": "UZ‑1, SberCloud",
+      "registryLabel": "Russian Software Registry",
+      "registrySub": "Domestic software",
+      "securityLabel": "Data protection",
+      "securitySub": "RLS, 2FA, IP filter",
+      "orderLabel": "Order No. 666",
+      "orderSub": "Moscow Department of Education",
+      "certification": "Certification",
+      "registry": "Russian Software Registry",
+      "privacy": "Privacy policy"
+    },
+    "features": {
+      "title": "Key capabilities",
+      "subtitle": "Everything needed to run a psychological-pedagogical service",
+      "all": "All capabilities",
+      "protocolsTitle": "PPC Protocols",
+      "protocolsDesc": "Per Order No. 666. Checklists, conclusions, recommendations.",
+      "scheduleTitle": "Schedule",
+      "scheduleDesc": "Individual and group sessions, parent reminders.",
+      "diagnosticsTitle": "Diagnostics",
+      "diagnosticsDesc": "Development tests, Ministry of Health methods, results export.",
+      "analyticsTitle": "Analytics & reports",
+      "analyticsDesc": "Statistics by specialist, workload, student progress."
+    },
+    "finalCta": {
+      "title": "Get started today",
+      "subtitle": "Onboarding in one day. Free trial period for specialists.",
+      "pricing": "Pricing"
+    }
   }
 }
