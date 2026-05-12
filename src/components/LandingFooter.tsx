@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Mail, Phone, FileText } from "lucide-react";
 import brandLogo from "@/assets/brand-logo.png";
 
 export default function LandingFooter() {
+  const { t } = useTranslation("pages");
+  const year = new Date().getFullYear();
   return (
     <footer className="border-t py-12 px-4">
       <div className="container mx-auto max-w-6xl">
@@ -12,23 +15,21 @@ export default function LandingFooter() {
               <img src={brandLogo} alt="universum." className="h-9 w-9 object-contain" />
               <span className="text-xl font-bold">universum.</span>
             </Link>
-            <p className="text-sm text-muted-foreground">
-              Развитие. Для каждого.
-            </p>
+            <p className="text-sm text-muted-foreground">{t("footer.tagline")}</p>
           </div>
-          
+
           <div>
-            <h3 className="font-medium mb-4 text-base">Продукт</h3>
+            <h3 className="font-medium mb-4 text-base">{t("footer.product")}</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link to="/for-organizations" className="hover:text-foreground transition-colors">Организациям</Link></li>
-              <li><Link to="/for-specialists" className="hover:text-foreground transition-colors">Педагогам</Link></li>
-             <li><Link to="/for-parents" className="hover:text-foreground transition-colors">Родителям</Link></li>
-             <li><Link to="/instructions" className="hover:text-foreground transition-colors">Инструкции</Link></li>
+              <li><Link to="/for-organizations" className="hover:text-foreground transition-colors">{t("footer.organizations")}</Link></li>
+              <li><Link to="/for-specialists" className="hover:text-foreground transition-colors">{t("footer.specialists")}</Link></li>
+              <li><Link to="/for-parents" className="hover:text-foreground transition-colors">{t("footer.parents")}</Link></li>
+              <li><Link to="/instructions" className="hover:text-foreground transition-colors">{t("footer.instructions")}</Link></li>
             </ul>
           </div>
-          
+
           <div>
-            <h3 className="font-medium mb-4 text-base">Контакты</h3>
+            <h3 className="font-medium mb-4 text-base">{t("footer.contacts")}</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 flex-shrink-0" />
@@ -36,64 +37,52 @@ export default function LandingFooter() {
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 flex-shrink-0" />
-                Пн-Пт, 10:00-18:00 МСК
+                {t("footer.workHours")}
               </li>
             </ul>
             <div className="mt-4 pt-4 border-t border-border/50">
-              <p className="text-xs text-muted-foreground">ИП Загладин В.С.</p>
-              <p className="text-xs text-muted-foreground">ИНН: 770702169499</p>
-              <p className="text-xs text-muted-foreground">ОГРНИП: 323774600132891</p>
+              <p className="text-xs text-muted-foreground">{t("footer.ipName")}</p>
+              <p className="text-xs text-muted-foreground">{t("footer.inn")}</p>
+              <p className="text-xs text-muted-foreground">{t("footer.ogrnip")}</p>
             </div>
           </div>
-          
+
           <div>
-            <h3 className="font-medium mb-4 text-base">Документы</h3>
+            <h3 className="font-medium mb-4 text-base">{t("footer.documents")}</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link 
-                  to="/privacy-policy" 
-                  className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group"
-                >
+                <Link to="/privacy-policy" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group">
                   <FileText className="h-4 w-4 flex-shrink-0 group-hover:text-primary transition-colors" />
-                  <span>Политика конфиденциальности</span>
+                  <span>{t("footer.privacy")}</span>
                 </Link>
               </li>
               <li>
-              <Link 
-                  to="/partnership-offer" 
-                  className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group"
-                >
+                <Link to="/partnership-offer" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group">
                   <FileText className="h-4 w-4 flex-shrink-0 group-hover:text-primary transition-colors" />
-                  <span>Партнёрская программа</span>
+                  <span>{t("footer.partnership")}</span>
                 </Link>
               </li>
               <li>
-                <Link 
-                  to="/documents" 
-                  className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group"
-                >
+                <Link to="/documents" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group">
                   <FileText className="h-4 w-4 flex-shrink-0 group-hover:text-primary transition-colors" />
-                  <span>Сертификация и безопасность</span>
+                  <span>{t("footer.certification")}</span>
                 </Link>
               </li>
               <li>
-                <Link 
-                  to="/installation" 
-                  className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group"
-                >
+                <Link to="/installation" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group">
                   <FileText className="h-4 w-4 flex-shrink-0 group-hover:text-primary transition-colors" />
-                  <span>Установка</span>
+                  <span>{t("footer.installation")}</span>
                 </Link>
               </li>
             </ul>
           </div>
         </div>
-        
+
         <div className="border-t mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p>© 2025{new Date().getFullYear() > 2025 ? `–${new Date().getFullYear()}` : '–2026'} universum. Все права защищены.</p>
+          <p>© 2025{year > 2025 ? `–${year}` : '–2026'} universum. {t("footer.rights")}</p>
           <div className="flex gap-4">
-            <Link to="/patents" className="hover:text-foreground transition-colors">Патенты</Link>
-            <Link to="/registry" className="hover:text-foreground transition-colors">Реестр отечественного ПО</Link>
+            <Link to="/patents" className="hover:text-foreground transition-colors">{t("footer.patents")}</Link>
+            <Link to="/registry" className="hover:text-foreground transition-colors">{t("footer.registry")}</Link>
           </div>
         </div>
       </div>

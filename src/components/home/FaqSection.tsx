@@ -1,56 +1,31 @@
+import { useTranslation } from "react-i18next";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import pagesRu from "@/i18n/locales/pages.ru.json";
 
-export const homeFaqItems = [
-  {
-    q: "Соответствует ли платформа Приказу № 666 ДОНМ Москвы?",
-    a: "Да. Все формы протоколов ППк, чек-листы и заключения построены строго по Приказу № 666 Департамента образования и науки города Москвы. Шаблоны регулярно обновляются вместе с изменениями нормативной базы.",
-  },
-  {
-    q: "Где хранятся персональные данные детей?",
-    a: "Данные хранятся только на серверах СберОблака в регионе Москва, уровень защищённости УЗ‑1 по Постановлению Правительства № 1119. Платформа зарегистрирована в Роскомнадзоре как оператор ПДн, поддерживает Row-Level Security, двухфакторную аутентификацию и фильтрацию по доверенным IP.",
-  },
-  {
-    q: "Можно ли подключить отдельного специалиста, а не всю организацию?",
-    a: "Да. Психологи, логопеды и дефектологи частной практики могут работать в личном кабинете за 330 ₽ в месяц — с ведением карточек детей, расписанием, диагностиками и онлайн-оплатой консультаций родителями.",
-  },
-  {
-    q: "Сколько хранятся протоколы и заключения?",
-    a: "Не менее 5 лет — как требует Приказ № 666. Документы выгружаются в PDF/DOCX/Excel с поддержкой кириллицы и доступны в любой момент в архиве организации.",
-  },
-  {
-    q: "Что включает пробный период?",
-    a: "Полный доступ ко всем модулям системы на 14 дней без привязки карты: ППк, расписание, диагностики, отчёты, карточки детей. Достаточно подать заявку — администратор активирует доступ в течение рабочего дня.",
-  },
-  {
-    q: "Есть ли интеграция с ЕКИС / Реестром организаций ДОНМ?",
-    a: "Да. Список образовательных организаций Москвы синхронизируется с ЕКИС автоматически. Для других регионов организации добавляются вручную или через API.",
-  },
-  {
-    q: "Можно ли установить систему на свои серверы (on-premise)?",
-    a: "Да, мы поддерживаем on-premise развёртывание для крупных образовательных холдингов и региональных операторов. Свяжитесь с нами через форму запроса демо.",
-  },
-];
+type FaqItem = { q: string; a: string };
+
+// Re-exported for JSON-LD on Home — uses RU items as canonical for SEO indexing
+export const homeFaqItems: FaqItem[] = (pagesRu as { faq: { items: FaqItem[] } }).faq.items;
 
 export function FaqSection() {
+  const { t } = useTranslation("pages");
+  const items = t("faq.items", { returnObjects: true }) as FaqItem[];
+
   return (
     <section className="py-16 md:py-24 px-4 bg-muted/30" id="faq">
       <div className="container mx-auto max-w-3xl">
         <div className="text-center mb-10">
-          <h2 className="text-3xl md:text-4xl font-bold mb-3">
-            Часто задаваемые вопросы
-          </h2>
-          <p className="text-muted-foreground">
-            Коротко о главном — нормативка, безопасность, тарифы
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-3">{t("faq.title")}</h2>
+          <p className="text-muted-foreground">{t("faq.subtitle")}</p>
         </div>
 
         <Accordion type="single" collapsible className="w-full">
-          {homeFaqItems.map((item, i) => (
+          {items.map((item, i) => (
             <AccordionItem key={i} value={`item-${i}`}>
               <AccordionTrigger className="text-left text-base font-medium">
                 {item.q}

@@ -427,5 +427,52 @@
       "subtitle": "Onboarding in one day. Free trial period for specialists.",
       "pricing": "Pricing"
     }
+  },
+  "footer": {
+    "tagline": "Development. For everyone.",
+    "product": "Product",
+    "organizations": "For Organizations",
+    "specialists": "For Educators",
+    "parents": "For Parents",
+    "instructions": "Guides",
+    "contacts": "Contacts",
+    "workHours": "Mon-Fri, 10:00-18:00 MSK",
+    "ipName": "IE Zagladin V.S.",
+    "inn": "TIN: 770702169499",
+    "ogrnip": "PSRNIE: 323774600132891",
+    "documents": "Documents",
+    "privacy": "Privacy policy",
+    "partnership": "Partner program",
+    "certification": "Certification & security",
+    "installation": "Installation",
+    "rights": "All rights reserved.",
+    "patents": "Patents",
+    "registry": "Russian Software Registry"
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "subtitle": "Briefly about regulations, security and pricing",
+    "items": [
+      { "q": "Does the platform comply with Moscow Department of Education Order No. 666?", "a": "Yes. All PPC protocol forms, checklists and conclusions are built strictly per Order No. 666 of the Moscow Department of Education and Science. Templates are updated regularly with regulatory changes." },
+      { "q": "Where is children's personal data stored?", "a": "Data is stored only on SberCloud servers in the Moscow region, security level UZ‑1 per Government Decree No. 1119. The platform is registered with Roskomnadzor as a personal data operator and supports Row-Level Security, two-factor authentication and trusted IP filtering." },
+      { "q": "Can an individual specialist join, rather than a whole organization?", "a": "Yes. Psychologists, speech therapists and defectologists in private practice can work in their personal account for 330 RUB per month — with child cards, scheduling, diagnostics and online payments by parents." },
+      { "q": "How long are protocols and conclusions retained?", "a": "At least 5 years, as required by Order No. 666. Documents export to PDF/DOCX/Excel with Cyrillic support and remain available in the organization's archive at any time." },
+      { "q": "What does the trial include?", "a": "Full access to all system modules for 14 days with no card required: PPC, scheduling, diagnostics, reports, child cards. Just submit a request — the administrator activates access within a business day." },
+      { "q": "Is there integration with EKIS / Moscow DOE organization registry?", "a": "Yes. The list of Moscow educational organizations syncs with EKIS automatically. For other regions organizations are added manually or via API." },
+      { "q": "Can the system be installed on our own servers (on-premise)?", "a": "Yes, we support on-premise deployment for large educational holdings and regional operators. Contact us via the demo request form." }
+    ]
+  },
+  "testimonials": {
+    "title": "What our users say",
+    "subtitle": "Schools, PPMS centers and private specialists across Russia",
+    "ratingAria": "Rating {{rating}} of 5",
+    "items": [
+      { "name": "Anna P.", "role": "Educational psychologist, School No. 1502", "text": "We moved off paper protocols — saving an hour a day per specialist. The Order 666 checklists are perfectly assembled and parents get notifications automatically." },
+      { "name": "Mikhail K.", "role": "Director of a PPMS center", "text": "Rolled out in a week for 12 specialists. Department reporting is generated in one click and workload statistics are always at hand. Support replies fast." },
+      { "name": "Elena S.", "role": "Speech therapist, private practice", "text": "Convenient to maintain child cards; parents book and pay online themselves. For 330 RUB a month I get a full CRM tailored to my specialty." }
+    ]
+  },
+  "stickyCta": {
+    "demo": "Request a demo"
   }
 }
