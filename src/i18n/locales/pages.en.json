@@ -426,6 +426,12 @@
       "title": "Get started today",
       "subtitle": "Onboarding in one day. Free trial period for specialists.",
       "pricing": "Pricing"
+    },
+    "partners": {
+      "title": "Our partners",
+      "subtitle": "We collaborate with leading organizations in education and development",
+      "youcanread": "YouCanRead",
+      "labss": "LABSS"
     }
   },
   "footer": {
