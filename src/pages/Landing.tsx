@@ -555,8 +555,8 @@ function FeaturesSection() {
 
 export default function Landing() {
   useSeoMeta({
-    title: "universum. — Автоматизация ППк, расписание и сопровождение детей",
-    description: "Платформа для психолого-педагогических консилиумов, специалистов (психолог, логопед, дефектолог) и родителей. Протоколы ППк, расписание занятий, карты детей — в одном месте. Соответствие ФЗ-152.",
+    title: "universum. — ППк, расписание, сопровождение детей",
+    description: "Платформа для ППк и специалистов: психологов, логопедов, дефектологов. Протоколы, расписание, карты детей. Соответствие ФЗ-152.",
     canonical: "/landing",
     keywords: "ППк, психолого-педагогический консилиум, ЦППМСП, ППМС-центр, протоколы ППк, психолог школы, логопед, дефектолог, расписание занятий, сопровождение детей",
     jsonLd: [
@@ -566,12 +566,12 @@ export default function Landing() {
         "name": "universum.",
         "applicationCategory": "EducationalApplication",
         "operatingSystem": "Web",
-        "url": "https://ppk.lovable.app",
+        "url": "https://unvrsm.ru",
         "description": "Платформа комплексной поддержки и развития детей: автоматизация ППк, расписание специалистов, карты детей, тесты развития.",
         "publisher": {
           "@type": "Organization",
           "name": "universum.",
-          "url": "https://ppk.lovable.app"
+          "url": "https://unvrsm.ru"
         }
       }
     ]
