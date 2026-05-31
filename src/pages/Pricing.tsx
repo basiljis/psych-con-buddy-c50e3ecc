@@ -140,8 +140,9 @@ export default function Pricing() {
         </section>
 
         {/* Plans */}
-        <section className="pb-16 px-4">
+        <section className="pb-16 px-4" aria-labelledby="pricing-plans-heading">
           <div className="container mx-auto max-w-6xl">
+            <h2 id="pricing-plans-heading" className="sr-only">Тарифные планы universum.</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {plans.map((plan) => (
                 <Card
