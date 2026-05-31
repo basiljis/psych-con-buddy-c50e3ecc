@@ -262,7 +262,6 @@ export type Database = {
           login: string
           parent_child_id: string
           password_hash: string
-          plain_password: string | null
           updated_at: string | null
         }
         Insert: {
@@ -273,7 +272,6 @@ export type Database = {
           login: string
           parent_child_id: string
           password_hash: string
-          plain_password?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -284,7 +282,6 @@ export type Database = {
           login?: string
           parent_child_id?: string
           password_hash?: string
-          plain_password?: string | null
           updated_at?: string | null
         }
         Relationships: [
