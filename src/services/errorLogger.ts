@@ -34,6 +34,33 @@ class ErrorLogger {
   }
 
   /**
+   * Список паттернов, которые не нужно логировать (шум, внешние скрипты)
+   */
+  private isNoise(message?: string, stack?: string, filename?: string): boolean {
+    const m = message || '';
+    const s = stack || '';
+    const f = filename || '';
+
+    const thirdParty = [
+      'talk-me.ru', 'flock.js', 'profilaktika.site',
+      'ppk.lovable.app', 'unvrsm.space', 'mc.yandex',
+      'googletagmanager', 'gstatic', 'metrika',
+    ];
+    if (thirdParty.some(p => s.includes(p) || f.includes(p))) return true;
+
+    if (m.includes('opts is not defined')) return true;
+    if (m === 'Script error.') return true;
+    if (m.includes('ResizeObserver loop')) return true;
+    if (m.includes('Lock was stolen')) return true;
+    if (m === '[object Object]') return true;
+    if (m.includes('Failed to fetch dynamically imported module')) return true;
+    if (m.includes('Importing a module script failed')) return true;
+    if (m.includes('Loading chunk') && m.includes('failed')) return true;
+
+    return false;
+  }
+
+  /**
    * Логировать ошибку
    */
   async logError({
@@ -50,7 +77,11 @@ class ErrorLogger {
       return;
     }
 
-    // Локальное логирование в консоль
+    if (this.isNoise(errorMessage, errorStack, (metadata as any)?.filename)) {
+      console.log('[ErrorLogger] Пропущен шум:', errorMessage);
+      return;
+    }
+
     const consoleMethod = severity === 'critical' || severity === 'error' ? 'error' : 
                          severity === 'warning' ? 'warn' : 'log';
     
@@ -63,15 +94,8 @@ class ErrorLogger {
       metadata
     });
 
-    // Отправка на сервер с повторными попытками
     await this.sendToServer({
-      errorType,
-      errorMessage,
-      errorStack,
-      componentName,
-      route,
-      severity,
-      metadata,
+      errorType, errorMessage, errorStack, componentName, route, severity, metadata,
     }, 0);
   }
 
