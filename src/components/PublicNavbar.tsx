@@ -80,8 +80,8 @@ export function PublicNavbar({
             <ThemeToggle />
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Menu className="h-5 w-5" />
+                <Button variant="outline" size="icon" aria-label={t('nav.menu')}>
+                  <Menu className="h-5 w-5" aria-hidden="true" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-80">
