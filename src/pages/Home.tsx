@@ -199,19 +199,7 @@ export default function Home() {
             </Button>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto pt-8 border-t">
-            {stats.map((s) => (
-              <div key={s.label}>
-                <div className="text-2xl md:text-3xl font-bold text-foreground">
-                  {s.value}
-                </div>
-                <div className="text-xs md:text-sm text-muted-foreground mt-1">
-                  {s.label}
-                </div>
-              </div>
-            ))}
-          </div>
+          {/* Stats — скрыто */}
         </div>
       </section>
 
