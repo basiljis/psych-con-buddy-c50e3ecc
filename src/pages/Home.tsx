@@ -217,7 +217,7 @@ export default function Home() {
 
           <div className="grid md:grid-cols-3 gap-6">
             {audiences.map((a) => (
-              <Link key={a.href} to={a.href} className="group">
+              <Link key={a.href} to={a.href} className="group" aria-label={`${t("homePage.audiences.more")}: ${a.title}`}>
                 <Card className="h-full transition-all hover:shadow-lg hover:-translate-y-1 border-border/50">
                   <CardContent className="p-8">
                     <div

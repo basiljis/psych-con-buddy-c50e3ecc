@@ -34,7 +34,7 @@ export function PublicNavbar({
         <NavbarBackground />
         <div className="container mx-auto flex h-16 items-center px-4 relative z-10">
           <Link to="/" className="flex items-center gap-2">
-            <img src={brandLogo} alt="universum." className="h-9 w-9 object-contain" />
+            <img src={brandLogo} alt="universum. — логотип образовательной платформы" className="h-9 w-9 object-contain" />
             <span className="text-xl font-bold">universum.</span>
           </Link>
 
@@ -80,8 +80,8 @@ export function PublicNavbar({
             <ThemeToggle />
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Menu className="h-5 w-5" />
+                <Button variant="outline" size="icon" aria-label={t('nav.menu')}>
+                  <Menu className="h-5 w-5" aria-hidden="true" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-80">

@@ -87,11 +87,11 @@ export default function About() {
             <div className="flex flex-wrap gap-3 justify-center">
               <Link to="/for-organizations">
                 <Button size="lg">
-                  Подробнее <ArrowRight className="ml-2 h-4 w-4" />
+                  Узнать больше о решении для организаций <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
               <Link to="/features">
-                <Button variant="outline" size="lg">Возможности</Button>
+                <Button variant="outline" size="lg">Посмотреть возможности платформы</Button>
               </Link>
             </div>
           </div>
