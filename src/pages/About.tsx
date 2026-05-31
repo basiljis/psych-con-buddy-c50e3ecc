@@ -49,8 +49,8 @@ export default function About() {
         "@context": "https://schema.org",
         "@type": "Organization",
         name: "universum.",
-        url: "https://ppk.lovable.app",
-        logo: "https://ppk.lovable.app/og-image.png",
+        url: "https://unvrsm.ru",
+        logo: "https://unvrsm.ru/og-image.png",
         description: "Платформа для комплексной поддержки и развития детей",
         foundingDate: "2023",
         address: {
@@ -63,7 +63,7 @@ export default function About() {
         "@context": "https://schema.org",
         "@type": "WebPage",
         name: "О платформе universum.",
-        url: "https://ppk.lovable.app/about",
+        url: "https://unvrsm.ru/about",
         description: "Информация о платформе universum. для поддержки развития детей"
       }
     ]

@@ -104,7 +104,7 @@ export default function Features() {
       "@context": "https://schema.org",
       "@type": "WebPage",
       name: "Возможности платформы universum.",
-      url: "https://ppk.lovable.app/features",
+      url: "https://unvrsm.ru/features",
       description: "Полный список возможностей платформы universum. для поддержки развития детей",
       mainEntity: {
         "@type": "SoftwareApplication",
@@ -113,7 +113,7 @@ export default function Features() {
         operatingSystem: "Web",
         offers: {
           "@type": "Offer",
-          url: "https://ppk.lovable.app/pricing"
+          url: "https://unvrsm.ru/pricing"
         }
       }
     }
