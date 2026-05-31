@@ -34,7 +34,7 @@ export function PublicNavbar({
         <NavbarBackground />
         <div className="container mx-auto flex h-16 items-center px-4 relative z-10">
           <Link to="/" className="flex items-center gap-2">
-            <img src={brandLogo} alt="universum." className="h-9 w-9 object-contain" />
+            <img src={brandLogo} alt="universum. — логотип образовательной платформы" className="h-9 w-9 object-contain" />
             <span className="text-xl font-bold">universum.</span>
           </Link>
 
