@@ -105,7 +105,7 @@ export default function Pricing() {
       "@context": "https://schema.org",
       "@type": "WebPage",
       name: "Тарифы universum.",
-      url: "https://ppk.lovable.app/pricing",
+      url: "https://unvrsm.ru/pricing",
       mainEntity: {
         "@type": "SoftwareApplication",
         name: "universum.",
@@ -116,7 +116,7 @@ export default function Pricing() {
           name: p.name,
           price: p.price.replace(/[^\d]/g, '') || "0",
           priceCurrency: "RUB",
-          url: "https://ppk.lovable.app/pricing"
+          url: "https://unvrsm.ru/pricing"
         }))
       }
     }
