@@ -5,7 +5,11 @@ WORKDIR /app
 
 # Установка зависимостей (используем кэш слоёв)
 COPY package*.json ./
-RUN npm ci --no-audit --no-fund
+# Увеличиваем heap для npm — на маленьких билд-раннерах npm ci падает по OOM
+ENV NODE_OPTIONS=--max-old-space-size=4096
+# npm install (а не ci) — терпим к рассинхрону package-lock.json,
+# иначе любая правка package.json валит сборку молча
+RUN npm install --no-audit --no-fund --prefer-offline --legacy-peer-deps
 
 # Копируем исходники и собираем
 COPY . .
