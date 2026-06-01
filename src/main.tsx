@@ -1,26 +1,37 @@
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
 import './index.css'
-import './i18n'
 
-// Unregister any stale service workers on Lovable preview/dev hosts —
-// they cache old JS chunks and cause "dispatcher.useState is null" errors
-// from two-React-copies symptoms.
-if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+const cleanupPreviewServiceWorkers = async () => {
+  if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
+
   const host = window.location.hostname;
   const isPreview =
     host.endsWith('.lovableproject.com') ||
     host.endsWith('.lovable.app') ||
     host.endsWith('.lovableproject-dev.com');
-  if (isPreview) {
-    navigator.serviceWorker.getRegistrations().then((regs) => {
-      regs.forEach((r) => r.unregister());
-    });
-    if (window.caches) {
-      caches.keys().then((keys) => keys.forEach((k) => caches.delete(k)));
-    }
-  }
-}
 
-createRoot(document.getElementById("root")!).render(<App />);
+  if (!isPreview) return;
+
+  const regs = await navigator.serviceWorker.getRegistrations();
+  await Promise.all(regs.map((r) => r.unregister()));
+
+  if (window.caches) {
+    const keys = await caches.keys();
+    await Promise.all(keys.map((k) => caches.delete(k)));
+  }
+};
+
+const bootstrap = async () => {
+  await cleanupPreviewServiceWorkers();
+
+  const [{ createRoot }, React, { default: App }] = await Promise.all([
+    import('react-dom/client'),
+    import('react'),
+    import('./App.tsx'),
+    import('./i18n'),
+  ]);
+
+  createRoot(document.getElementById("root")!).render(React.createElement(App));
+};
+
+void bootstrap();
 
