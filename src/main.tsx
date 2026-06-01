@@ -1,5 +1,3 @@
-import './index.css'
-
 const cleanupPreviewServiceWorkers = async () => {
   if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
 
@@ -24,11 +22,12 @@ const bootstrap = async () => {
   await cleanupPreviewServiceWorkers();
 
   const [{ createRoot }, React, { default: App }] = await Promise.all([
+    import('./index.css'),
     import('react-dom/client'),
     import('react'),
     import('./App.tsx'),
     import('./i18n'),
-  ]);
+  ]).then(([, reactDom, react, app]) => [reactDom, react, app] as const);
 
   createRoot(document.getElementById("root")!).render(React.createElement(App));
 };
