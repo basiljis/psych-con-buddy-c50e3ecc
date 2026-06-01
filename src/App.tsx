@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -60,10 +60,9 @@ const Features = lazyWithRetry(() => import("./pages/Features"));
 const Pricing = lazyWithRetry(() => import("./pages/Pricing"));
 const Instructions = lazyWithRetry(() => import("./pages/Instructions"));
 
-const App = () => {
-  // Stable QueryClient instance per App mount (prevents re-instantiation on HMR)
-  const [queryClient] = useState(() => new QueryClient());
+const queryClient = new QueryClient();
 
+const App = () => {
   return (
     <ErrorBoundary componentName="App">
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
