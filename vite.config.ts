@@ -15,6 +15,10 @@ export default defineConfig(({ mode }) => ({
     mode === 'development' && componentTagger(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Disable SW on Lovable preview/dev to avoid stale chunk caching
+      disable: mode !== 'production' || (typeof process !== 'undefined' && process.env.LOVABLE_PREVIEW === 'true'),
+      injectRegister: 'auto',
+      devOptions: { enabled: false },
       includeAssets: ['favicon.ico', 'robots.txt'],
       manifest: {
         name: 'universum. Развитие. Для каждого',
