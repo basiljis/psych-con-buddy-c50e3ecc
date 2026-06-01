@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   web:
     build:
@@ -8,7 +10,7 @@ services:
         VITE_SUPABASE_PUBLISHABLE_KEY: ${VITE_SUPABASE_PUBLISHABLE_KEY}
         VITE_SUPABASE_PROJECT_ID: ${VITE_SUPABASE_PROJECT_ID}
     image: unvrsm-web:latest
-    container_name: unvrsm-web
     restart: always
     ports:
       - "80:80"
+    command: ["nginx", "-g", "daemon off;"]
