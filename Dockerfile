@@ -7,9 +7,17 @@ WORKDIR /app
 COPY package*.json ./
 # Увеличиваем heap для npm — на маленьких билд-раннерах npm ci падает по OOM
 ENV NODE_OPTIONS=--max-old-space-size=4096
-# npm install (а не ci) — терпим к рассинхрону package-lock.json,
-# иначе любая правка package.json валит сборку молча
-RUN npm install --no-audit --no-fund --prefer-offline --legacy-peer-deps
+# Делаем npm устойчивым к сетевым сбоям (на Timeweb/Cloud.ru registry бывает нестабильным)
+RUN npm config set fetch-retries 5 \
+ && npm config set fetch-retry-mintimeout 20000 \
+ && npm config set fetch-retry-maxtimeout 120000 \
+ && npm config set fetch-timeout 600000
+# npm install (а не ci) — терпим к рассинхрону package-lock.json.
+# Явная проверка vite в конце: если install молча упал ("Exit handler never called!"),
+# шаг сразу падает с понятной ошибкой, а не на этапе `npm run build`.
+RUN npm install --no-audit --no-fund --legacy-peer-deps \
+ && test -x node_modules/.bin/vite \
+ || (echo "npm install failed — vite not installed" && exit 1)
 
 # Копируем исходники и собираем
 COPY . .
