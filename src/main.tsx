@@ -1,3 +1,5 @@
+import './index.css';
+
 const cleanupPreviewServiceWorkers = async () => {
   if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
 
@@ -47,13 +49,16 @@ const showBootstrapError = () => {
 const bootstrap = async () => {
   await cleanupPreviewServiceWorkers();
 
-  const [{ createRoot }, React, { default: App }] = await Promise.all([
-    importWithRetry(() => import('./index.css')),
+  const [reactDom, react, app] = await Promise.all([
     importWithRetry(() => import('react-dom/client')),
     importWithRetry(() => import('react')),
     importWithRetry(() => import('./App.tsx')),
     importWithRetry(() => import('./i18n')),
-  ]).then(([, reactDom, react, app]) => [reactDom, react, app] as const);
+  ]).then(([rd, r, a]) => [rd, r, a] as const);
+
+  const { createRoot } = reactDom;
+  const React = react;
+  const { default: App } = app;
 
   createRoot(document.getElementById("root")!).render(React.createElement(App));
 };
@@ -62,4 +67,3 @@ void bootstrap().catch((error) => {
   console.error('[bootstrap] Failed to start application', error);
   showBootstrapError();
 });
-
