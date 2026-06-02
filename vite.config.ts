@@ -40,6 +40,7 @@ export default defineConfig(({ mode }) => ({
       workbox: {
         // Cache static assets
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         // Runtime caching strategies
         runtimeCaching: [
           {
