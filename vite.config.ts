@@ -105,28 +105,16 @@ export default defineConfig(({ mode }) => ({
     dedupe: ['react', 'react-dom'],
   },
   build: {
-    // Optimize chunk splitting - use function to avoid React duplication
+    // Keep all third-party packages in a single vendor chunk.
+    // Splitting React, React DOM and React Query into separate manual chunks
+    // created a circular dependency in production where query-* imported React
+    // before the vendor chunk had finished initializing it.
     rollupOptions: {
       output: {
-        manualChunks: {
-          // CRITICAL: All React-related modules MUST be in the same chunk
-          // to avoid "forwardRef" and "dispatcher.useEffect" errors
-          vendor: [
-            'react',
-            'react-dom',
-            'react-router-dom',
-            'scheduler',
-            'react/jsx-runtime',
-            'react/jsx-dev-runtime',
-          ],
-          supabase: ['@supabase/supabase-js'],
-          query: ['@tanstack/react-query'],
-          // Charts include recharts which uses React - must NOT be separate
-          // Moved to main bundle to avoid React version conflicts
-          'date-utils': ['date-fns'],
-          ui: ['@radix-ui/react-dialog', '@radix-ui/react-popover', '@radix-ui/react-select', '@radix-ui/react-tooltip'],
-          form: ['react-hook-form', '@hookform/resolvers', 'zod'],
-          export: ['jspdf', 'html2canvas', 'xlsx'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
         },
       },
     },
