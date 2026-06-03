@@ -9,6 +9,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 // Preloader MUST be imported synchronously to avoid infinite loading state
 import Preloader from "@/components/Preloader";
+import RootGate from "./pages/RootGate";
+import Home from "./pages/Home";
 
 // Helper: retry lazy import once on chunk load failure (handles stale build cache)
 const lazyWithRetry = <T extends React.ComponentType<unknown>>(
@@ -38,7 +40,6 @@ const NotFound = lazyWithRetry(() => import("./pages/NotFound"));
 const ResetPassword = lazyWithRetry(() => import("./pages/ResetPassword"));
 const Install = lazyWithRetry(() => import("./pages/Install"));
 const Landing = lazyWithRetry(() => import("./pages/Landing"));
-const Home = lazyWithRetry(() => import("./pages/Home"));
 const ForOrganizations = lazyWithRetry(() => import("./pages/ForOrganizations"));
 const ForSpecialists = lazyWithRetry(() => import("./pages/ForSpecialists"));
 const ForParents = lazyWithRetry(() => import("./pages/ForParents"));
@@ -49,7 +50,6 @@ const Installation = lazyWithRetry(() => import("./pages/Installation"));
 const Registry = lazyWithRetry(() => import("./pages/Registry"));
 const Patents = lazyWithRetry(() => import("./pages/Patents"));
 const AccessRequestStatus = lazy(() => import("@/components/AccessRequestStatus").then(m => ({ default: m.AccessRequestStatus })));
-const RootGate = lazy(() => import("./pages/RootGate").then(m => ({ default: m.default })));
 const OfflineIndicator = lazy(() => import("@/components/OfflineIndicator"));
 const PublicSpecialists = lazyWithRetry(() => import("./pages/PublicSpecialists"));
 const PublicOrganizations = lazyWithRetry(() => import("./pages/PublicOrganizations"));
