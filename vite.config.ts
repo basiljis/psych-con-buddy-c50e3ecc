@@ -15,70 +15,13 @@ export default defineConfig(({ mode }) => ({
     mode === 'development' && componentTagger(),
     VitePWA({
       registerType: 'autoUpdate',
-      // Disable SW on Lovable preview/dev to avoid stale chunk caching
-      disable: mode !== 'production' || (typeof process !== 'undefined' && process.env.LOVABLE_PREVIEW === 'true'),
-      injectRegister: 'auto',
+      // PWA fully disabled — stale workbox SWs on unvrsm.ru intercepted fetches
+      // and broke the site. Kill-switch SWs in public/sw.js + public/service-worker.js
+      // unregister themselves on existing devices.
+      disable: true,
+      injectRegister: false,
       devOptions: { enabled: false },
-      includeAssets: ['favicon.ico', 'robots.txt'],
-      manifest: {
-        name: 'universum. Развитие. Для каждого',
-        short_name: 'universum',
-        description: 'universum. Развитие. Для каждого — платформа комплексной поддержки детей',
-        theme_color: '#003366',
-        background_color: '#f5f7fa',
-        display: 'standalone',
-        scope: '/',
-        start_url: '/',
-        icons: [
-          {
-            src: '/favicon.ico',
-            sizes: '64x64 32x32 24x24 16x16',
-            type: 'image/x-icon'
-          }
-        ]
-      },
-      workbox: {
-        // Cache static assets
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-        // Runtime caching strategies
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/oxyjmeslnmhewlpgzlmf\.supabase\.co\/.*/i,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'supabase-api-cache',
-              expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 60 // 1 hour
-              },
-              networkTimeoutSeconds: 10
-            }
-          },
-          {
-            urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'images-cache',
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
-              }
-            }
-          },
-          {
-            urlPattern: /\.(?:js|css)$/,
-            handler: 'StaleWhileRevalidate',
-            options: {
-              cacheName: 'static-resources',
-              expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
-              }
-            }
-          }
-        ]
-      }
+      manifest: false,
     }),
   ].filter(Boolean),
   // CRITICAL: Force Vite to pre-bundle React dependencies together
