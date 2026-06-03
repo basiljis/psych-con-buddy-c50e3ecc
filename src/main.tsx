@@ -16,6 +16,10 @@ const cleanupPreviewServiceWorkers = async () => {
   }
 };
 
+const runServiceWorkerCleanupInBackground = () => {
+  void cleanupPreviewServiceWorkers();
+};
+
 const importWithRetry = async <T,>(importFn: () => Promise<T>, retries = 2): Promise<T> => {
   try {
     return await importFn();
@@ -43,7 +47,7 @@ const showBootstrapError = () => {
 };
 
 const bootstrap = async () => {
-  await cleanupPreviewServiceWorkers();
+  runServiceWorkerCleanupInBackground();
 
   const [reactDom, react, app] = await Promise.all([
     importWithRetry(() => import('react-dom/client')),
