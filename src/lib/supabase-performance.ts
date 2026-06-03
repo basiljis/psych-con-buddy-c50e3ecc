@@ -28,11 +28,12 @@ const supabaseConfig = {
 
 // Создание оптимизированного клиента Supabase
 export const createOptimizedSupabaseClient = (): SupabaseClient => {
-  const client = createClient(
-    'https://oxyjmeslnmhewlpgzlmf.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94eWptZXNsbm1oZXdscGd6bG1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQzMjE2MjEsImV4cCI6MjA2OTg5NzYyMX0.zqNt8Zj0ktRLY1HBKelEYJ0gXaLkyIc4l6PAwMod7Co',
-    supabaseConfig
-  );
+  const SUPABASE_URL =
+    (import.meta as any).env?.VITE_SUPABASE_URL ?? 'https://oxyjmeslnmhewlpgzlmf.supabase.co';
+  const SUPABASE_KEY =
+    (import.meta as any).env?.VITE_SUPABASE_PUBLISHABLE_KEY ??
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94eWptZXNsbm1oZXdscGd6bG1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQzMjE2MjEsImV4cCI6MjA2OTg5NzYyMX0.zqNt8Zj0ktRLY1HBKelEYJ0gXaLkyIc4l6PAwMod7Co';
+  const client = createClient(SUPABASE_URL, SUPABASE_KEY, supabaseConfig);
 
   return client as any;
 };
