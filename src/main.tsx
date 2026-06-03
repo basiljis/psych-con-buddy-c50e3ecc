@@ -1,29 +1,18 @@
 import './index.css';
+import { registerServiceWorker } from './service-worker-registration';
 
-const cleanupPreviewServiceWorkers = async () => {
-  if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
-
+// One-time purge of legacy workbox caches that previously broke the site.
+// We keep our own asset cache (`assets-v1`); only workbox-* caches are removed.
+const purgeLegacyWorkboxCaches = async () => {
+  if (typeof window === 'undefined' || !window.caches) return;
   try {
-    const regs = await navigator.serviceWorker.getRegistrations();
-    const hadActiveController = Boolean(navigator.serviceWorker.controller || regs.length > 0);
-    await Promise.all(regs.map((r) => r.unregister()));
-
-    if (window.caches) {
-      const keys = await caches.keys();
-      await Promise.all(keys.map((k) => caches.delete(k)));
-    }
-
-    if (hadActiveController && !sessionStorage.getItem('sw-cleanup-reloaded')) {
-      sessionStorage.setItem('sw-cleanup-reloaded', '1');
-      window.location.reload();
-    }
+    const keys = await caches.keys();
+    await Promise.all(
+      keys.filter((k) => k.startsWith('workbox-')).map((k) => caches.delete(k))
+    );
   } catch (e) {
-    console.warn('[sw-cleanup] failed', e);
+    console.warn('[cache-cleanup] failed', e);
   }
-};
-
-const runServiceWorkerCleanupInBackground = () => {
-  void cleanupPreviewServiceWorkers();
 };
 
 const importWithRetry = async <T,>(importFn: () => Promise<T>, retries = 2): Promise<T> => {
@@ -53,7 +42,7 @@ const showBootstrapError = () => {
 };
 
 const bootstrap = async () => {
-  runServiceWorkerCleanupInBackground();
+  void purgeLegacyWorkboxCaches();
 
   const [reactDom, react, app] = await Promise.all([
     importWithRetry(() => import('react-dom/client')),
@@ -67,6 +56,9 @@ const bootstrap = async () => {
   const { default: App } = app;
 
   createRoot(document.getElementById("root")!).render(React.createElement(App));
+
+  // Register SW after the app is mounted so it never blocks first render.
+  registerServiceWorker();
 };
 
 void bootstrap().catch((error) => {
