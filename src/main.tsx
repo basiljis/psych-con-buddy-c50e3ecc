@@ -5,11 +5,17 @@ const cleanupPreviewServiceWorkers = async () => {
 
   try {
     const regs = await navigator.serviceWorker.getRegistrations();
+    const hadActiveController = Boolean(navigator.serviceWorker.controller || regs.length > 0);
     await Promise.all(regs.map((r) => r.unregister()));
 
     if (window.caches) {
       const keys = await caches.keys();
       await Promise.all(keys.map((k) => caches.delete(k)));
+    }
+
+    if (hadActiveController && !sessionStorage.getItem('sw-cleanup-reloaded')) {
+      sessionStorage.setItem('sw-cleanup-reloaded', '1');
+      window.location.reload();
     }
   } catch (e) {
     console.warn('[sw-cleanup] failed', e);
