@@ -56,9 +56,59 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('node_modules')) {
-            return 'vendor';
+          if (!id.includes('node_modules')) return;
+
+          // Keep React core + React Query together to avoid circular init issues
+          if (
+            id.includes('/node_modules/react/') ||
+            id.includes('/node_modules/react-dom/') ||
+            id.includes('/node_modules/scheduler/') ||
+            id.includes('/node_modules/react-router') ||
+            id.includes('/node_modules/@tanstack/react-query') ||
+            id.includes('/node_modules/react-query/')
+          ) {
+            return 'react-vendor';
           }
+
+          if (id.includes('/node_modules/@supabase/')) return 'supabase';
+          if (id.includes('/node_modules/@radix-ui/')) return 'radix';
+          if (
+            id.includes('/node_modules/recharts/') ||
+            id.includes('/node_modules/d3-') ||
+            id.includes('/node_modules/victory-')
+          ) {
+            return 'charts';
+          }
+          if (
+            id.includes('/node_modules/jspdf') ||
+            id.includes('/node_modules/html2canvas') ||
+            id.includes('/node_modules/xlsx') ||
+            id.includes('/node_modules/exceljs') ||
+            id.includes('/node_modules/file-saver')
+          ) {
+            return 'export';
+          }
+          if (
+            id.includes('/node_modules/i18next') ||
+            id.includes('/node_modules/react-i18next')
+          ) {
+            return 'i18n';
+          }
+          if (
+            id.includes('/node_modules/date-fns') ||
+            id.includes('/node_modules/dayjs') ||
+            id.includes('/node_modules/moment')
+          ) {
+            return 'date';
+          }
+          if (
+            id.includes('/node_modules/lucide-react') ||
+            id.includes('/node_modules/@radix-ui/react-icons')
+          ) {
+            return 'icons';
+          }
+
+          return 'vendor';
         },
       },
     },
