@@ -3,20 +3,16 @@ import './index.css';
 const cleanupPreviewServiceWorkers = async () => {
   if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
 
-  const host = window.location.hostname;
-  const isPreview =
-    host.endsWith('.lovableproject.com') ||
-    host.endsWith('.lovable.app') ||
-    host.endsWith('.lovableproject-dev.com');
+  try {
+    const regs = await navigator.serviceWorker.getRegistrations();
+    await Promise.all(regs.map((r) => r.unregister()));
 
-  if (!isPreview) return;
-
-  const regs = await navigator.serviceWorker.getRegistrations();
-  await Promise.all(regs.map((r) => r.unregister()));
-
-  if (window.caches) {
-    const keys = await caches.keys();
-    await Promise.all(keys.map((k) => caches.delete(k)));
+    if (window.caches) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => caches.delete(k)));
+    }
+  } catch (e) {
+    console.warn('[sw-cleanup] failed', e);
   }
 };
 
