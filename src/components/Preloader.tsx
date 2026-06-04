@@ -38,7 +38,8 @@ const Preloader = () => {
           style={{
             fontFamily: 'system-ui, -apple-system, sans-serif',
             textTransform: 'uppercase',
-            letterSpacing: '0.25em'
+            letterSpacing: '0.25em',
+            textIndent: '0.25em'
           }}
         >
           universum.
