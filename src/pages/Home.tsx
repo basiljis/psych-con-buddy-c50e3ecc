@@ -160,6 +160,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-background">
       <PublicNavbar currentPage="landing" />
 
+      <main>
       {/* Hero */}
       <section className="relative pt-28 pb-16 md:pt-36 md:pb-24 px-4 overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/5 via-background to-background" />
