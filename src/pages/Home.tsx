@@ -399,6 +399,7 @@ export default function Home() {
           </Card>
         </div>
       </section>
+      </main>
 
       <LandingFooter />
       <StickyMobileCta />
