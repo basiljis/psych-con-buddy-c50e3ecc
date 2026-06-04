@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { getDirectionBySlug } from "@/constants/workDirections";
+import { useSeoMeta } from "@/hooks/useSeoMeta";
 
 interface SessionPackage {
   sessions: number;
