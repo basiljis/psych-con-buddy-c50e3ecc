@@ -139,6 +139,37 @@ export default function SpecialistDetail() {
     }
   };
 
+  const seoTitle = specialist
+    ? `${specialist.full_name}${specialist.position?.name ? ` — ${specialist.position.name}` : ""} | universum.`.slice(0, 60)
+    : "Профиль специалиста — universum.";
+  const seoDescription = specialist
+    ? (specialist.public_bio?.slice(0, 155) ||
+        `${specialist.full_name}${specialist.position?.name ? `, ${specialist.position.name}` : ""}${specialist.organization?.name ? `, ${specialist.organization.name}` : ""}. Запись на консультацию через universum.`).slice(0, 160)
+    : "Профиль специалиста на платформе universum. — запись на консультацию, опыт и квалификация.";
+
+  useSeoMeta({
+    title: seoTitle,
+    description: seoDescription,
+    canonical: slug ? `/s/${slug}` : "/specialists",
+    ogImage: specialist?.public_photo_url || undefined,
+    noIndex: !specialist,
+    jsonLd: specialist
+      ? {
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: specialist.full_name,
+          jobTitle: specialist.position?.name || undefined,
+          description: specialist.public_bio || undefined,
+          image: specialist.public_photo_url || undefined,
+          worksFor: specialist.organization?.name
+            ? { "@type": "Organization", name: specialist.organization.name }
+            : undefined,
+          url: `https://unvrsm.ru/s/${slug}`,
+        }
+      : undefined,
+  });
+
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
