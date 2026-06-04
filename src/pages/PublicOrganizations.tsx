@@ -21,6 +21,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useSeoMeta } from "@/hooks/useSeoMeta";
 
 // Moscow region ID in the database
 const MOSCOW_REGION_ID = "77";
