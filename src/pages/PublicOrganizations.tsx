@@ -391,6 +391,41 @@ export default function PublicOrganizations() {
     navigate(target);
   };
 
+  const seoTitle = slug && singleOrganization
+    ? `${singleOrganization.name} — universum.`.slice(0, 60)
+    : "Каталог организаций — universum.";
+  const seoDescription = slug && singleOrganization
+    ? ((singleOrganization.public_description || `${singleOrganization.name}${singleOrganization.district ? `, ${singleOrganization.district}` : ""}. Запись к специалистам через universum.`).slice(0, 160))
+    : "Каталог ППМС-центров, школ и организаций на платформе universum. Найдите специалиста и запишитесь на консультацию.";
+
+  useSeoMeta({
+    title: seoTitle,
+    description: seoDescription,
+    canonical: slug ? `/o/${slug}` : "/organizations",
+    ogImage: slug && singleOrganization?.logo_url ? singleOrganization.logo_url : undefined,
+    noIndex: slug ? !singleOrganization : false,
+    jsonLd: slug && singleOrganization
+      ? {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: singleOrganization.name,
+          description: singleOrganization.public_description || undefined,
+          url: `https://unvrsm.ru/o/${slug}`,
+          logo: singleOrganization.logo_url || undefined,
+          telephone: singleOrganization.phone || undefined,
+          email: singleOrganization.email || undefined,
+          address: singleOrganization.address
+            ? { "@type": "PostalAddress", streetAddress: singleOrganization.address, addressLocality: singleOrganization.district || undefined, addressCountry: "RU" }
+            : undefined,
+        }
+      : {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Каталог организаций universum.",
+          url: "https://unvrsm.ru/organizations",
+        },
+  });
+
   // If slug is provided, show single organization detail view
   if (slug) {
     if (isLoadingSingle) {
