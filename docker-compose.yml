@@ -1,8 +1,28 @@
 # Timeweb Cloud Apps — Docker Compose deployment
-# Redeploy trigger: 2026-06-01T14:30 (lockfile regenerated)
-
+# Redeploy trigger: 2026-06-06
 
 services:
+  # ---------------------------------------------------------------
+  # Edge-прокси. Точка входа. Остаётся живым во время деплоя app
+  # и автоматически показывает /maintenance.html при недоступности.
+  # ---------------------------------------------------------------
+  edge:
+    build:
+      context: ./edge
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8080"
+    depends_on:
+      - app
+    restart: unless-stopped
+    # Хранилище для ручного флага обслуживания (touch maintenance.enabled)
+    volumes:
+      - maintenance_flags:/etc/nginx/flags
+
+  # ---------------------------------------------------------------
+  # Основное приложение (SPA + reverse-proxy на Supabase).
+  # Порт наружу НЕ публикуется — доступ только через edge.
+  # ---------------------------------------------------------------
   app:
     build:
       context: .
@@ -11,6 +31,9 @@ services:
         VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
         VITE_SUPABASE_PUBLISHABLE_KEY: ${VITE_SUPABASE_PUBLISHABLE_KEY}
         VITE_SUPABASE_PROJECT_ID: ${VITE_SUPABASE_PROJECT_ID}
-    ports:
-      - "8082:8080"
+    expose:
+      - "8080"
     restart: unless-stopped
+
+volumes:
+  maintenance_flags:
