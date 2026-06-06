@@ -373,6 +373,13 @@
     "badge": "Development. For everyone.",
     "heroTitle1": "The child's profile —",
     "heroTitle2": "the heart of every specialist and parent",
+    "heroRotating": [
+      "the heart of every specialist and parent",
+      "a full development history in one place",
+      "tests, sessions and recommendations",
+      "a dialogue between family and specialist",
+      "progress you can actually see"
+    ],
     "heroSubtitle": "A child's whole development story in one place: tests, session recordings, recommendations and a direct dialogue with parents. We help specialists see real progress and families understand what's happening with their child.",
     "ctaDemo": "Request a demo",
     "ctaTryFree": "Try for free",
