@@ -9,6 +9,7 @@ import { FaqSection, homeFaqItems } from "@/components/home/FaqSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { LeadCaptureForm } from "@/components/home/LeadCaptureForm";
 import { StickyMobileCta } from "@/components/home/StickyMobileCta";
+import { Typewriter } from "@/components/home/Typewriter";
 import {
   Building2,
   GraduationCap,
