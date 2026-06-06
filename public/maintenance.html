@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Идёт обновление — universum.</title>
+  <link rel="icon" href="/favicon.ico" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #ffffff;
+      --fg: #0f172a;
+      --muted: #64748b;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 60%, #fef3c7 100%);
+      color: var(--fg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: 0 20px 60px -20px rgba(15, 23, 42, 0.25);
+      max-width: 520px;
+      width: 100%;
+      padding: 40px 32px;
+      text-align: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 24px;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+    h1 {
+      font-size: 28px;
+      line-height: 1.2;
+      margin: 0 0 12px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    p {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+      margin: 0 0 8px;
+    }
+    .countdown {
+      margin-top: 28px;
+      padding: 16px;
+      background: #f8fafc;
+      border-radius: 12px;
+      color: var(--fg);
+      font-weight: 600;
+      font-size: 15px;
+    }
+    .countdown small {
+      display: block;
+      color: var(--muted);
+      font-weight: 400;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+    .footer {
+      margin-top: 28px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+      color: var(--fg);
+    }
+    .logo span { color: var(--accent); }
+    @media (max-width: 480px) {
+      .card { padding: 32px 22px; }
+      h1 { font-size: 22px; }
+      p { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <div class="logo">universum<span>.</span></div>
+    <div class="badge">
+      <span class="dot"></span>
+      Идёт обновление
+    </div>
+    <h1>Сервис временно недоступен</h1>
+    <p>Мы выкатываем обновление платформы — улучшаем работу для специалистов, родителей и детей.</p>
+    <p>Пожалуйста, вернитесь примерно <strong>через 15 минут</strong>.</p>
+
+    <div class="countdown">
+      <span id="timer">Возвращаемся через 15:00</span>
+      <small>Страница обновится автоматически</small>
+    </div>
+
+    <div class="footer">
+      Если ситуация не изменилась — напишите нам на
+      <a href="mailto:support@unvrsm.ru">support@unvrsm.ru</a>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var endsAt = Date.now() + 15 * 60 * 1000;
+      var el = document.getElementById('timer');
+      function tick() {
+        var diff = Math.max(0, endsAt - Date.now());
+        var m = Math.floor(diff / 60000);
+        var s = Math.floor((diff % 60000) / 1000);
+        el.textContent = 'Возвращаемся через ' + m + ':' + (s < 10 ? '0' : '') + s;
+        if (diff <= 0) location.reload();
+      }
+      tick();
+      setInterval(tick, 1000);
+      // Авто-проверка доступности раз в 30 сек
+      setInterval(function () {
+        fetch('/?_health=1', { cache: 'no-store' })
+          .then(function (r) { if (r.ok && r.status !== 503) location.reload(); })
+          .catch(function () {});
+      }, 30000);
+    })();
+  </script>
+</body>
+</html>
