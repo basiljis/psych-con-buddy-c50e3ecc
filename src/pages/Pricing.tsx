@@ -25,7 +25,7 @@ const plans = [
   },
   {
     name: "Специалист",
-    price: "990 ₽",
+    price: "330 ₽",
     period: "/ мес",
     description: "Для частных практиков и педагогов",
     features: [
@@ -42,7 +42,7 @@ const plans = [
   },
   {
     name: "Организация",
-    price: "4 990 ₽",
+    price: "2 500 ₽",
     period: "/ мес",
     description: "Для школ, ППМС-центров и ЦППМСП",
     features: [
