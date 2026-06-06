@@ -9,6 +9,7 @@ import { FaqSection, homeFaqItems } from "@/components/home/FaqSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { LeadCaptureForm } from "@/components/home/LeadCaptureForm";
 import { StickyMobileCta } from "@/components/home/StickyMobileCta";
+import { Typewriter } from "@/components/home/Typewriter";
 import {
   Building2,
   GraduationCap,
@@ -172,11 +173,12 @@ export default function Home() {
             {t("homePage.badge")}
           </div>
 
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 min-h-[1.2em]">
             {t("homePage.heroTitle1")}{" "}
-            <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              {t("homePage.heroTitle2")}
-            </span>
+            <Typewriter
+              words={(t("homePage.heroRotating", { returnObjects: true }) as string[]) || [t("homePage.heroTitle2")]}
+              className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent"
+            />
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
