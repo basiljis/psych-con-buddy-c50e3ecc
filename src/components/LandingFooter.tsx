@@ -80,7 +80,8 @@ export default function LandingFooter() {
 
         <div className="border-t mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <p>© 2025{year > 2025 ? `–${year}` : '–2026'} universum. {t("footer.rights")}</p>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link to="/legal" className="hover:text-foreground transition-colors">Нормативная база</Link>
             <Link to="/patents" className="hover:text-foreground transition-colors">{t("footer.patents")}</Link>
             <Link to="/registry" className="hover:text-foreground transition-colors">{t("footer.registry")}</Link>
           </div>

@@ -59,6 +59,7 @@ const About = lazyWithRetry(() => import("./pages/About"));
 const Features = lazyWithRetry(() => import("./pages/Features"));
 const Pricing = lazyWithRetry(() => import("./pages/Pricing"));
 const Instructions = lazyWithRetry(() => import("./pages/Instructions"));
+const Legal = lazyWithRetry(() => import("./pages/Legal"));
 
 const queryClient = new QueryClient();
 
@@ -104,6 +105,7 @@ const App = () => {
                       <Route path="/installation" element={<Installation />} />
                       <Route path="/registry" element={<Registry />} />
                       <Route path="/patents" element={<Patents />} />
+                      <Route path="/legal" element={<Legal />} />
                       <Route path="/app" element={<Index />} />
                       <Route path="/auth" element={<Auth />} />
                       <Route path="/parent-auth" element={<ParentAuth />} />
