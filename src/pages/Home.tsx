@@ -23,6 +23,7 @@ import {
   Sparkles,
   Award,
   Lock,
+  Scale,
 } from "lucide-react";
 
 export default function Home() {
