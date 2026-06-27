@@ -12,7 +12,7 @@ import brandLogo from "@/assets/brand-logo.png";
 
 interface PublicNavbarProps {
   showHomeButton?: boolean;
-  currentPage?: 'organizations' | 'specialists' | 'parents' | 'auth' | 'landing' | 'catalog-specialists' | 'catalog-organizations' | 'privacy' | 'partnership' | 'instructions' | 'other';
+  currentPage?: 'organizations' | 'specialists' | 'parents' | 'auth' | 'landing' | 'catalog-specialists' | 'catalog-organizations' | 'privacy' | 'partnership' | 'instructions' | 'legal' | 'other';
   showSecondaryNav?: boolean;
   authLink?: string;
 }
