@@ -1,10 +1,24 @@
+import { useState, useMemo } from "react";
 import { PublicNavbar } from "@/components/PublicNavbar";
 import LandingFooter from "@/components/LandingFooter";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
-import { Scale, BookOpen, Shield, GraduationCap, HeartPulse, FileText, ExternalLink, Building2 } from "lucide-react";
+import {
+  Scale,
+  BookOpen,
+  Shield,
+  GraduationCap,
+  HeartPulse,
+  FileText,
+  ExternalLink,
+  Building2,
+  Search,
+  X,
+} from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 type Doc = {
   title: string;
@@ -117,27 +131,23 @@ const sections: Section[] = [
     docs: [
       {
         title: "Приказ Минобрнауки России от 17.10.2013 № 1155 — ФГОС ДО",
-        description:
-          "Федеральный государственный образовательный стандарт дошкольного образования.",
+        description: "Федеральный государственный образовательный стандарт дошкольного образования.",
         url: "http://www.consultant.ru/document/cons_doc_LAW_154637/",
       },
       {
         title: "Приказ Минпросвещения России от 31.05.2021 № 286 — ФГОС НОО",
-        description:
-          "Федеральный государственный образовательный стандарт начального общего образования.",
+        description: "Федеральный государственный образовательный стандарт начального общего образования.",
         url: "http://publication.pravo.gov.ru/Document/View/0001202107050027",
       },
       {
         title: "Приказ Минобрнауки России от 19.12.2014 № 1598 — ФГОС НОО ОВЗ",
-        description:
-          "ФГОС начального общего образования обучающихся с ограниченными возможностями здоровья.",
+        description: "ФГОС начального общего образования обучающихся с ограниченными возможностями здоровья.",
         url: "http://www.consultant.ru/document/cons_doc_LAW_175495/",
         badge: "ОВЗ",
       },
       {
         title: "Приказ Минобрнауки России от 19.12.2014 № 1599 — ФГОС УО",
-        description:
-          "ФГОС образования обучающихся с умственной отсталостью (интеллектуальными нарушениями).",
+        description: "ФГОС образования обучающихся с умственной отсталостью (интеллектуальными нарушениями).",
         url: "http://www.consultant.ru/document/cons_doc_LAW_175316/",
       },
     ],
@@ -191,8 +201,7 @@ const sections: Section[] = [
       },
       {
         title: "Приказ ФСБ России от 10.07.2014 № 378",
-        description:
-          "Требования к защите ПДн с использованием средств криптографической защиты информации.",
+        description: "Требования к защите ПДн с использованием средств криптографической защиты информации.",
         url: "http://www.consultant.ru/document/cons_doc_LAW_169199/",
       },
       {
@@ -227,7 +236,18 @@ const sections: Section[] = [
   },
 ];
 
+function matchesQuery(doc: Doc, q: string): boolean {
+  return (
+    doc.title.toLowerCase().includes(q) ||
+    doc.description.toLowerCase().includes(q) ||
+    (doc.meta?.toLowerCase().includes(q) ?? false) ||
+    (doc.badge?.toLowerCase().includes(q) ?? false)
+  );
+}
+
 export default function Legal() {
+  const [query, setQuery] = useState("");
+
   useSeoMeta({
     title: "Нормативно-правовая база — законы и стандарты | universum.",
     description:
@@ -236,6 +256,31 @@ export default function Legal() {
     keywords:
       "нормативно-правовая база, ФЗ-152, ФЗ-273, Приказ 666 ДОНМ, ППк, ПМПК, ФГОС ОВЗ, ФСТЭК, защита персональных данных",
   });
+
+  const filteredSections = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return sections;
+
+    return sections
+      .map((section) => {
+        const sectionMatch =
+          section.title.toLowerCase().includes(q) ||
+          section.intro.toLowerCase().includes(q);
+        const matchedDocs = section.docs.filter((doc) => matchesQuery(doc, q));
+
+        if (sectionMatch) {
+          return section;
+        }
+        if (matchedDocs.length > 0) {
+          return { ...section, docs: matchedDocs };
+        }
+        return null;
+      })
+      .filter((s): s is Section => s !== null);
+  }, [query]);
+
+  const totalDocs = filteredSections.reduce((sum, s) => sum + s.docs.length, 0);
+  const hasQuery = query.trim().length > 0;
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -253,77 +298,125 @@ export default function Legal() {
             </p>
           </div>
 
-          {/* Quick TOC */}
-          <nav aria-label="Разделы документа" className="mb-12">
-            <Card className="border-border/60 bg-muted/30">
-              <CardContent className="py-4 px-5">
-                <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
-                  {sections.map((s) => (
-                    <li key={s.id}>
-                      <a
-                        href={`#${s.id}`}
-                        className="text-primary hover:underline inline-flex items-center gap-2"
-                      >
-                        <s.icon className="h-3.5 w-3.5" />
-                        {s.title}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          </nav>
+          {/* Search */}
+          <div className="mb-8">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+              <Input
+                type="text"
+                placeholder="Поиск по названию, описанию или типу документа…"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="pl-9 pr-10"
+              />
+              {hasQuery && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                  onClick={() => setQuery("")}
+                  aria-label="Очистить поиск"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+            {hasQuery && (
+              <p className="mt-2 text-sm text-muted-foreground">
+                Найдено {totalDocs} {totalDocs === 1 ? "документ" : totalDocs >= 2 && totalDocs <= 4 ? "документа" : "документов"} в {filteredSections.length}{" "}
+                {filteredSections.length === 1 ? "разделе" : "разделах"}
+              </p>
+            )}
+          </div>
 
-          {sections.map((section, idx) => {
-            const Icon = section.icon;
-            return (
-              <section key={section.id} id={section.id} className="mb-12 scroll-mt-24">
-                <div className="flex items-center gap-2 mb-4">
-                  <Icon className="h-5 w-5 text-primary" />
-                  <h2 className="text-2xl font-semibold">{section.title}</h2>
-                </div>
-                <p className="text-muted-foreground mb-6">{section.intro}</p>
+          {/* Quick TOC — hide when searching */}
+          {!hasQuery && (
+            <nav aria-label="Разделы документа" className="mb-12">
+              <Card className="border-border/60 bg-muted/30">
+                <CardContent className="py-4 px-5">
+                  <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
+                    {sections.map((s) => (
+                      <li key={s.id}>
+                        <a
+                          href={`#${s.id}`}
+                          className="text-primary hover:underline inline-flex items-center gap-2"
+                        >
+                          <s.icon className="h-3.5 w-3.5" />
+                          {s.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </nav>
+          )}
 
-                <div className="space-y-3">
-                  {section.docs.map((doc) => (
-                    <Card key={doc.title} className="border-border/60">
-                      <CardHeader className="pb-2">
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="flex items-start gap-3 min-w-0">
-                            <FileText className="h-4 w-4 text-muted-foreground mt-1 flex-shrink-0" />
-                            <CardTitle className="text-base leading-snug">
-                              <a
-                                href={doc.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="hover:text-primary transition-colors inline-flex items-start gap-1"
-                              >
-                                <span>{doc.title}</span>
-                                <ExternalLink className="h-3.5 w-3.5 mt-1 flex-shrink-0 opacity-60" />
-                              </a>
-                            </CardTitle>
+          {filteredSections.length === 0 ? (
+            <div className="text-center py-16">
+              <Search className="h-10 w-10 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground text-lg mb-2">
+                По запросу «{query.trim()}» ничего не найдено
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Попробуйте изменить запрос или сбросить фильтр
+              </p>
+              <Button variant="outline" className="mt-4" onClick={() => setQuery("")}>
+                Сбросить поиск
+              </Button>
+            </div>
+          ) : (
+            filteredSections.map((section, idx) => {
+              const Icon = section.icon;
+              return (
+                <section key={section.id} id={section.id} className="mb-12 scroll-mt-24">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Icon className="h-5 w-5 text-primary" />
+                    <h2 className="text-2xl font-semibold">{section.title}</h2>
+                  </div>
+                  <p className="text-muted-foreground mb-6">{section.intro}</p>
+
+                  <div className="space-y-3">
+                    {section.docs.map((doc) => (
+                      <Card key={doc.title} className="border-border/60">
+                        <CardHeader className="pb-2">
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex items-start gap-3 min-w-0">
+                              <FileText className="h-4 w-4 text-muted-foreground mt-1 flex-shrink-0" />
+                              <CardTitle className="text-base leading-snug">
+                                <a
+                                  href={doc.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="hover:text-primary transition-colors inline-flex items-start gap-1"
+                                >
+                                  <span>{doc.title}</span>
+                                  <ExternalLink className="h-3.5 w-3.5 mt-1 flex-shrink-0 opacity-60" />
+                                </a>
+                              </CardTitle>
+                            </div>
+                            {doc.badge && (
+                              <Badge variant="secondary" className="flex-shrink-0 text-xs">
+                                {doc.badge}
+                              </Badge>
+                            )}
                           </div>
-                          {doc.badge && (
-                            <Badge variant="secondary" className="flex-shrink-0 text-xs">
-                              {doc.badge}
-                            </Badge>
+                        </CardHeader>
+                        <CardContent className="pt-0 pl-12">
+                          {doc.meta && (
+                            <p className="text-xs text-muted-foreground mb-1">{doc.meta}</p>
                           )}
-                        </div>
-                      </CardHeader>
-                      <CardContent className="pt-0 pl-12">
-                        {doc.meta && (
-                          <p className="text-xs text-muted-foreground mb-1">{doc.meta}</p>
-                        )}
-                        <p className="text-sm text-muted-foreground">{doc.description}</p>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                          <p className="text-sm text-muted-foreground">{doc.description}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
 
-                {idx < sections.length - 1 && <Separator className="mt-12" />}
-              </section>
-            );
-          })}
+                  {idx < filteredSections.length - 1 && <Separator className="mt-12" />}
+                </section>
+              );
+            })
+          )}
 
           <Card className="border-border/60 bg-muted/30 mt-8">
             <CardContent className="py-5 px-5">
