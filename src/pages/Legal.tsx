@@ -239,7 +239,7 @@ export default function Legal() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <PublicNavbar currentPage="other" showSecondaryNav={false} />
+      <PublicNavbar currentPage="legal" showSecondaryNav={false} />
 
       <main className="flex-1 pt-24 pb-16 px-4">
         <div className="container mx-auto max-w-4xl">

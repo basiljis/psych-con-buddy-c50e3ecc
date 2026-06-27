@@ -23,6 +23,7 @@ import {
   Sparkles,
   Award,
   Lock,
+  Scale,
 } from "lucide-react";
 
 export default function Home() {
@@ -283,6 +284,12 @@ export default function Home() {
             </Button>
             <Button asChild variant="ghost" size="sm">
               <Link to="/privacy-policy">{t("homePage.trust.privacy")}</Link>
+            </Button>
+            <Button asChild variant="ghost" size="sm">
+              <Link to="/legal" className="inline-flex items-center gap-1.5">
+                <Scale className="h-3.5 w-3.5" />
+                Нормативная база
+              </Link>
             </Button>
           </div>
         </div>

@@ -6,13 +6,13 @@ import { LanguageToggle } from "@/components/ui/language-toggle";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { NavbarBackground } from "@/components/NavbarBackground";
 import {
-  Heart, Menu, GraduationCap, Building2, Home, BookOpen
+  Heart, Menu, GraduationCap, Building2, Home, BookOpen, Scale
 } from "lucide-react";
 import brandLogo from "@/assets/brand-logo.png";
 
 interface PublicNavbarProps {
   showHomeButton?: boolean;
-  currentPage?: 'organizations' | 'specialists' | 'parents' | 'auth' | 'landing' | 'catalog-specialists' | 'catalog-organizations' | 'privacy' | 'partnership' | 'instructions' | 'other';
+  currentPage?: 'organizations' | 'specialists' | 'parents' | 'auth' | 'landing' | 'catalog-specialists' | 'catalog-organizations' | 'privacy' | 'partnership' | 'instructions' | 'legal' | 'other';
   showSecondaryNav?: boolean;
   authLink?: string;
 }
@@ -63,6 +63,12 @@ export function PublicNavbar({
               className={`text-sm ${currentPage === 'instructions' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
             >
               {t('nav.instructions')}
+            </Link>
+            <Link
+              to="/legal"
+              className={`text-sm ${currentPage === 'legal' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
+            >
+              {t('nav.legal')}
             </Link>
           </nav>
 
@@ -136,6 +142,13 @@ export function PublicNavbar({
                     >
                       <BookOpen className="h-4 w-4" />
                       {t('nav.instructions')}
+                    </Link>
+                    <Link
+                      to="/legal"
+                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'legal' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
+                    >
+                      <Scale className="h-4 w-4" />
+                      {t('nav.legal')}
                     </Link>
                   </div>
 
