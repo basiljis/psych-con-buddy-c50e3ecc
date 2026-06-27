@@ -143,6 +143,13 @@ export function PublicNavbar({
                       <BookOpen className="h-4 w-4" />
                       {t('nav.instructions')}
                     </Link>
+                    <Link
+                      to="/legal"
+                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'legal' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
+                    >
+                      <Scale className="h-4 w-4" />
+                      {t('nav.legal')}
+                    </Link>
                   </div>
 
                   {showHomeButton && (
