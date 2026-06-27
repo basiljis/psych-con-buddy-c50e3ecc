@@ -285,6 +285,12 @@ export default function Home() {
             <Button asChild variant="ghost" size="sm">
               <Link to="/privacy-policy">{t("homePage.trust.privacy")}</Link>
             </Button>
+            <Button asChild variant="ghost" size="sm">
+              <Link to="/legal" className="inline-flex items-center gap-1.5">
+                <Scale className="h-3.5 w-3.5" />
+                Нормативная база
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
