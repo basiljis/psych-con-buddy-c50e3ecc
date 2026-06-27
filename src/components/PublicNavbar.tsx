@@ -64,6 +64,12 @@ export function PublicNavbar({
             >
               {t('nav.instructions')}
             </Link>
+            <Link
+              to="/legal"
+              className={`text-sm ${currentPage === 'legal' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
+            >
+              {t('nav.legal')}
+            </Link>
           </nav>
 
           <div className="hidden md:flex items-center gap-3">
