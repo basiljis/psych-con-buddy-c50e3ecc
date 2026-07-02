@@ -15,9 +15,6 @@ services:
     depends_on:
       - app
     restart: unless-stopped
-    # Хранилище для ручного флага обслуживания (touch maintenance.enabled)
-    volumes:
-      - maintenance_flags:/etc/nginx/flags
 
   # ---------------------------------------------------------------
   # Основное приложение (SPA + reverse-proxy на Supabase).
@@ -34,6 +31,3 @@ services:
     expose:
       - "8080"
     restart: unless-stopped
-
-volumes:
-  maintenance_flags:
