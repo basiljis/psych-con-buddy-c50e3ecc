@@ -76,35 +76,7 @@ export default function LegalSection() {
 
           <div className="space-y-3 mb-12">
             {section.docs.map((doc) => (
-              <Card key={doc.title} className="border-border/60">
-                <CardHeader className="pb-2">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-start gap-3 min-w-0">
-                      <FileText className="h-4 w-4 text-muted-foreground mt-1 flex-shrink-0" />
-                      <CardTitle className="text-base leading-snug">
-                        <a
-                          href={doc.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:text-primary transition-colors inline-flex items-start gap-1"
-                        >
-                          <span>{doc.title}</span>
-                          <ExternalLink className="h-3.5 w-3.5 mt-1 flex-shrink-0 opacity-60" />
-                        </a>
-                      </CardTitle>
-                    </div>
-                    {doc.badge && (
-                      <Badge variant="secondary" className="flex-shrink-0 text-xs">
-                        {doc.badge}
-                      </Badge>
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0 pl-12">
-                  {doc.meta && <p className="text-xs text-muted-foreground mb-1">{doc.meta}</p>}
-                  <p className="text-sm text-muted-foreground">{doc.description}</p>
-                </CardContent>
-              </Card>
+              <DocCard key={doc.title} doc={doc} />
             ))}
           </div>
 
