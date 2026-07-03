@@ -8,12 +8,19 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+export type LegalExcerpt = {
+  label: string;
+  text: string;
+  applies: string;
+};
+
 export type LegalDoc = {
   title: string;
   meta?: string;
   description: string;
   url: string;
   badge?: string;
+  excerpts?: LegalExcerpt[];
 };
 
 export type LegalSection = {
