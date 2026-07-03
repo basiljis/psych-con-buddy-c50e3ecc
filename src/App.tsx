@@ -109,6 +109,7 @@ const App = () => {
                       <Route path="/patents" element={<Patents />} />
                       <Route path="/legal" element={<Legal />} />
                       <Route path="/legal/:sectionId" element={<LegalSection />} />
+                      <Route path="/guides/pmpk-preparation" element={<PmpkPreparation />} />
                       <Route path="/app" element={<Index />} />
                       <Route path="/auth" element={<Auth />} />
                       <Route path="/parent-auth" element={<ParentAuth />} />
