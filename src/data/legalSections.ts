@@ -122,7 +122,7 @@ export const legalSections: LegalSection[] = [
       {
         title: "Приказ Минпросвещения России от 31.05.2021 № 286 — ФГОС НОО",
         description: "Федеральный государственный образовательный стандарт начального общего образования.",
-        url: "http://publication.pravo.gov.ru/Document/View/0001202107050027",
+        url: "https://www.consultant.ru/document/cons_doc_LAW_389561/",
       },
       {
         title: "Приказ Минобрнауки России от 19.12.2014 № 1598 — ФГОС НОО ОВЗ",
