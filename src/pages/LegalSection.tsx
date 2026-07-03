@@ -113,3 +113,76 @@ export default function LegalSection() {
     </div>
   );
 }
+
+function DocCard({ doc }: { doc: import("@/data/legalSections").LegalDoc }) {
+  const [open, setOpen] = useState(false);
+  const hasExcerpts = !!doc.excerpts?.length;
+
+  return (
+    <Card className="border-border/60">
+      <CardHeader className="pb-2">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-start gap-3 min-w-0">
+            <FileText className="h-4 w-4 text-muted-foreground mt-1 flex-shrink-0" />
+            <CardTitle className="text-base leading-snug">
+              <a
+                href={doc.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary transition-colors inline-flex items-start gap-1"
+              >
+                <span>{doc.title}</span>
+                <ExternalLink className="h-3.5 w-3.5 mt-1 flex-shrink-0 opacity-60" />
+              </a>
+            </CardTitle>
+          </div>
+          {doc.badge && (
+            <Badge variant="secondary" className="flex-shrink-0 text-xs">
+              {doc.badge}
+            </Badge>
+          )}
+        </div>
+      </CardHeader>
+      <CardContent className="pt-0 pl-12">
+        {doc.meta && <p className="text-xs text-muted-foreground mb-1">{doc.meta}</p>}
+        <p className="text-sm text-muted-foreground">{doc.description}</p>
+
+        {hasExcerpts && (
+          <Collapsible open={open} onOpenChange={setOpen} className="mt-3">
+            <CollapsibleTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 gap-2 text-xs"
+                aria-expanded={open}
+              >
+                <BookOpen className="h-3.5 w-3.5" />
+                {open ? "Скрыть выдержки" : "Показать выдержки, применимые к системе"}
+                <ChevronDown
+                  className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`}
+                />
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-3 space-y-3">
+              {doc.excerpts!.map((ex) => (
+                <div
+                  key={ex.label}
+                  className="rounded-md border border-border/60 bg-muted/30 p-3"
+                >
+                  <p className="text-xs font-medium text-foreground mb-2">{ex.label}</p>
+                  <blockquote className="text-sm text-muted-foreground italic border-l-2 border-primary/40 pl-3 mb-2">
+                    {ex.text}
+                  </blockquote>
+                  <p className="text-xs text-foreground/80">
+                    <span className="font-medium text-primary">Как применяется в universum.:</span>{" "}
+                    {ex.applies}
+                  </p>
+                </div>
+              ))}
+            </CollapsibleContent>
+          </Collapsible>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
