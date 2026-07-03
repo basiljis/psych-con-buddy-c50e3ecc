@@ -61,6 +61,7 @@ const Pricing = lazyWithRetry(() => import("./pages/Pricing"));
 const Instructions = lazyWithRetry(() => import("./pages/Instructions"));
 const Legal = lazyWithRetry(() => import("./pages/Legal"));
 const LegalSection = lazyWithRetry(() => import("./pages/LegalSection"));
+const PmpkPreparation = lazyWithRetry(() => import("./pages/guides/PmpkPreparation"));
 
 const queryClient = new QueryClient();
 
