@@ -184,18 +184,18 @@ export const legalSections: LegalSection[] = [
         title: "Приказ ФСТЭК России от 18.02.2013 № 21",
         description:
           "Состав и содержание организационных и технических мер по обеспечению безопасности ПДн в информационных системах.",
-        url: "https://fstec.ru/normotvorcheskaya/akty/53-prikazy/691",
+        url: "https://www.consultant.ru/document/cons_doc_LAW_146520/",
       },
       {
         title: "Приказ ФСБ России от 10.07.2014 № 378",
         description: "Требования к защите ПДн с использованием средств криптографической защиты информации.",
-        url: "http://www.consultant.ru/document/cons_doc_LAW_169199/",
+        url: "https://www.consultant.ru/document/cons_doc_LAW_169199/",
       },
       {
         title: "Приказ Роскомнадзора от 24.02.2021 № 18",
         description:
           "Требования к содержанию согласия на обработку персональных данных, разрешённых субъектом для распространения.",
-        url: "http://publication.pravo.gov.ru/Document/View/0001202103310021",
+        url: "https://www.consultant.ru/document/cons_doc_LAW_382687/",
       },
     ],
   },
