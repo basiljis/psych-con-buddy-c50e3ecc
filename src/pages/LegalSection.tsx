@@ -75,8 +75,19 @@ export default function LegalSection() {
               <Icon className="h-6 w-6 text-primary" />
               <h1 className="text-3xl md:text-4xl font-bold">{section.title}</h1>
             </div>
-            <p className="text-muted-foreground text-lg">{section.intro}</p>
+            <p className="text-muted-foreground text-lg mb-4">{section.intro}</p>
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <Badge variant="outline" className="gap-1.5 font-normal">
+                <Eye className="h-3.5 w-3.5 text-primary" />
+                Просмотров: <span className="font-semibold">{(sectionStats?.total_views ?? 0).toLocaleString("ru-RU")}</span>
+              </Badge>
+              <Badge variant="outline" className="gap-1.5 font-normal">
+                <Users className="h-3.5 w-3.5 text-primary" />
+                Уникальных посетителей: <span className="font-semibold">{(sectionStats?.unique_views ?? 0).toLocaleString("ru-RU")}</span>
+              </Badge>
+            </div>
           </div>
+
 
           <div className="space-y-3 mb-12">
             {section.docs.map((doc) => (
