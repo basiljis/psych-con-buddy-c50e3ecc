@@ -9,6 +9,8 @@ import {
   Search,
   X,
   ChevronRight,
+  Eye,
+  Users,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +22,7 @@ import {
   type LegalDoc,
   type LegalSection,
 } from "@/data/legalSections";
+import { useLogLegalView, useLegalViewStats } from "@/hooks/useLegalViews";
 
 function matchesQuery(doc: LegalDoc, q: string): boolean {
   return (
@@ -32,6 +35,8 @@ function matchesQuery(doc: LegalDoc, q: string): boolean {
 
 export default function Legal() {
   const [query, setQuery] = useState("");
+  useLogLegalView(null);
+  const { stats, totals } = useLegalViewStats();
 
   useSeoMeta({
     title: "Нормативно-правовая база — законы и стандарты | universum.",
@@ -73,11 +78,23 @@ export default function Legal() {
             <h1 className="text-3xl md:text-4xl font-bold mb-3">
               Нормативно-правовая база
             </h1>
-            <p className="text-muted-foreground text-lg">
+            <p className="text-muted-foreground text-lg mb-4">
               Перечень федеральных законов, ведомственных приказов и стандартов,
               на основании которых разработана и эксплуатируется платформа universum.
             </p>
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <Badge variant="outline" className="gap-1.5 font-normal">
+                <Eye className="h-3.5 w-3.5 text-primary" />
+                Всего просмотров: <span className="font-semibold">{totals.total.toLocaleString("ru-RU")}</span>
+              </Badge>
+              <Badge variant="outline" className="gap-1.5 font-normal">
+                <Users className="h-3.5 w-3.5 text-primary" />
+                Уникальных: <span className="font-semibold">{totals.unique.toLocaleString("ru-RU")}</span>
+              </Badge>
+            </div>
           </div>
+
+
 
           {/* Category cards — separate pages per section */}
           {!hasQuery && (
@@ -88,6 +105,7 @@ export default function Legal() {
               <div className="grid sm:grid-cols-2 gap-3">
                 {legalSections.map((s) => {
                   const Icon = s.icon;
+                  const st = stats[s.id];
                   return (
                     <Link
                       key={s.id}
@@ -108,10 +126,22 @@ export default function Legal() {
                       <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
                         {s.title}
                       </p>
-                      <span className="text-xs text-primary inline-flex items-center gap-1">
-                        Открыть раздел
-                        <ChevronRight className="h-3 w-3" />
-                      </span>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-xs text-primary inline-flex items-center gap-1">
+                          Открыть раздел
+                          <ChevronRight className="h-3 w-3" />
+                        </span>
+                        <span className="inline-flex items-center gap-2 text-[11px] text-muted-foreground">
+                          <span className="inline-flex items-center gap-1" title="Всего просмотров">
+                            <Eye className="h-3 w-3" />
+                            {(st?.total_views ?? 0).toLocaleString("ru-RU")}
+                          </span>
+                          <span className="inline-flex items-center gap-1" title="Уникальных посетителей">
+                            <Users className="h-3 w-3" />
+                            {(st?.unique_views ?? 0).toLocaleString("ru-RU")}
+                          </span>
+                        </span>
+                      </div>
                     </Link>
                   );
                 })}
