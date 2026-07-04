@@ -35,6 +35,8 @@ function matchesQuery(doc: LegalDoc, q: string): boolean {
 
 export default function Legal() {
   const [query, setQuery] = useState("");
+  useLogLegalView(null);
+  const { stats, totals } = useLegalViewStats();
 
   useSeoMeta({
     title: "Нормативно-правовая база — законы и стандарты | universum.",
