@@ -9,6 +9,8 @@ import {
   Search,
   X,
   ChevronRight,
+  Eye,
+  Users,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +22,7 @@ import {
   type LegalDoc,
   type LegalSection,
 } from "@/data/legalSections";
+import { useLogLegalView, useLegalViewStats } from "@/hooks/useLegalViews";
 
 function matchesQuery(doc: LegalDoc, q: string): boolean {
   return (
