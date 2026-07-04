@@ -1344,6 +1344,27 @@ export type Database = {
         }
         Relationships: []
       }
+      legal_views: {
+        Row: {
+          created_at: string
+          id: string
+          section_id: string | null
+          visitor_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          section_id?: string | null
+          visitor_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          section_id?: string | null
+          visitor_id?: string
+        }
+        Relationships: []
+      }
       linked_parent_children: {
         Row: {
           created_at: string
@@ -3320,6 +3341,14 @@ export type Database = {
       generate_protocol_number: { Args: never; Returns: string }
       generate_telegram_link_code: { Args: never; Returns: string }
       generate_verification_code: { Args: never; Returns: string }
+      get_legal_view_stats: {
+        Args: never
+        Returns: {
+          section_id: string
+          total_views: number
+          unique_views: number
+        }[]
+      }
       get_organization_subscription_end_date: {
         Args: { _user_id: string }
         Returns: string
