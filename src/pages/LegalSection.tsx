@@ -14,6 +14,9 @@ import { useLogLegalView, useLegalViewStats } from "@/hooks/useLegalViews";
 export default function LegalSection() {
   const { sectionId = "" } = useParams<{ sectionId: string }>();
   const section = getLegalSection(sectionId);
+  useLogLegalView(section ? section.id : null);
+  const { stats } = useLegalViewStats();
+  const sectionStats = section ? stats[section.id] : undefined;
 
   useSeoMeta({
     title: section
