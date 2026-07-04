@@ -78,11 +78,23 @@ export default function Legal() {
             <h1 className="text-3xl md:text-4xl font-bold mb-3">
               Нормативно-правовая база
             </h1>
-            <p className="text-muted-foreground text-lg">
+            <p className="text-muted-foreground text-lg mb-4">
               Перечень федеральных законов, ведомственных приказов и стандартов,
               на основании которых разработана и эксплуатируется платформа universum.
             </p>
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <Badge variant="outline" className="gap-1.5 font-normal">
+                <Eye className="h-3.5 w-3.5 text-primary" />
+                Всего просмотров: <span className="font-semibold">{totals.total.toLocaleString("ru-RU")}</span>
+              </Badge>
+              <Badge variant="outline" className="gap-1.5 font-normal">
+                <Users className="h-3.5 w-3.5 text-primary" />
+                Уникальных: <span className="font-semibold">{totals.unique.toLocaleString("ru-RU")}</span>
+              </Badge>
+            </div>
           </div>
+
+
 
           {/* Category cards — separate pages per section */}
           {!hasQuery && (
