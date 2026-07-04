@@ -145,25 +145,6 @@ export default function Legal() {
                     </Link>
                   );
                 })}
-                          <Icon className="h-4 w-4 text-primary flex-shrink-0" />
-                          <span className="font-medium text-sm group-hover:text-primary truncate">
-                            {s.shortTitle}
-                          </span>
-                        </div>
-                        <Badge variant="secondary" className="text-xs flex-shrink-0">
-                          {s.docs.length}
-                        </Badge>
-                      </div>
-                      <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
-                        {s.title}
-                      </p>
-                      <span className="text-xs text-primary inline-flex items-center gap-1">
-                        Открыть раздел
-                        <ChevronRight className="h-3 w-3" />
-                      </span>
-                    </Link>
-                  );
-                })}
               </div>
             </section>
           )}
