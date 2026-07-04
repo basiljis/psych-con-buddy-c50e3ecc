@@ -105,6 +105,7 @@ export default function Legal() {
               <div className="grid sm:grid-cols-2 gap-3">
                 {legalSections.map((s) => {
                   const Icon = s.icon;
+                  const st = stats[s.id];
                   return (
                     <Link
                       key={s.id}
@@ -113,6 +114,37 @@ export default function Legal() {
                     >
                       <div className="flex items-center justify-between gap-2 mb-2">
                         <div className="flex items-center gap-2 min-w-0">
+                          <Icon className="h-4 w-4 text-primary flex-shrink-0" />
+                          <span className="font-medium text-sm group-hover:text-primary truncate">
+                            {s.shortTitle}
+                          </span>
+                        </div>
+                        <Badge variant="secondary" className="text-xs flex-shrink-0">
+                          {s.docs.length}
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
+                        {s.title}
+                      </p>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-xs text-primary inline-flex items-center gap-1">
+                          Открыть раздел
+                          <ChevronRight className="h-3 w-3" />
+                        </span>
+                        <span className="inline-flex items-center gap-2 text-[11px] text-muted-foreground">
+                          <span className="inline-flex items-center gap-1" title="Всего просмотров">
+                            <Eye className="h-3 w-3" />
+                            {(st?.total_views ?? 0).toLocaleString("ru-RU")}
+                          </span>
+                          <span className="inline-flex items-center gap-1" title="Уникальных посетителей">
+                            <Users className="h-3 w-3" />
+                            {(st?.unique_views ?? 0).toLocaleString("ru-RU")}
+                          </span>
+                        </span>
+                      </div>
+                    </Link>
+                  );
+                })}
                           <Icon className="h-4 w-4 text-primary flex-shrink-0" />
                           <span className="font-medium text-sm group-hover:text-primary truncate">
                             {s.shortTitle}
