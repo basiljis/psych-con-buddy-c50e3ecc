@@ -7,8 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ArrowLeft, ChevronDown, ChevronRight, ExternalLink, FileText, BookOpen } from "lucide-react";
+import { ArrowLeft, ChevronDown, ChevronRight, ExternalLink, FileText, BookOpen, Eye, Users } from "lucide-react";
 import { getLegalSection, legalSections } from "@/data/legalSections";
+import { useLogLegalView, useLegalViewStats } from "@/hooks/useLegalViews";
 
 export default function LegalSection() {
   const { sectionId = "" } = useParams<{ sectionId: string }>();
