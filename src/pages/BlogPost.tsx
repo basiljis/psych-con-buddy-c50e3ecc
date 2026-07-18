@@ -9,7 +9,8 @@ import LandingFooter from "@/components/LandingFooter";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Clock, Calendar } from "lucide-react";
+import { ArrowLeft, Clock, Calendar, Eye, Users } from "lucide-react";
+import { useLogBlogView, useBlogViewStats } from "@/hooks/useBlogViews";
 
 const BASE_URL = "https://unvrsm.ru";
 
@@ -18,6 +19,8 @@ export default function BlogPost() {
   const navigate = useNavigate();
   const [post, setPost] = useState<BlogPostType | null>(null);
   const [loading, setLoading] = useState(true);
+  const { stats } = useBlogViewStats();
+  useLogBlogView(post ? slug : undefined);
 
   useEffect(() => {
     if (!slug) return;
@@ -78,7 +81,7 @@ export default function BlogPost() {
   return (
     <div className="min-h-screen flex flex-col">
       <PublicNavbar currentPage="blog" />
-      <main className="flex-1 container mx-auto max-w-3xl px-4 py-10">
+      <main className="flex-1 container mx-auto max-w-3xl px-4 pt-28 md:pt-32 pb-16">
         {loading ? (
           <div className="space-y-4">
             <Skeleton className="h-6 w-40" />
@@ -116,7 +119,14 @@ export default function BlogPost() {
                   day: "numeric", month: "long", year: "numeric",
                 })}
               </span>
+              <span className="text-xs text-muted-foreground inline-flex items-center gap-1" title="Всего просмотров">
+                <Eye className="h-3 w-3" /> {stats[post.slug]?.total_views ?? 0}
+              </span>
+              <span className="text-xs text-muted-foreground inline-flex items-center gap-1" title="Уникальных посетителей">
+                <Users className="h-3 w-3" /> {stats[post.slug]?.unique_views ?? 0}
+              </span>
             </div>
+
 
             <h1 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">{post.title}</h1>
             <p className="text-lg text-muted-foreground mb-8">{post.excerpt}</p>

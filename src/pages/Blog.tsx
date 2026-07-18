@@ -11,7 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Rss, Search, ChevronLeft, ChevronRight, Clock } from "lucide-react";
+import { Rss, Search, ChevronLeft, ChevronRight, Clock, Eye, Users } from "lucide-react";
+import { useBlogViewStats } from "@/hooks/useBlogViews";
 
 const PAGE_SIZE = 6;
 const BASE_URL = "https://unvrsm.ru";
@@ -22,6 +23,7 @@ export default function Blog() {
   const [q, setQ] = useState("");
   const [category, setCategory] = useState<BlogCategory | "all">("all");
   const [page, setPage] = useState(1);
+  const { stats } = useBlogViewStats();
 
   useEffect(() => {
     (async () => {
@@ -69,17 +71,17 @@ export default function Blog() {
   return (
     <div className="min-h-screen flex flex-col">
       <PublicNavbar currentPage="blog" />
-      <main className="flex-1 container mx-auto max-w-6xl px-4 py-10">
-        <header className="mb-8">
-          <nav aria-label="breadcrumb" className="text-sm text-muted-foreground mb-2">
+      <main className="flex-1 container mx-auto max-w-6xl px-4 pt-28 md:pt-32 pb-16">
+        <header className="mb-10">
+          <nav aria-label="breadcrumb" className="text-sm text-muted-foreground mb-3">
             <Link to="/" className="hover:text-foreground">Главная</Link>
             <span className="mx-2">/</span>
             <span>Блог</span>
           </nav>
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold">Блог</h1>
-              <p className="text-muted-foreground mt-2 max-w-2xl">
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Блог</h1>
+              <p className="text-muted-foreground mt-3 max-w-2xl">
                 Практика ППк и ПМПК, документы, речевое развитие, работа с семьёй.
               </p>
             </div>
@@ -92,6 +94,7 @@ export default function Blog() {
             </a>
           </div>
         </header>
+
 
         <div className="mb-8 flex flex-col md:flex-row gap-3">
           <div className="relative flex-1">
@@ -151,11 +154,21 @@ export default function Blog() {
                       <CardDescription className="line-clamp-3">{p.excerpt}</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-xs text-muted-foreground">
-                        {new Date(p.published_at).toLocaleDateString("ru-RU", {
-                          day: "numeric", month: "long", year: "numeric",
-                        })}
-                      </p>
+                      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
+                        <span>
+                          {new Date(p.published_at).toLocaleDateString("ru-RU", {
+                            day: "numeric", month: "long", year: "numeric",
+                          })}
+                        </span>
+                        <span className="inline-flex items-center gap-3">
+                          <span className="inline-flex items-center gap-1" title="Всего просмотров">
+                            <Eye className="h-3.5 w-3.5" /> {stats[p.slug]?.total_views ?? 0}
+                          </span>
+                          <span className="inline-flex items-center gap-1" title="Уникальных посетителей">
+                            <Users className="h-3.5 w-3.5" /> {stats[p.slug]?.unique_views ?? 0}
+                          </span>
+                        </span>
+                      </div>
                     </CardContent>
                   </Card>
                 </Link>

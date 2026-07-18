@@ -200,6 +200,27 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_views: {
+        Row: {
+          created_at: string
+          id: string
+          post_slug: string
+          visitor_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_slug: string
+          visitor_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_slug?: string
+          visitor_id?: string
+        }
+        Relationships: []
+      }
       change_history: {
         Row: {
           action: string
@@ -3392,6 +3413,14 @@ export type Database = {
       generate_protocol_number: { Args: never; Returns: string }
       generate_telegram_link_code: { Args: never; Returns: string }
       generate_verification_code: { Args: never; Returns: string }
+      get_blog_view_stats: {
+        Args: never
+        Returns: {
+          post_slug: string
+          total_views: number
+          unique_views: number
+        }[]
+      }
       get_legal_view_stats: {
         Args: never
         Returns: {
