@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>universum. — Блог</title>
+    <link>https://unvrsm.ru/blog</link>
+    <atom:link href="https://unvrsm.ru/rss.xml" rel="self" type="application/rss+xml" />
+    <description>Статьи для педагогов-психологов, логопедов, дефектологов, администраторов ППМС и родителей.</description>
+    <language>ru</language>
+    <item>
+      <title>Как провести ППк в школе: пошаговый алгоритм</title>
+      <link>https://unvrsm.ru/blog/kak-provesti-ppk-v-shkole</link>
+      <guid isPermaLink="true">https://unvrsm.ru/blog/kak-provesti-ppk-v-shkole</guid>
+      <category>specialists</category>
+      <description>Практический алгоритм проведения психолого-педагогического консилиума (ППк) в школе: подготовка, состав, документы, протокол и заключение. С опорой на Приказ Минпросвещения № 1082.</description>
+    </item>
+    <item>
+      <title>Как организовать службу психолого-педагогического сопровождения по Приказу ДОНМ № 666</title>
+      <link>https://unvrsm.ru/blog/sluzhba-soprovozhdeniya-po-prikazu-666</link>
+      <guid isPermaLink="true">https://unvrsm.ru/blog/sluzhba-soprovozhdeniya-po-prikazu-666</guid>
+      <category>admins</category>
+      <description>Что должно быть в приказе, локальных актах и штатном расписании школы, чтобы служба психолого-педагогического сопровождения работала в соответствии с Приказом ДОНМ Москвы № 666.</description>
+    </item>
+    <item>
+      <title>Подготовка к ПМПК: что взять и как настроить ребёнка</title>
+      <link>https://unvrsm.ru/blog/podgotovka-k-pmpk</link>
+      <guid isPermaLink="true">https://unvrsm.ru/blog/podgotovka-k-pmpk</guid>
+      <category>parents</category>
+      <description>Пошаговая инструкция для родителей: какие документы взять на ПМПК, как психологически подготовить ребёнка, чего ждать на комиссии и что делать после получения заключения.</description>
+    </item>
+    <item>
+      <title>Как понять, что ребёнку нужен логопед: нормы речи 3–7 лет</title>
+      <link>https://unvrsm.ru/blog/kak-ponyat-chto-rebenku-nuzhen-logoped</link>
+      <guid isPermaLink="true">https://unvrsm.ru/blog/kak-ponyat-chto-rebenku-nuzhen-logoped</guid>
+      <category>parents</category>
+      <description>Возрастные нормы речевого развития от 3 до 7 лет. Простой чек-лист для родителей: когда обращаться к логопеду и какие сигналы нельзя пропустить.</description>
+    </item>
+  </channel>
+</rss>
