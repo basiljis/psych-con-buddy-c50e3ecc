@@ -202,7 +202,7 @@ export default function Features() {
                   Тарифы <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Link to="/auth">
+              <Link to="/register">
                 <Button variant="outline" size="lg">Попробовать бесплатно</Button>
               </Link>
             </div>

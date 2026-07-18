@@ -199,7 +199,7 @@ export default function Home() {
               size="lg"
               className="text-base h-12 px-8"
             >
-              <Link to="/auth">{t("homePage.ctaTryFree")}</Link>
+              <Link to="/register">{t("homePage.ctaTryFree")}</Link>
             </Button>
           </div>
 

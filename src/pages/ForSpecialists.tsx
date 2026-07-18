@@ -169,7 +169,7 @@ export default function ForSpecialists() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link to="/auth">
+            <Link to="/auth?mode=private">
               <Button size="lg" className="gap-2 bg-orange-600 hover:bg-orange-700">
                 Войти как специалист
                 <ArrowRight className="h-4 w-4" />
@@ -336,7 +336,7 @@ export default function ForSpecialists() {
           <p className="text-muted-foreground mb-6">
             Регистрация занимает 2 минуты. После одобрения заявки вы получите полный доступ к системе.
           </p>
-          <Link to="/auth">
+          <Link to="/auth?mode=private">
             <Button size="lg" className="bg-orange-600 hover:bg-orange-700">
               Зарегистрироваться
             </Button>

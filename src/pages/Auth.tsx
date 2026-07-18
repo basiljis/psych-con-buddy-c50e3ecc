@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -130,7 +130,16 @@ const Auth = () => {
   const [welcomeUserName, setWelcomeUserName] = useState("");
 
   // Registration mode: 'organization' or 'private'
-  const [registrationMode, setRegistrationMode] = useState<'organization' | 'private'>('private');
+  const [searchParams] = useSearchParams();
+  const [registrationMode, setRegistrationMode] = useState<'organization' | 'private'>(
+    searchParams.get('mode') === 'organization' ? 'organization' : 'private'
+  );
+
+  // Sync mode from URL on change
+  useEffect(() => {
+    const m = searchParams.get('mode');
+    if (m === 'organization' || m === 'private') setRegistrationMode(m);
+  }, [searchParams]);
   
   // Private signup form
   const [privateSignupData, setPrivateSignupData] = useState({
