@@ -27,6 +27,7 @@ import { ParentTestsManagement } from "@/components/ParentTestsManagement";
 import { ParentChildrenManagement } from "@/components/ParentChildrenManagement";
 import { SystemHealthPanel } from "@/components/SystemHealthPanel";
 import { SiteAnalyticsPanel } from "@/components/SiteAnalyticsPanel";
+import { BlogManagement } from "@/components/BlogManagement";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useRef } from "react";
 import {
@@ -407,6 +408,12 @@ export const Administration = ({ activeSubTab = "access-requests" }: Administrat
       {activeSubTab === "site-analytics" && (
         <div className="space-y-6">
           <SiteAnalyticsPanel />
+        </div>
+      )}
+
+      {activeSubTab === "blog" && (
+        <div className="space-y-6">
+          <BlogManagement />
         </div>
       )}
 

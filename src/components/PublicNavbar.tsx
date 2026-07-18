@@ -12,7 +12,7 @@ import brandLogo from "@/assets/brand-logo.png";
 
 interface PublicNavbarProps {
   showHomeButton?: boolean;
-  currentPage?: 'organizations' | 'specialists' | 'parents' | 'auth' | 'landing' | 'catalog-specialists' | 'catalog-organizations' | 'privacy' | 'partnership' | 'instructions' | 'legal' | 'other';
+  currentPage?: 'organizations' | 'specialists' | 'parents' | 'auth' | 'landing' | 'catalog-specialists' | 'catalog-organizations' | 'privacy' | 'partnership' | 'instructions' | 'legal' | 'blog' | 'other';
   showSecondaryNav?: boolean;
   authLink?: string;
 }
@@ -69,6 +69,12 @@ export function PublicNavbar({
               className={`text-sm ${currentPage === 'legal' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
             >
               {t('nav.legal')}
+            </Link>
+            <Link
+              to="/blog"
+              className={`text-sm ${currentPage === 'blog' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
+            >
+              Блог
             </Link>
           </nav>
 

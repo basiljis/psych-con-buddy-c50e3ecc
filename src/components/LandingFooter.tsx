@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Mail, Phone, FileText } from "lucide-react";
+import { Mail, Phone, FileText, Rss, BookOpen } from "lucide-react";
 import brandLogo from "@/assets/brand-logo.png";
 
 export default function LandingFooter() {
@@ -25,6 +25,16 @@ export default function LandingFooter() {
               <li><Link to="/for-specialists" className="hover:text-foreground transition-colors">{t("footer.specialists")}</Link></li>
               <li><Link to="/for-parents" className="hover:text-foreground transition-colors">{t("footer.parents")}</Link></li>
               <li><Link to="/instructions" className="hover:text-foreground transition-colors">{t("footer.instructions")}</Link></li>
+              <li>
+                <Link to="/blog" className="hover:text-foreground transition-colors inline-flex items-center gap-1">
+                  <BookOpen className="h-3.5 w-3.5" /> Блог
+                </Link>
+              </li>
+              <li>
+                <a href="/rss.xml" className="hover:text-foreground transition-colors inline-flex items-center gap-1" aria-label="RSS-лента блога">
+                  <Rss className="h-3.5 w-3.5" /> RSS
+                </a>
+              </li>
             </ul>
           </div>
 

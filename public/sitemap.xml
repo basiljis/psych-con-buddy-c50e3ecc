@@ -124,4 +124,34 @@
     <priority>0.9</priority>
   </url>
 
+  <url>
+    <loc>https://unvrsm.ru/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://unvrsm.ru/blog/kak-provesti-ppk-v-shkole</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://unvrsm.ru/blog/sluzhba-soprovozhdeniya-po-prikazu-666</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://unvrsm.ru/blog/podgotovka-k-pmpk</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://unvrsm.ru/blog/kak-ponyat-chto-rebenku-nuzhen-logoped</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
