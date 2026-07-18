@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { BlogPost, BlogCategory } from "@/types/blog";
-import { BLOG_CATEGORIES, blogCategoryLabel, postToZenText } from "@/types/blog";
+import { BLOG_CATEGORIES, blogCategoryLabel, postToZenText, postToZenHtml } from "@/types/blog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -136,14 +136,31 @@ export function BlogManagement() {
   };
 
   const copyForZen = async (p: BlogPost) => {
+    const html = postToZenHtml(p);
+    const text = postToZenText(p);
     try {
-      await navigator.clipboard.writeText(postToZenText(p));
+      // Богатая вставка: Дзен.Редактор сохранит заголовки, абзацы, списки и картинку.
+      if (typeof ClipboardItem !== "undefined" && navigator.clipboard?.write) {
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            "text/html": new Blob([html], { type: "text/html" }),
+            "text/plain": new Blob([text], { type: "text/plain" }),
+          }),
+        ]);
+      } else {
+        await navigator.clipboard.writeText(text);
+      }
       toast({
         title: "Скопировано для Яндекс Дзен",
-        description: "Вставьте в редактор Дзена (Ctrl+V / ⌘+V).",
+        description: "Откройте Дзен.Редактор и вставьте (Ctrl+V / ⌘+V) — форматирование и обложка сохранятся.",
       });
     } catch {
-      toast({ title: "Не удалось скопировать", variant: "destructive" });
+      try {
+        await navigator.clipboard.writeText(text);
+        toast({ title: "Скопирован текст", description: "HTML недоступен — вставлен обычный текст." });
+      } catch {
+        toast({ title: "Не удалось скопировать", variant: "destructive" });
+      }
     }
   };
 
