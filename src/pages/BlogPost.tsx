@@ -9,7 +9,8 @@ import LandingFooter from "@/components/LandingFooter";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Clock, Calendar } from "lucide-react";
+import { ArrowLeft, Clock, Calendar, Eye, Users } from "lucide-react";
+import { useLogBlogView, useBlogViewStats } from "@/hooks/useBlogViews";
 
 const BASE_URL = "https://unvrsm.ru";
 
