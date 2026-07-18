@@ -253,8 +253,11 @@ export function BlogManagement() {
                         <ExternalLink className="h-4 w-4" />
                       </Link>
                     </Button>
-                    <Button size="sm" variant="ghost" onClick={() => copyForZen(p)} title="Копировать для Яндекс Дзен">
+                    <Button size="sm" variant="ghost" onClick={() => copyForZen(p)} title="Копировать для Яндекс Дзен (HTML + текст со ссылками)">
                       <Copy className="h-4 w-4" />
+                    </Button>
+                    <Button size="sm" variant="ghost" onClick={() => downloadCover(p)} title="Скачать обложку для загрузки в Дзен">
+                      <ImageDown className="h-4 w-4" />
                     </Button>
                     <Button size="sm" variant="ghost" onClick={() => openEdit(p)} title="Редактировать">
                       <Pencil className="h-4 w-4" />
