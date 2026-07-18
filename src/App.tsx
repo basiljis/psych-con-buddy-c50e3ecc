@@ -28,6 +28,7 @@ const lazyWithRetry = <T extends React.ComponentType<unknown>>(
 // Lazy load route components for better FCP
 const Index = lazyWithRetry(() => import("./pages/Index"));
 const Auth = lazyWithRetry(() => import("./pages/Auth"));
+const Register = lazyWithRetry(() => import("./pages/Register"));
 const ParentAuth = lazyWithRetry(() => import("./pages/ParentAuth"));
 const ParentDashboard = lazyWithRetry(() => import("./pages/ParentDashboard"));
 const ParentMaterials = lazyWithRetry(() => import("./pages/ParentMaterials"));
