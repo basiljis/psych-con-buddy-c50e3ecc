@@ -411,6 +411,12 @@ export const Administration = ({ activeSubTab = "access-requests" }: Administrat
         </div>
       )}
 
+      {activeSubTab === "blog" && (
+        <div className="space-y-6">
+          <BlogManagement />
+        </div>
+      )}
+
       {activeSubTab === "commercial-offers" && (
         <div className="space-y-6">
           <CommercialOfferRequestsManagement />
