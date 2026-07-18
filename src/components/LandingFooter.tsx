@@ -25,6 +25,16 @@ export default function LandingFooter() {
               <li><Link to="/for-specialists" className="hover:text-foreground transition-colors">{t("footer.specialists")}</Link></li>
               <li><Link to="/for-parents" className="hover:text-foreground transition-colors">{t("footer.parents")}</Link></li>
               <li><Link to="/instructions" className="hover:text-foreground transition-colors">{t("footer.instructions")}</Link></li>
+              <li>
+                <Link to="/blog" className="hover:text-foreground transition-colors inline-flex items-center gap-1">
+                  <BookOpen className="h-3.5 w-3.5" /> Блог
+                </Link>
+              </li>
+              <li>
+                <a href="/rss.xml" className="hover:text-foreground transition-colors inline-flex items-center gap-1" aria-label="RSS-лента блога">
+                  <Rss className="h-3.5 w-3.5" /> RSS
+                </a>
+              </li>
             </ul>
           </div>
 
