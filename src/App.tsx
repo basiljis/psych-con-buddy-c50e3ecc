@@ -116,6 +116,7 @@ const App = () => {
                       <Route path="/blog/:slug" element={<BlogPost />} />
                       <Route path="/app" element={<Index />} />
                       <Route path="/auth" element={<Auth />} />
+                      <Route path="/register" element={<Register />} />
                       <Route path="/parent-auth" element={<ParentAuth />} />
                       <Route path="/parent" element={<ParentDashboard />} />
                       <Route path="/parent/materials" element={<ParentMaterials />} />
