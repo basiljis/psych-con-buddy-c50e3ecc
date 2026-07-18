@@ -149,6 +149,57 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_posts: {
+        Row: {
+          author: string
+          category: Database["public"]["Enums"]["blog_category"]
+          content: string
+          cover_url: string | null
+          created_at: string
+          excerpt: string
+          id: string
+          keywords: string[]
+          published: boolean
+          published_at: string
+          reading_minutes: number
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author?: string
+          category?: Database["public"]["Enums"]["blog_category"]
+          content?: string
+          cover_url?: string | null
+          created_at?: string
+          excerpt?: string
+          id?: string
+          keywords?: string[]
+          published?: boolean
+          published_at?: string
+          reading_minutes?: number
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string
+          category?: Database["public"]["Enums"]["blog_category"]
+          content?: string
+          cover_url?: string | null
+          created_at?: string
+          excerpt?: string
+          id?: string
+          keywords?: string[]
+          published?: boolean
+          published_at?: string
+          reading_minutes?: number
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       change_history: {
         Row: {
           action: string
@@ -3380,6 +3431,7 @@ export type Database = {
         | "director"
         | "parent"
         | "private_specialist"
+      blog_category: "specialists" | "admins" | "parents" | "product"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -3516,6 +3568,7 @@ export const Constants = {
         "parent",
         "private_specialist",
       ],
+      blog_category: ["specialists", "admins", "parents", "product"],
     },
   },
 } as const
