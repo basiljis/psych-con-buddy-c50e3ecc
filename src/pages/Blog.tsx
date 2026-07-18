@@ -154,11 +154,21 @@ export default function Blog() {
                       <CardDescription className="line-clamp-3">{p.excerpt}</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-xs text-muted-foreground">
-                        {new Date(p.published_at).toLocaleDateString("ru-RU", {
-                          day: "numeric", month: "long", year: "numeric",
-                        })}
-                      </p>
+                      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
+                        <span>
+                          {new Date(p.published_at).toLocaleDateString("ru-RU", {
+                            day: "numeric", month: "long", year: "numeric",
+                          })}
+                        </span>
+                        <span className="inline-flex items-center gap-3">
+                          <span className="inline-flex items-center gap-1" title="Всего просмотров">
+                            <Eye className="h-3.5 w-3.5" /> {stats[p.slug]?.total_views ?? 0}
+                          </span>
+                          <span className="inline-flex items-center gap-1" title="Уникальных посетителей">
+                            <Users className="h-3.5 w-3.5" /> {stats[p.slug]?.unique_views ?? 0}
+                          </span>
+                        </span>
+                      </div>
                     </CardContent>
                   </Card>
                 </Link>
