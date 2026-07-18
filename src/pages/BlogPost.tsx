@@ -119,7 +119,14 @@ export default function BlogPost() {
                   day: "numeric", month: "long", year: "numeric",
                 })}
               </span>
+              <span className="text-xs text-muted-foreground inline-flex items-center gap-1" title="Всего просмотров">
+                <Eye className="h-3 w-3" /> {stats[post.slug]?.total_views ?? 0}
+              </span>
+              <span className="text-xs text-muted-foreground inline-flex items-center gap-1" title="Уникальных посетителей">
+                <Users className="h-3 w-3" /> {stats[post.slug]?.unique_views ?? 0}
+              </span>
             </div>
+
 
             <h1 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">{post.title}</h1>
             <p className="text-lg text-muted-foreground mb-8">{post.excerpt}</p>
