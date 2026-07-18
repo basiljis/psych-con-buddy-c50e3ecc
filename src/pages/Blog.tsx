@@ -23,6 +23,7 @@ export default function Blog() {
   const [q, setQ] = useState("");
   const [category, setCategory] = useState<BlogCategory | "all">("all");
   const [page, setPage] = useState(1);
+  const { stats } = useBlogViewStats();
 
   useEffect(() => {
     (async () => {
