@@ -81,7 +81,7 @@ export default function BlogPost() {
   return (
     <div className="min-h-screen flex flex-col">
       <PublicNavbar currentPage="blog" />
-      <main className="flex-1 container mx-auto max-w-3xl px-4 py-10">
+      <main className="flex-1 container mx-auto max-w-3xl px-4 pt-28 md:pt-32 pb-16">
         {loading ? (
           <div className="space-y-4">
             <Skeleton className="h-6 w-40" />
