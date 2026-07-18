@@ -20,6 +20,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Pencil, Trash2, Copy, ExternalLink, Rss, ImageDown } from "lucide-react";
 import { Link } from "react-router-dom";
+import { downloadZenCover } from "@/lib/zen-cover";
 
 const empty = {
   slug: "",
