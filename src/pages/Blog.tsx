@@ -11,7 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Rss, Search, ChevronLeft, ChevronRight, Clock } from "lucide-react";
+import { Rss, Search, ChevronLeft, ChevronRight, Clock, Eye, Users } from "lucide-react";
+import { useBlogViewStats } from "@/hooks/useBlogViews";
 
 const PAGE_SIZE = 6;
 const BASE_URL = "https://unvrsm.ru";
