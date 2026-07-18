@@ -18,7 +18,7 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Pencil, Trash2, Copy, ExternalLink, Rss } from "lucide-react";
+import { Plus, Pencil, Trash2, Copy, ExternalLink, Rss, ImageDown } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const empty = {
@@ -152,7 +152,8 @@ export function BlogManagement() {
       }
       toast({
         title: "Скопировано для Яндекс Дзен",
-        description: "Откройте Дзен.Редактор и вставьте (Ctrl+V / ⌘+V) — форматирование и обложка сохранятся.",
+        description:
+          "Вставьте в Дзен.Редактор (Ctrl+V / ⌘+V) — заголовки, абзацы, списки и ссылки сохранятся. Обложку загрузите отдельно кнопкой 🖼️ ниже.",
       });
     } catch {
       try {
@@ -161,6 +162,38 @@ export function BlogManagement() {
       } catch {
         toast({ title: "Не удалось скопировать", variant: "destructive" });
       }
+    }
+  };
+
+  const downloadCover = async (p: BlogPost) => {
+    if (!p.cover_url) {
+      toast({ title: "Нет обложки", description: "Добавьте cover_url в статью.", variant: "destructive" });
+      return;
+    }
+    try {
+      const res = await fetch(p.cover_url, { mode: "cors" });
+      if (!res.ok) throw new Error(String(res.status));
+      const blob = await res.blob();
+      const ext = (blob.type.split("/")[1] || "jpg").split("+")[0];
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${p.slug}-cover.${ext}`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast({
+        title: "Обложка скачана",
+        description: "Перетащите файл в Дзен.Редактор в блок обложки или в тело статьи.",
+      });
+    } catch (e) {
+      // CORS fallback — открываем в новой вкладке, пользователь сохранит вручную.
+      window.open(p.cover_url, "_blank", "noopener");
+      toast({
+        title: "Открыта картинка в новой вкладке",
+        description: "Скачайте её (ПКМ → «Сохранить изображение как…») и загрузите в Дзен.",
+      });
     }
   };
 
@@ -220,8 +253,11 @@ export function BlogManagement() {
                         <ExternalLink className="h-4 w-4" />
                       </Link>
                     </Button>
-                    <Button size="sm" variant="ghost" onClick={() => copyForZen(p)} title="Копировать для Яндекс Дзен">
+                    <Button size="sm" variant="ghost" onClick={() => copyForZen(p)} title="Копировать для Яндекс Дзен (HTML + текст со ссылками)">
                       <Copy className="h-4 w-4" />
+                    </Button>
+                    <Button size="sm" variant="ghost" onClick={() => downloadCover(p)} title="Скачать обложку для загрузки в Дзен">
+                      <ImageDown className="h-4 w-4" />
                     </Button>
                     <Button size="sm" variant="ghost" onClick={() => openEdit(p)} title="Редактировать">
                       <Pencil className="h-4 w-4" />
