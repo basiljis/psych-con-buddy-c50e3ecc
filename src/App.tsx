@@ -62,6 +62,8 @@ const Instructions = lazyWithRetry(() => import("./pages/Instructions"));
 const Legal = lazyWithRetry(() => import("./pages/Legal"));
 const LegalSection = lazyWithRetry(() => import("./pages/LegalSection"));
 const PmpkPreparation = lazyWithRetry(() => import("./pages/guides/PmpkPreparation"));
+const Blog = lazyWithRetry(() => import("./pages/Blog"));
+const BlogPost = lazyWithRetry(() => import("./pages/BlogPost"));
 
 const queryClient = new QueryClient();
 
