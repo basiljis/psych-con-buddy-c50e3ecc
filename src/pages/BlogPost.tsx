@@ -19,6 +19,8 @@ export default function BlogPost() {
   const navigate = useNavigate();
   const [post, setPost] = useState<BlogPostType | null>(null);
   const [loading, setLoading] = useState(true);
+  const { stats } = useBlogViewStats();
+  useLogBlogView(post ? slug : undefined);
 
   useEffect(() => {
     if (!slug) return;
