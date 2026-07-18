@@ -165,6 +165,38 @@ export function BlogManagement() {
     }
   };
 
+  const downloadCover = async (p: BlogPost) => {
+    if (!p.cover_url) {
+      toast({ title: "Нет обложки", description: "Добавьте cover_url в статью.", variant: "destructive" });
+      return;
+    }
+    try {
+      const res = await fetch(p.cover_url, { mode: "cors" });
+      if (!res.ok) throw new Error(String(res.status));
+      const blob = await res.blob();
+      const ext = (blob.type.split("/")[1] || "jpg").split("+")[0];
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${p.slug}-cover.${ext}`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast({
+        title: "Обложка скачана",
+        description: "Перетащите файл в Дзен.Редактор в блок обложки или в тело статьи.",
+      });
+    } catch (e) {
+      // CORS fallback — открываем в новой вкладке, пользователь сохранит вручную.
+      window.open(p.cover_url, "_blank", "noopener");
+      toast({
+        title: "Открыта картинка в новой вкладке",
+        description: "Скачайте её (ПКМ → «Сохранить изображение как…») и загрузите в Дзен.",
+      });
+    }
+  };
+
   const copyRss = async () => {
     const url = `https://oxyjmeslnmhewlpgzlmf.supabase.co/functions/v1/blog-rss`;
     try {
