@@ -71,17 +71,17 @@ export default function Blog() {
   return (
     <div className="min-h-screen flex flex-col">
       <PublicNavbar currentPage="blog" />
-      <main className="flex-1 container mx-auto max-w-6xl px-4 py-10">
-        <header className="mb-8">
-          <nav aria-label="breadcrumb" className="text-sm text-muted-foreground mb-2">
+      <main className="flex-1 container mx-auto max-w-6xl px-4 pt-28 md:pt-32 pb-16">
+        <header className="mb-10">
+          <nav aria-label="breadcrumb" className="text-sm text-muted-foreground mb-3">
             <Link to="/" className="hover:text-foreground">Главная</Link>
             <span className="mx-2">/</span>
             <span>Блог</span>
           </nav>
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold">Блог</h1>
-              <p className="text-muted-foreground mt-2 max-w-2xl">
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Блог</h1>
+              <p className="text-muted-foreground mt-3 max-w-2xl">
                 Практика ППк и ПМПК, документы, речевое развитие, работа с семьёй.
               </p>
             </div>
@@ -94,6 +94,7 @@ export default function Blog() {
             </a>
           </div>
         </header>
+
 
         <div className="mb-8 flex flex-col md:flex-row gap-3">
           <div className="relative flex-1">
