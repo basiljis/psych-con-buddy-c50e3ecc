@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Mail, Phone, FileText } from "lucide-react";
+import { Mail, Phone, FileText, Rss, BookOpen } from "lucide-react";
 import brandLogo from "@/assets/brand-logo.png";
 
 export default function LandingFooter() {
