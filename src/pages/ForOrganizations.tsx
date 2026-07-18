@@ -180,7 +180,7 @@ export default function ForOrganizations() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link to="/auth">
+            <Link to="/auth?mode=organization">
               <Button size="lg" className="gap-2">
                 Начать бесплатно
                 <ArrowRight className="h-4 w-4" />
@@ -253,7 +253,7 @@ export default function ForOrganizations() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <Link to="/auth">
+                  <Link to="/auth?mode=organization">
                     <Button className="w-full" variant={plan.badge ? "default" : "outline"}>
                       Попробовать 7 дней бесплатно
                     </Button>
@@ -358,7 +358,7 @@ export default function ForOrganizations() {
             Свяжитесь с нами для получения коммерческого предложения или демонстрации системы
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link to="/auth">
+            <Link to="/auth?mode=organization">
               <Button size="lg">Зарегистрировать организацию</Button>
             </Link>
             <CommercialOfferRequestForm />

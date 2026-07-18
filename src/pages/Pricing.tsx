@@ -177,7 +177,7 @@ export default function Pricing() {
                         </li>
                       ))}
                     </ul>
-                    <Link to={plan.name === "Корпоративный" ? "/for-organizations" : "/auth"}>
+                    <Link to={plan.name === "Корпоративный" ? "/for-organizations" : "/auth?mode=organization"}>
                       <Button variant={plan.ctaVariant} className="w-full">
                         {plan.cta}
                         <ArrowRight className="ml-2 h-4 w-4" />

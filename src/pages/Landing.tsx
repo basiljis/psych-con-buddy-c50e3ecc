@@ -136,7 +136,7 @@ const userTypes = [
       { text: "Управление видимостью стоимости услуг", isNew: true }
     ],
     link: "/for-organizations",
-    authLink: "/auth",
+    authLink: "/register",
     color: "from-blue-500/20 to-blue-600/10",
     borderColor: "border-blue-500/30"
   },
@@ -151,7 +151,7 @@ const userTypes = [
       { text: "Протоколы и карты детей" }
     ],
     link: "/for-specialists",
-    authLink: "/auth",
+    authLink: "/register",
     color: "from-orange-500/20 to-orange-600/10",
     borderColor: "border-orange-500/30"
   },
@@ -214,7 +214,7 @@ const pricingPlans: Record<string, PricingPlan[]> = {
         "Приоритетная поддержка",
       ],
       cta: "Начать 7 дней бесплатно",
-      ctaLink: "/auth"
+      ctaLink: "/register"
     }
   ],
   specialist: [
@@ -234,7 +234,7 @@ const pricingPlans: Record<string, PricingPlan[]> = {
         "Email и пуш-уведомления",
       ],
       cta: "Войти в кабинет",
-      ctaLink: "/auth"
+      ctaLink: "/register"
     },
     {
       name: "Частная практика",
@@ -261,7 +261,7 @@ const pricingPlans: Record<string, PricingPlan[]> = {
         "SEO-продвижение профиля в поиске",
       ],
       cta: "Начать 7 дней бесплатно",
-      ctaLink: "/auth"
+      ctaLink: "/register"
     }
   ],
   parent: [
@@ -809,13 +809,13 @@ export default function Landing() {
             Зарегистрируйтесь и получите 7 дней бесплатного доступа ко всем функциям системы
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
-            <Link to="/auth">
+            <Link to="/register">
               <Button size="lg" className="gap-2">
                 <Building2 className="h-4 w-4" />
                 Для организаций
               </Button>
             </Link>
-            <Link to="/auth">
+            <Link to="/register">
               <Button size="lg" variant="secondary" className="gap-2">
                 <GraduationCap className="h-4 w-4" />
                 Для педагогов
