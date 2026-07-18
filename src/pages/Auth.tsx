@@ -130,7 +130,16 @@ const Auth = () => {
   const [welcomeUserName, setWelcomeUserName] = useState("");
 
   // Registration mode: 'organization' or 'private'
-  const [registrationMode, setRegistrationMode] = useState<'organization' | 'private'>('private');
+  const [searchParams] = useSearchParams();
+  const [registrationMode, setRegistrationMode] = useState<'organization' | 'private'>(
+    searchParams.get('mode') === 'organization' ? 'organization' : 'private'
+  );
+
+  // Sync mode from URL on change
+  useEffect(() => {
+    const m = searchParams.get('mode');
+    if (m === 'organization' || m === 'private') setRegistrationMode(m);
+  }, [searchParams]);
   
   // Private signup form
   const [privateSignupData, setPrivateSignupData] = useState({
