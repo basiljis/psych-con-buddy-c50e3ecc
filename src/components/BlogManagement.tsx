@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { BlogPost, BlogCategory } from "@/types/blog";
-import { BLOG_CATEGORIES, blogCategoryLabel, postToZenText } from "@/types/blog";
+import { BLOG_CATEGORIES, blogCategoryLabel, postToZenText, postToZenHtml } from "@/types/blog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
