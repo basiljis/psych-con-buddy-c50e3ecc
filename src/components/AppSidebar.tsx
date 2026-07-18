@@ -154,6 +154,7 @@ const adminItems = [
       { id: "administration-workload-report", label: "Загрузка специалистов" },
       { id: "administration-session-notifications", label: "Уведомления" },
       { id: "administration-marketing", label: "Маркетинг и публикации" },
+      { id: "administration-blog", label: "Блог (статьи)" },
       { id: "administration-instructions", label: "Инструкции" },
     ]
   },
