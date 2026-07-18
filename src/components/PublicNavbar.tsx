@@ -70,6 +70,12 @@ export function PublicNavbar({
             >
               {t('nav.legal')}
             </Link>
+            <Link
+              to="/blog"
+              className={`text-sm ${currentPage === 'blog' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
+            >
+              Блог
+            </Link>
           </nav>
 
           <div className="hidden md:flex items-center gap-3">
