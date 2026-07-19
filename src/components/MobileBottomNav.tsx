@@ -60,7 +60,8 @@ export const MobileBottomNav = ({
     <>
       {/* Bottom nav bar */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-t border-border/60 pb-safe">
-        <div className="flex items-center justify-around px-2 h-16">
+        <div className="flex items-center justify-around px-1 h-14">
+
           {primaryTabs.map((tab) => {
             const Icon = tab.icon;
             const active = isTabActive(tab.id);
