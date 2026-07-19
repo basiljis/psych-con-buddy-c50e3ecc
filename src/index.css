@@ -14,9 +14,8 @@
 
 /* Blog article prose refinements */
 @layer components {
-  .blog-prose {
-    @apply prose prose-slate dark:prose-invert max-w-none;
-  }
+  .blog-prose { max-width: none; color: hsl(var(--foreground)); }
+
   .blog-prose :where(h2, h3, h4) { scroll-margin-top: 7rem; letter-spacing: -0.01em; }
   .blog-prose :where(h2) {
     font-size: 1.75rem;
