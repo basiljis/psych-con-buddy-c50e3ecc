@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Menu, ClipboardList, Database, BarChart3, BookOpen, Settings, ChevronDown, Users, Globe } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Menu, ClipboardList, Database, BarChart3, BookOpen, Settings, ChevronDown, Users, Globe, Newspaper } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
+
 
 interface MobileMenuProps {
   activeTab: string;
@@ -80,12 +82,16 @@ export const MobileMenu = ({ activeTab, onTabChange, isAdmin = true, canAccessPu
           <Menu className="h-5 w-5" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-80">
-        <SheetHeader>
+      <SheetContent
+        side="left"
+        className="w-80 flex flex-col p-0"
+      >
+        <SheetHeader className="px-6 pt-6 pb-2 shrink-0">
           <SheetTitle>Меню</SheetTitle>
         </SheetHeader>
-        <div className="mt-6 space-y-2">
-          {/* Core Feature - Child Card - Highlighted separately */}
+        <div className="flex-1 overflow-y-auto overscroll-contain px-6 pb-8">
+          <div className="mt-4 space-y-2">
+
           <div className="space-y-2">
             <p className="text-xs font-medium text-muted-foreground px-3 flex items-center gap-2">
               Ядро системы
@@ -220,8 +226,24 @@ export const MobileMenu = ({ activeTab, onTabChange, isAdmin = true, canAccessPu
               </Collapsible>
             </>
           )}
+
+          <Separator className="my-3" />
+
+          <p className="text-xs font-medium text-muted-foreground px-3">Ресурсы</p>
+          <Button
+            asChild
+            variant="ghost"
+            className="w-full justify-start gap-3"
+          >
+            <Link to="/blog" onClick={() => setOpen(false)}>
+              <Newspaper className="h-4 w-4" />
+              Блог
+            </Link>
+          </Button>
+          </div>
         </div>
       </SheetContent>
+
     </Sheet>
   );
 };

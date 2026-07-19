@@ -206,3 +206,16 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Raise TalkMe chat widget above the mobile bottom nav so it doesn't overlap */
+@media (max-width: 767px) {
+  iframe[src*="talk-me"],
+  iframe[src*="site-chat.me"],
+  #supportTrigger,
+  #supportFrame,
+  .support-frame-container,
+  [class*="support-trigger"],
+  [id^="supportChatFrame"] {
+    bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}

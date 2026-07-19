@@ -60,7 +60,8 @@ export const MobileBottomNav = ({
     <>
       {/* Bottom nav bar */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-t border-border/60 pb-safe">
-        <div className="flex items-center justify-around px-2 h-16">
+        <div className="flex items-center justify-around px-1 h-14">
+
           {primaryTabs.map((tab) => {
             const Icon = tab.icon;
             const active = isTabActive(tab.id);
@@ -69,7 +70,8 @@ export const MobileBottomNav = ({
                 key={tab.id}
                 onClick={() => handleTabClick(tab.id)}
                 className={cn(
-                  "flex flex-col items-center gap-0.5 flex-1 py-2 px-1 rounded-xl transition-all duration-200",
+                  "flex flex-col items-center gap-0.5 flex-1 py-1 px-0.5 rounded-xl transition-all duration-200",
+
                   active
                     ? "text-primary"
                     : "text-muted-foreground"
@@ -77,11 +79,12 @@ export const MobileBottomNav = ({
               >
                 <div
                   className={cn(
-                    "flex items-center justify-center w-10 h-6 rounded-full transition-all duration-200",
+                    "flex items-center justify-center w-9 h-5 rounded-full transition-all duration-200",
+
                     active && "bg-primary/10"
                   )}
                 >
-                  <Icon className={cn("h-5 w-5 transition-transform duration-200", active && "scale-110")} />
+                  <Icon className={cn("h-4 w-4 transition-transform duration-200", active && "scale-110")} />
                 </div>
                 <span className={cn("text-[10px] font-medium leading-none", active && "font-semibold")}>
                   {tab.label}
@@ -94,17 +97,18 @@ export const MobileBottomNav = ({
           <button
             onClick={() => setMoreOpen(true)}
             className={cn(
-              "flex flex-col items-center gap-0.5 flex-1 py-2 px-1 rounded-xl transition-all duration-200",
+              "flex flex-col items-center gap-0.5 flex-1 py-1 px-0.5 rounded-xl transition-all duration-200",
               isMoreActive ? "text-primary" : "text-muted-foreground"
             )}
           >
             <div
               className={cn(
-                "flex items-center justify-center w-10 h-6 rounded-full transition-all duration-200",
+                "flex items-center justify-center w-9 h-5 rounded-full transition-all duration-200",
                 isMoreActive && "bg-primary/10"
               )}
             >
-              <MoreHorizontal className={cn("h-5 w-5", isMoreActive && "scale-110")} />
+              <MoreHorizontal className={cn("h-4 w-4", isMoreActive && "scale-110")} />
+
             </div>
             <span className={cn("text-[10px] font-medium leading-none", isMoreActive && "font-semibold")}>
               Ещё
