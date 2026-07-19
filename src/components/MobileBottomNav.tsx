@@ -70,7 +70,8 @@ export const MobileBottomNav = ({
                 key={tab.id}
                 onClick={() => handleTabClick(tab.id)}
                 className={cn(
-                  "flex flex-col items-center gap-0.5 flex-1 py-2 px-1 rounded-xl transition-all duration-200",
+                  "flex flex-col items-center gap-0.5 flex-1 py-1 px-0.5 rounded-xl transition-all duration-200",
+
                   active
                     ? "text-primary"
                     : "text-muted-foreground"
