@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Menu, ClipboardList, Database, BarChart3, BookOpen, Settings, ChevronDown, Users, Globe } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Menu, ClipboardList, Database, BarChart3, BookOpen, Settings, ChevronDown, Users, Globe, Newspaper } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
+
 
 interface MobileMenuProps {
   activeTab: string;
