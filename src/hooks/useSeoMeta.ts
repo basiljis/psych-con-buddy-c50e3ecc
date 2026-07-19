@@ -6,6 +6,14 @@ interface SeoMeta {
   canonical?: string;
   keywords?: string;
   ogImage?: string;
+  ogType?: "website" | "article";
+  article?: {
+    publishedTime?: string;
+    modifiedTime?: string;
+    author?: string;
+    section?: string;
+    tags?: string[];
+  };
   noIndex?: boolean;
   jsonLd?: object | object[];
 }
