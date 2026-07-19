@@ -50,5 +50,3 @@ const RootGate = () => {
 
 export default RootGate;
 
-
-export default RootGate;
