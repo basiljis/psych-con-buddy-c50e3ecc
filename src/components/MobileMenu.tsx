@@ -226,8 +226,24 @@ export const MobileMenu = ({ activeTab, onTabChange, isAdmin = true, canAccessPu
               </Collapsible>
             </>
           )}
+
+          <Separator className="my-3" />
+
+          <p className="text-xs font-medium text-muted-foreground px-3">Ресурсы</p>
+          <Button
+            asChild
+            variant="ghost"
+            className="w-full justify-start gap-3"
+          >
+            <Link to="/blog" onClick={() => setOpen(false)}>
+              <Newspaper className="h-4 w-4" />
+              Блог
+            </Link>
+          </Button>
+          </div>
         </div>
       </SheetContent>
+
     </Sheet>
   );
 };
