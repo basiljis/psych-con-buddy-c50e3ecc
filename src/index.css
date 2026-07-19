@@ -12,6 +12,31 @@
   }
 }
 
+/* Blog article prose refinements */
+@layer components {
+  .blog-prose {
+    @apply prose prose-slate dark:prose-invert max-w-none;
+    @apply prose-headings:font-semibold prose-headings:tracking-tight prose-headings:scroll-mt-28;
+    @apply prose-h2:text-2xl md:prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-border/60;
+    @apply prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-h3:text-foreground;
+    @apply prose-p:leading-[1.8] prose-p:text-[1.0625rem] prose-p:text-foreground/90;
+    @apply prose-li:my-1.5 prose-li:leading-relaxed prose-ul:my-4 prose-ol:my-4;
+    @apply prose-a:text-primary prose-a:font-medium prose-a:underline-offset-4 hover:prose-a:text-primary/80;
+    @apply prose-strong:text-foreground prose-strong:font-semibold;
+    @apply prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-accent/40 prose-blockquote:py-1 prose-blockquote:px-5 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:text-foreground/90 prose-blockquote:my-6;
+    @apply prose-img:rounded-xl prose-img:shadow-md prose-img:my-8;
+    @apply prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none;
+    @apply prose-table:text-sm prose-th:bg-muted prose-th:font-semibold prose-th:text-left prose-th:p-3 prose-td:p-3 prose-td:border-t prose-td:border-border;
+    @apply prose-hr:my-10 prose-hr:border-border/60;
+  }
+  .blog-prose > p:first-of-type::first-letter {
+    @apply float-left text-6xl font-bold leading-none pr-3 pt-1 text-primary;
+    font-family: Georgia, "Times New Roman", serif;
+  }
+  .blog-prose ul > li::marker { color: hsl(var(--primary)); }
+  .blog-prose ol > li::marker { color: hsl(var(--primary)); font-weight: 600; }
+}
+
 /* Design system for psychological-pedagogical consultation system */
 
 @layer base {
