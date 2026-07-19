@@ -1,9 +1,16 @@
 User-agent: *
 Allow: /
+Allow: /blog
+Allow: /blog/
+Allow: /legal
+Allow: /legal/
+Allow: /guides/
 Disallow: /app
 Disallow: /auth
+Disallow: /register
 Disallow: /parent
 Disallow: /parent-auth
+Disallow: /parent/
 Disallow: /child-playground
 Disallow: /child-workspace
 Disallow: /child-login
@@ -13,5 +20,15 @@ Disallow: /reset-password
 Disallow: /install
 Disallow: /access-status
 
-Sitemap: https://unvrsm.ru/sitemap.xml
+# Разрешаем основным поисковикам полный доступ к публичным разделам
+User-agent: Googlebot
+Allow: /
 
+User-agent: YandexBot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+Sitemap: https://unvrsm.ru/sitemap.xml
+Host: unvrsm.ru
