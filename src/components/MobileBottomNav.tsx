@@ -97,17 +97,18 @@ export const MobileBottomNav = ({
           <button
             onClick={() => setMoreOpen(true)}
             className={cn(
-              "flex flex-col items-center gap-0.5 flex-1 py-2 px-1 rounded-xl transition-all duration-200",
+              "flex flex-col items-center gap-0.5 flex-1 py-1 px-0.5 rounded-xl transition-all duration-200",
               isMoreActive ? "text-primary" : "text-muted-foreground"
             )}
           >
             <div
               className={cn(
-                "flex items-center justify-center w-10 h-6 rounded-full transition-all duration-200",
+                "flex items-center justify-center w-9 h-5 rounded-full transition-all duration-200",
                 isMoreActive && "bg-primary/10"
               )}
             >
-              <MoreHorizontal className={cn("h-5 w-5", isMoreActive && "scale-110")} />
+              <MoreHorizontal className={cn("h-4 w-4", isMoreActive && "scale-110")} />
+
             </div>
             <span className={cn("text-[10px] font-medium leading-none", isMoreActive && "font-semibold")}>
               Ещё
