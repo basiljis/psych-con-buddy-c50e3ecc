@@ -16,21 +16,69 @@
 @layer components {
   .blog-prose {
     @apply prose prose-slate dark:prose-invert max-w-none;
-    @apply prose-headings:font-semibold prose-headings:tracking-tight prose-headings:scroll-mt-28;
-    @apply prose-h2:text-2xl md:prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-border/60;
-    @apply prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-h3:text-foreground;
-    @apply prose-p:leading-[1.8] prose-p:text-[1.0625rem] prose-p:text-foreground/90;
-    @apply prose-li:my-1.5 prose-li:leading-relaxed prose-ul:my-4 prose-ol:my-4;
-    @apply prose-a:text-primary prose-a:font-medium prose-a:underline-offset-4 hover:prose-a:text-primary/80;
-    @apply prose-strong:text-foreground prose-strong:font-semibold;
-    @apply prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-accent/40 prose-blockquote:py-1 prose-blockquote:px-5 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:text-foreground/90 prose-blockquote:my-6;
-    @apply prose-img:rounded-xl prose-img:shadow-md prose-img:my-8;
-    @apply prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none;
-    @apply prose-table:text-sm prose-th:bg-muted prose-th:font-semibold prose-th:text-left prose-th:p-3 prose-td:p-3 prose-td:border-t prose-td:border-border;
-    @apply prose-hr:my-10 prose-hr:border-border/60;
   }
+  .blog-prose :where(h2, h3, h4) { scroll-margin-top: 7rem; letter-spacing: -0.01em; }
+  .blog-prose :where(h2) {
+    font-size: 1.75rem;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.6);
+    font-weight: 600;
+  }
+  @media (min-width: 768px) {
+    .blog-prose :where(h2) { font-size: 2rem; }
+  }
+  .blog-prose :where(h3) {
+    font-size: 1.25rem;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+  }
+  .blog-prose :where(p) {
+    line-height: 1.8;
+    font-size: 1.0625rem;
+    color: hsl(var(--foreground) / 0.9);
+  }
+  .blog-prose :where(li) { margin-top: 0.375rem; margin-bottom: 0.375rem; line-height: 1.7; }
+  .blog-prose :where(a) {
+    color: hsl(var(--primary));
+    font-weight: 500;
+    text-underline-offset: 4px;
+  }
+  .blog-prose :where(a):hover { color: hsl(var(--primary) / 0.8); }
+  .blog-prose :where(strong) { color: hsl(var(--foreground)); font-weight: 600; }
+  .blog-prose :where(blockquote) {
+    border-left: 4px solid hsl(var(--primary));
+    background: hsl(var(--accent) / 0.4);
+    padding: 0.5rem 1.25rem;
+    border-radius: 0 0.5rem 0.5rem 0;
+    font-style: normal;
+    color: hsl(var(--foreground) / 0.9);
+    margin: 1.5rem 0;
+  }
+  .blog-prose :where(img) { border-radius: 0.75rem; box-shadow: 0 4px 12px -4px hsl(var(--foreground) / 0.15); margin: 2rem 0; }
+  .blog-prose :where(code):not(pre code) {
+    background: hsl(var(--muted));
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+  }
+  .blog-prose :where(code)::before,
+  .blog-prose :where(code)::after { content: none; }
+  .blog-prose :where(table) { font-size: 0.9375rem; }
+  .blog-prose :where(th) { background: hsl(var(--muted)); font-weight: 600; text-align: left; padding: 0.75rem; }
+  .blog-prose :where(td) { padding: 0.75rem; border-top: 1px solid hsl(var(--border)); }
+  .blog-prose :where(hr) { margin: 2.5rem 0; border-color: hsl(var(--border) / 0.6); }
   .blog-prose > p:first-of-type::first-letter {
-    @apply float-left text-6xl font-bold leading-none pr-3 pt-1 text-primary;
+    float: left;
+    font-size: 3.75rem;
+    font-weight: 700;
+    line-height: 1;
+    padding-right: 0.75rem;
+    padding-top: 0.25rem;
+    color: hsl(var(--primary));
     font-family: Georgia, "Times New Roman", serif;
   }
   .blog-prose ul > li::marker { color: hsl(var(--primary)); }
