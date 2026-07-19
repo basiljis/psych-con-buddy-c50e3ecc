@@ -82,12 +82,16 @@ export const MobileMenu = ({ activeTab, onTabChange, isAdmin = true, canAccessPu
           <Menu className="h-5 w-5" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-80">
-        <SheetHeader>
+      <SheetContent
+        side="left"
+        className="w-80 flex flex-col p-0"
+      >
+        <SheetHeader className="px-6 pt-6 pb-2 shrink-0">
           <SheetTitle>Меню</SheetTitle>
         </SheetHeader>
-        <div className="mt-6 space-y-2">
-          {/* Core Feature - Child Card - Highlighted separately */}
+        <div className="flex-1 overflow-y-auto overscroll-contain px-6 pb-8">
+          <div className="mt-4 space-y-2">
+
           <div className="space-y-2">
             <p className="text-xs font-medium text-muted-foreground px-3 flex items-center gap-2">
               Ядро системы
