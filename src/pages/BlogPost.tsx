@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import type { BlogPost as BlogPostType } from "@/types/blog";
@@ -9,16 +9,51 @@ import LandingFooter from "@/components/LandingFooter";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Clock, Calendar, Eye, Users } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  ArrowLeft, ArrowRight, Clock, Calendar, Eye, Users,
+  Share2, Link2, ListOrdered, Check,
+} from "lucide-react";
 import { useLogBlogView, useBlogViewStats } from "@/hooks/useBlogViews";
+import { toast } from "sonner";
 
 const BASE_URL = "https://unvrsm.ru";
+
+type Heading = { id: string; text: string; level: 2 | 3 };
+
+/** Inject stable IDs into <h2>/<h3> and collect them for a table of contents. */
+function withHeadingIds(html: string): { html: string; headings: Heading[] } {
+  const headings: Heading[] = [];
+  const used = new Set<string>();
+  const slugify = (s: string) =>
+    s.toLowerCase().replace(/<[^>]+>/g, "").trim()
+      .replace(/[^\p{L}\p{N}\s-]/gu, "").replace(/\s+/g, "-").slice(0, 80) || "section";
+  const out = html.replace(
+    /<h([23])(\s[^>]*)?>([\s\S]*?)<\/h\1>/gi,
+    (_m, lvl: string, attrs: string = "", inner: string) => {
+      const text = stripHtml(inner);
+      let id = slugify(text);
+      let i = 2;
+      while (used.has(id)) id = `${slugify(text)}-${i++}`;
+      used.add(id);
+      headings.push({ id, text, level: Number(lvl) as 2 | 3 });
+      const hasId = /\sid=/i.test(attrs);
+      const newAttrs = hasId ? attrs : `${attrs} id="${id}"`;
+      return `<h${lvl}${newAttrs}>${inner}</h${lvl}>`;
+    }
+  );
+  return { html: out, headings };
+}
 
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [post, setPost] = useState<BlogPostType | null>(null);
   const [loading, setLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const [related, setRelated] = useState<BlogPostType[]>([]);
+  const [copied, setCopied] = useState(false);
+  const articleRef = useRef<HTMLElement>(null);
   const { stats } = useBlogViewStats();
   useLogBlogView(post ? slug : undefined);
 
@@ -36,6 +71,40 @@ export default function BlogPost() {
       setLoading(false);
     })();
   }, [slug]);
+
+  useEffect(() => {
+    if (!post) return;
+    (async () => {
+      const { data } = await supabase
+        .from("blog_posts")
+        .select("*")
+        .eq("published", true)
+        .eq("category", post.category)
+        .neq("slug", post.slug)
+        .order("published_at", { ascending: false })
+        .limit(3);
+      setRelated((data ?? []) as BlogPostType[]);
+    })();
+  }, [post]);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const el = articleRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const total = el.scrollHeight - window.innerHeight;
+      const scrolled = Math.min(Math.max(-rect.top, 0), Math.max(total, 1));
+      setProgress(total > 0 ? (scrolled / total) * 100 : 0);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [post]);
+
+  const { html: contentWithIds, headings } = useMemo(
+    () => (post ? withHeadingIds(post.content) : { html: "", headings: [] as Heading[] }),
+    [post]
+  );
 
   const canonical = `${BASE_URL}/blog/${slug}`;
   const description = post
@@ -57,11 +126,7 @@ export default function BlogPost() {
             datePublished: post.published_at,
             dateModified: post.updated_at,
             author: { "@type": "Organization", name: post.author || "universum." },
-            publisher: {
-              "@type": "Organization",
-              name: "universum.",
-              url: BASE_URL,
-            },
+            publisher: { "@type": "Organization", name: "universum.", url: BASE_URL },
             mainEntityOfPage: canonical,
             keywords: post.keywords.join(", "),
           },
@@ -78,72 +143,206 @@ export default function BlogPost() {
       : undefined,
   });
 
+  const share = async () => {
+    const url = canonical;
+    if (navigator.share) {
+      try { await navigator.share({ title: post?.title, url }); return; } catch { /* cancelled */ }
+    }
+    await navigator.clipboard.writeText(url);
+    setCopied(true);
+    toast.success("Ссылка скопирована");
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <PublicNavbar currentPage="blog" />
-      <main className="flex-1 container mx-auto max-w-3xl px-4 pt-28 md:pt-32 pb-16">
+
+      {/* Reading progress */}
+      <div
+        aria-hidden
+        className="fixed top-0 left-0 right-0 h-0.5 bg-primary/80 z-40 origin-left transition-transform duration-100"
+        style={{ transform: `scaleX(${progress / 100})` }}
+      />
+
+      <main className="flex-1">
         {loading ? (
-          <div className="space-y-4">
+          <div className="container mx-auto max-w-3xl px-4 pt-28 md:pt-32 pb-16 space-y-4">
             <Skeleton className="h-6 w-40" />
-            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-12 w-full" />
             <Skeleton className="h-4 w-64" />
             <Skeleton className="h-64 w-full" />
           </div>
         ) : !post ? (
-          <div className="text-center py-16">
+          <div className="container mx-auto max-w-3xl px-4 pt-28 md:pt-32 pb-16 text-center py-16">
             <h1 className="text-2xl font-bold mb-4">Статья не найдена</h1>
             <Button onClick={() => navigate("/blog")}>Вернуться в блог</Button>
           </div>
         ) : (
-          <article>
-            <nav aria-label="breadcrumb" className="text-sm text-muted-foreground mb-4">
-              <Link to="/" className="hover:text-foreground">Главная</Link>
-              <span className="mx-2">/</span>
-              <Link to="/blog" className="hover:text-foreground">Блог</Link>
-              <span className="mx-2">/</span>
-              <span className="line-clamp-1 inline">{post.title}</span>
-            </nav>
+          <>
+            {/* HERO */}
+            <header className="relative border-b border-border/60 bg-gradient-to-b from-accent/30 via-background to-background">
+              <div className="container mx-auto max-w-3xl px-4 pt-28 md:pt-32 pb-10">
+                <nav aria-label="breadcrumb" className="text-sm text-muted-foreground mb-6">
+                  <Link to="/" className="hover:text-foreground">Главная</Link>
+                  <span className="mx-2">/</span>
+                  <Link to="/blog" className="hover:text-foreground">Блог</Link>
+                  <span className="mx-2">/</span>
+                  <span className="line-clamp-1 inline text-foreground/70">{post.title}</span>
+                </nav>
 
-            <Link to="/blog" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
-              <ArrowLeft className="h-4 w-4" /> Все статьи
-            </Link>
+                <Link
+                  to="/blog"
+                  className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6"
+                >
+                  <ArrowLeft className="h-4 w-4" /> Все статьи
+                </Link>
 
-            <div className="flex items-center gap-3 mb-4">
-              <Badge variant="secondary">{blogCategoryLabel(post.category)}</Badge>
-              <span className="text-xs text-muted-foreground inline-flex items-center gap-1">
-                <Clock className="h-3 w-3" /> {post.reading_minutes} мин
-              </span>
-              <span className="text-xs text-muted-foreground inline-flex items-center gap-1">
-                <Calendar className="h-3 w-3" />
-                {new Date(post.published_at).toLocaleDateString("ru-RU", {
-                  day: "numeric", month: "long", year: "numeric",
-                })}
-              </span>
-              <span className="text-xs text-muted-foreground inline-flex items-center gap-1" title="Всего просмотров">
-                <Eye className="h-3 w-3" /> {stats[post.slug]?.total_views ?? 0}
-              </span>
-              <span className="text-xs text-muted-foreground inline-flex items-center gap-1" title="Уникальных посетителей">
-                <Users className="h-3 w-3" /> {stats[post.slug]?.unique_views ?? 0}
-              </span>
-            </div>
+                <div className="flex flex-wrap items-center gap-2 mb-5">
+                  <Badge className="bg-primary/10 text-primary hover:bg-primary/15 border-0">
+                    {blogCategoryLabel(post.category)}
+                  </Badge>
+                  {post.keywords.slice(0, 2).map((k) => (
+                    <Badge key={k} variant="outline" className="font-normal">{k}</Badge>
+                  ))}
+                </div>
 
+                <h1 className="text-3xl md:text-5xl font-bold leading-[1.15] tracking-tight mb-5">
+                  {post.title}
+                </h1>
+                <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6 max-w-2xl">
+                  {post.excerpt}
+                </p>
 
-            <h1 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">{post.title}</h1>
-            <p className="text-lg text-muted-foreground mb-8">{post.excerpt}</p>
-
-            <div
-              className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-semibold prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-3 prose-p:leading-relaxed prose-li:my-1"
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
-
-            {post.keywords.length > 0 && (
-              <div className="mt-10 pt-6 border-t flex flex-wrap gap-2">
-                {post.keywords.map((k) => (
-                  <Badge key={k} variant="outline">{k}</Badge>
-                ))}
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
+                  <span className="inline-flex items-center gap-1.5">
+                    <Calendar className="h-4 w-4" />
+                    {new Date(post.published_at).toLocaleDateString("ru-RU", {
+                      day: "numeric", month: "long", year: "numeric",
+                    })}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <Clock className="h-4 w-4" /> {post.reading_minutes} мин чтения
+                  </span>
+                  <span className="inline-flex items-center gap-1.5" title="Всего просмотров">
+                    <Eye className="h-4 w-4" /> {stats[post.slug]?.total_views ?? 0}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5" title="Уникальных посетителей">
+                    <Users className="h-4 w-4" /> {stats[post.slug]?.unique_views ?? 0}
+                  </span>
+                  <Button
+                    size="sm" variant="ghost"
+                    className="h-8 ml-auto gap-1.5"
+                    onClick={share}
+                  >
+                    {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
+                    Поделиться
+                  </Button>
+                </div>
               </div>
-            )}
-          </article>
+            </header>
+
+            <div className="container mx-auto max-w-6xl px-4 py-12 md:py-16">
+              <div className="grid lg:grid-cols-[1fr_240px] gap-10">
+                <article ref={articleRef}>
+                  <div
+                    className="blog-prose"
+                    dangerouslySetInnerHTML={{ __html: contentWithIds }}
+                  />
+
+                  {post.keywords.length > 0 && (
+                    <div className="mt-12 pt-6 border-t flex flex-wrap gap-2">
+                      {post.keywords.map((k) => (
+                        <Badge key={k} variant="outline" className="font-normal">#{k}</Badge>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* CTA */}
+                  <Card className="mt-10 border-primary/30 bg-gradient-to-br from-primary/5 via-accent/30 to-transparent">
+                    <CardContent className="p-6 md:p-8">
+                      <h3 className="text-xl md:text-2xl font-semibold mb-2">
+                        Попробуйте universum. в работе
+                      </h3>
+                      <p className="text-muted-foreground mb-5">
+                        Карточка ребёнка, тесты 0–18 лет, протоколы ППк, экспорт для ПМПК.
+                        Для родителей — бесплатно, для специалистов — от 330 ₽/мес.
+                      </p>
+                      <div className="flex flex-wrap gap-3">
+                        <Button asChild>
+                          <Link to="/register">Начать бесплатно <ArrowRight className="h-4 w-4 ml-1" /></Link>
+                        </Button>
+                        <Button asChild variant="outline">
+                          <Link to="/pricing">Тарифы</Link>
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </article>
+
+                {/* Sidebar: TOC + share */}
+                <aside className="hidden lg:block">
+                  <div className="sticky top-28 space-y-6">
+                    {headings.length > 1 && (
+                      <div>
+                        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+                          <ListOrdered className="h-3.5 w-3.5" /> Содержание
+                        </div>
+                        <nav className="text-sm space-y-1.5 border-l border-border">
+                          {headings.map((h) => (
+                            <a
+                              key={h.id}
+                              href={`#${h.id}`}
+                              className={`block hover:text-primary transition-colors text-muted-foreground -ml-px border-l-2 border-transparent hover:border-primary pl-3 ${
+                                h.level === 3 ? "pl-6 text-xs" : ""
+                              }`}
+                            >
+                              {h.text}
+                            </a>
+                          ))}
+                        </nav>
+                      </div>
+                    )}
+                    <div>
+                      <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                        Поделиться
+                      </div>
+                      <Button size="sm" variant="outline" className="w-full gap-2" onClick={share}>
+                        {copied ? <Check className="h-4 w-4" /> : <Link2 className="h-4 w-4" />}
+                        {copied ? "Скопировано" : "Скопировать ссылку"}
+                      </Button>
+                    </div>
+                  </div>
+                </aside>
+              </div>
+
+              {/* Related */}
+              {related.length > 0 && (
+                <section className="mt-16 pt-10 border-t">
+                  <h2 className="text-2xl font-bold mb-6">Читайте также</h2>
+                  <div className="grid md:grid-cols-3 gap-5">
+                    {related.map((r) => (
+                      <Link key={r.id} to={`/blog/${r.slug}`} className="group">
+                        <Card className="h-full transition-shadow group-hover:shadow-md">
+                          <CardContent className="p-5">
+                            <Badge variant="secondary" className="mb-3">
+                              {blogCategoryLabel(r.category)}
+                            </Badge>
+                            <h3 className="font-semibold leading-snug mb-2 group-hover:text-primary transition-colors line-clamp-3">
+                              {r.title}
+                            </h3>
+                            <p className="text-xs text-muted-foreground inline-flex items-center gap-1">
+                              <Clock className="h-3 w-3" /> {r.reading_minutes} мин
+                            </p>
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              )}
+            </div>
+          </>
         )}
       </main>
       <LandingFooter />
