@@ -110,12 +110,26 @@ export default function BlogPost() {
   const description = post
     ? (post.excerpt || stripHtml(post.content).slice(0, 160))
     : "";
+  const ogImage = post?.cover_url
+    ? (post.cover_url.startsWith("http") ? post.cover_url : `${BASE_URL}${post.cover_url}`)
+    : `${BASE_URL}/og-image.png`;
 
   useSeoMeta({
     title: post ? `${post.title} — Блог universum.` : "Статья — Блог universum.",
     description,
     canonical,
     keywords: post?.keywords.join(", "),
+    ogImage,
+    ogType: post ? "article" : "website",
+    article: post
+      ? {
+          publishedTime: post.published_at,
+          modifiedTime: post.updated_at,
+          author: post.author || "universum.",
+          section: blogCategoryLabel(post.category),
+          tags: post.keywords,
+        }
+      : undefined,
     jsonLd: post
       ? [
           {
@@ -123,12 +137,30 @@ export default function BlogPost() {
             "@type": "Article",
             headline: post.title,
             description,
+            image: [ogImage],
             datePublished: post.published_at,
             dateModified: post.updated_at,
-            author: { "@type": "Organization", name: post.author || "universum." },
-            publisher: { "@type": "Organization", name: "universum.", url: BASE_URL },
-            mainEntityOfPage: canonical,
+            author: {
+              "@type": "Organization",
+              name: post.author || "universum.",
+              url: BASE_URL,
+            },
+            publisher: {
+              "@type": "Organization",
+              name: "universum.",
+              url: BASE_URL,
+              logo: {
+                "@type": "ImageObject",
+                url: `${BASE_URL}/og-image.png`,
+              },
+            },
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": canonical,
+            },
             keywords: post.keywords.join(", "),
+            articleSection: blogCategoryLabel(post.category),
+            inLanguage: "ru-RU",
           },
           {
             "@context": "https://schema.org",

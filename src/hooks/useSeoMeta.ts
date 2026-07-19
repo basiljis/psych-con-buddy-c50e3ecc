@@ -6,6 +6,14 @@ interface SeoMeta {
   canonical?: string;
   keywords?: string;
   ogImage?: string;
+  ogType?: "website" | "article";
+  article?: {
+    publishedTime?: string;
+    modifiedTime?: string;
+    author?: string;
+    section?: string;
+    tags?: string[];
+  };
   noIndex?: boolean;
   jsonLd?: object | object[];
 }
@@ -19,6 +27,8 @@ export function useSeoMeta({
   canonical,
   keywords,
   ogImage = DEFAULT_OG_IMAGE,
+  ogType = "website",
+  article,
   noIndex = false,
   jsonLd,
 }: SeoMeta) {
@@ -36,6 +46,10 @@ export function useSeoMeta({
       el.setAttribute("content", content);
     };
 
+    const removeMeta = (attr: string, key: string) => {
+      document.querySelectorAll(`meta[${attr}="${key}"]`).forEach(el => el.remove());
+    };
+
     setMeta("name", "description", description);
     if (keywords) setMeta("name", "keywords", keywords);
     setMeta("name", "robots", noIndex ? "noindex, nofollow" : "index, follow");
@@ -51,16 +65,42 @@ export function useSeoMeta({
     setMeta("property", "og:description", description);
     setMeta("property", "og:image", resolvedOgImage);
     setMeta("property", "og:image:alt", title);
+    setMeta("property", "og:image:width", "1200");
+    setMeta("property", "og:image:height", "630");
     setMeta("property", "og:url", resolvedUrl);
-    setMeta("property", "og:type", "website");
-    setMeta("property", "og:site_name", "Universum");
+    setMeta("property", "og:type", ogType);
+    setMeta("property", "og:site_name", "universum.");
     setMeta("property", "og:locale", "ru_RU");
+
+    // Article-specific OG tags — clean up when not an article
+    const articleTagKeys = [
+      "article:published_time",
+      "article:modified_time",
+      "article:author",
+      "article:section",
+    ];
+    articleTagKeys.forEach(k => removeMeta("property", k));
+    document.querySelectorAll('meta[property="article:tag"]').forEach(el => el.remove());
+
+    if (ogType === "article" && article) {
+      if (article.publishedTime) setMeta("property", "article:published_time", article.publishedTime);
+      if (article.modifiedTime) setMeta("property", "article:modified_time", article.modifiedTime);
+      if (article.author) setMeta("property", "article:author", article.author);
+      if (article.section) setMeta("property", "article:section", article.section);
+      (article.tags ?? []).forEach(tag => {
+        const el = document.createElement("meta");
+        el.setAttribute("property", "article:tag");
+        el.setAttribute("content", tag);
+        document.head.appendChild(el);
+      });
+    }
 
     // Twitter
     setMeta("name", "twitter:card", "summary_large_image");
     setMeta("name", "twitter:title", title);
     setMeta("name", "twitter:description", description);
     setMeta("name", "twitter:image", resolvedOgImage);
+    setMeta("name", "twitter:image:alt", title);
 
     // Canonical
     let canonicalEl = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
@@ -92,5 +132,5 @@ export function useSeoMeta({
     return () => {
       document.querySelectorAll('[id^="seo-json-ld"]').forEach(el => el.remove());
     };
-  }, [title, description, canonical, keywords, ogImage, noIndex, jsonLd]);
+  }, [title, description, canonical, keywords, ogImage, ogType, article, noIndex, jsonLd]);
 }
