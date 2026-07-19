@@ -246,7 +246,7 @@ export default function BlogPost() {
               <div className="grid lg:grid-cols-[1fr_240px] gap-10">
                 <article ref={articleRef}>
                   <div
-                    className="blog-prose"
+                    className="prose prose-slate dark:prose-invert max-w-none blog-prose"
                     dangerouslySetInnerHTML={{ __html: contentWithIds }}
                   />
 
