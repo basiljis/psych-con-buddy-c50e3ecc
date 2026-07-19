@@ -84,7 +84,7 @@ export const MobileBottomNav = ({
                     active && "bg-primary/10"
                   )}
                 >
-                  <Icon className={cn("h-5 w-5 transition-transform duration-200", active && "scale-110")} />
+                  <Icon className={cn("h-4 w-4 transition-transform duration-200", active && "scale-110")} />
                 </div>
                 <span className={cn("text-[10px] font-medium leading-none", active && "font-semibold")}>
                   {tab.label}
