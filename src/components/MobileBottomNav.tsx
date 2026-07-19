@@ -79,7 +79,8 @@ export const MobileBottomNav = ({
               >
                 <div
                   className={cn(
-                    "flex items-center justify-center w-10 h-6 rounded-full transition-all duration-200",
+                    "flex items-center justify-center w-9 h-5 rounded-full transition-all duration-200",
+
                     active && "bg-primary/10"
                   )}
                 >
