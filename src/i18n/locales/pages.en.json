@@ -593,7 +593,45 @@
     "leadMagnet": {
       "badge": "Useful materials",
       "title": "Free materials for specialists",
-      "subtitle": "Download and use in your work — no registration required"
+      "subtitle": "Download and use in your work — no registration required",
+      "card": {
+        "free": "Free",
+        "title": "Checklist «PPC readiness for inspection»",
+        "desc": "37 items across 5 areas: documentation, staff, work with children, parents, data protection. Based on Moscow DoE Order № 666.",
+        "items": "37 items",
+        "order": "Order № 666",
+        "cta": "Download for free"
+      },
+      "dialog": {
+        "title": "Download the checklist",
+        "description": "Enter your email — we'll send you the link and useful materials on PPC automation",
+        "emailLabel": "Email *",
+        "emailPh": "your@email.com",
+        "nameLabel": "Name (optional)",
+        "namePh": "How should we address you",
+        "insideTitle": "What's inside the checklist:",
+        "itemsCount": "{{count}} items",
+        "submit": "Download PDF",
+        "submitting": "Preparing...",
+        "consent": "By clicking the button, you agree to the",
+        "privacyLink": "privacy policy",
+        "successTitle": "Checklist downloaded!",
+        "successDesc": "Check your downloads folder",
+        "automateTitle": "Want to automate your PPC workflow?",
+        "tryFree": "Try free — 7 days"
+      },
+      "toast": {
+        "emailRequired": "Please enter an email",
+        "success": "Checklist downloaded!",
+        "error": "Something went wrong, please try again"
+      },
+      "categories": {
+        "docs": "PPC documentation",
+        "staff": "Committee composition and qualifications",
+        "children": "Work with children and support",
+        "parents": "Interaction with parents (legal guardians)",
+        "data": "Storage and protection of personal data"
+      }
     },
     "userTypesSection": {
       "title": "Choose your workspace",
