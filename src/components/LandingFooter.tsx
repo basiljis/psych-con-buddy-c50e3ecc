@@ -27,11 +27,11 @@ export default function LandingFooter() {
               <li><Link to="/instructions" className="hover:text-foreground transition-colors">{t("footer.instructions")}</Link></li>
               <li>
                 <Link to="/blog" className="hover:text-foreground transition-colors inline-flex items-center gap-1">
-                  <BookOpen className="h-3.5 w-3.5" /> Блог
+                  <BookOpen className="h-3.5 w-3.5" /> {t("footer.blog")}
                 </Link>
               </li>
               <li>
-                <a href="/rss.xml" className="hover:text-foreground transition-colors inline-flex items-center gap-1" aria-label="RSS-лента блога">
+                <a href="/rss.xml" className="hover:text-foreground transition-colors inline-flex items-center gap-1" aria-label={t("footer.rssAria")}>
                   <Rss className="h-3.5 w-3.5" /> RSS
                 </a>
               </li>
@@ -91,7 +91,7 @@ export default function LandingFooter() {
         <div className="border-t mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <p>© 2025{year > 2025 ? `–${year}` : '–2026'} universum. {t("footer.rights")}</p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link to="/legal" className="hover:text-foreground transition-colors">Нормативная база</Link>
+            <Link to="/legal" className="hover:text-foreground transition-colors">{t("footer.legalNav")}</Link>
             <Link to="/patents" className="hover:text-foreground transition-colors">{t("footer.patents")}</Link>
             <Link to="/registry" className="hover:text-foreground transition-colors">{t("footer.registry")}</Link>
           </div>

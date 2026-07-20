@@ -74,7 +74,7 @@ export function PublicNavbar({
               to="/blog"
               className={`text-sm ${currentPage === 'blog' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
             >
-              Блог
+              {t('nav.blog')}
             </Link>
           </nav>
 
