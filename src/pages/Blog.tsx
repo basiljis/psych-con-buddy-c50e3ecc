@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import type { BlogPost, BlogCategory } from "@/types/blog";
-import { BLOG_CATEGORIES, blogCategoryLabel } from "@/types/blog";
+import { BLOG_CATEGORIES, blogCategoryLabel, localizedPost } from "@/types/blog";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
 import { PublicNavbar } from "@/components/PublicNavbar";
 import LandingFooter from "@/components/LandingFooter";
@@ -18,6 +19,9 @@ const PAGE_SIZE = 6;
 const BASE_URL = "https://unvrsm.ru";
 
 export default function Blog() {
+  const { t, i18n } = useTranslation("pages");
+  const lang = i18n.resolvedLanguage || i18n.language || "ru";
+  const isEn = lang.toLowerCase().startsWith("en");
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
@@ -43,30 +47,33 @@ export default function Blog() {
     return posts.filter((p) => {
       if (category !== "all" && p.category !== category) return false;
       if (!term) return true;
-      const hay = [p.title, p.excerpt, p.keywords.join(" ")].join(" ").toLowerCase();
+      const loc = localizedPost(p, lang);
+      const hay = [loc.title, loc.excerpt, p.keywords.join(" ")].join(" ").toLowerCase();
       return hay.includes(term);
     });
-  }, [posts, q, category]);
+  }, [posts, q, category, lang]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const paged = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   useSeoMeta({
-    title: "Блог universum. — статьи для психологов, логопедов и родителей",
-    description:
-      "Практические материалы о работе службы психолого-педагогического сопровождения, ППк и ПМПК, речевом развитии и коррекционной педагогике.",
+    title: t("blogPage.seoTitle"),
+    description: t("blogPage.seoDescription"),
     canonical: `${BASE_URL}/blog`,
-    keywords: "блог, психолог, логопед, дефектолог, ППк, ПМПК, школа, родители",
+    keywords: "блог, психолог, логопед, дефектолог, ППк, ПМПК, школа, родители, blog, psychology",
+    locale: isEn ? "en_US" : "ru_RU",
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "Blog",
-      name: "Блог universum.",
+      name: t("blogPage.seoTitle"),
       url: `${BASE_URL}/blog`,
-      description:
-        "Статьи для педагогов-психологов, логопедов, дефектологов и родителей.",
+      description: t("blogPage.seoDescription"),
+      inLanguage: isEn ? "en-US" : "ru-RU",
     },
   });
+
+  const dateLocale = isEn ? "en-US" : "ru-RU";
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -74,21 +81,21 @@ export default function Blog() {
       <main className="flex-1 container mx-auto max-w-6xl px-4 pt-28 md:pt-32 pb-16">
         <header className="mb-10">
           <nav aria-label="breadcrumb" className="text-sm text-muted-foreground mb-3">
-            <Link to="/" className="hover:text-foreground">Главная</Link>
+            <Link to="/" className="hover:text-foreground">{t("blogPage.breadcrumbHome")}</Link>
             <span className="mx-2">/</span>
-            <span>Блог</span>
+            <span>{t("blogPage.breadcrumb")}</span>
           </nav>
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Блог</h1>
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight">{t("blogPage.title")}</h1>
               <p className="text-muted-foreground mt-3 max-w-2xl">
-                Практика ППк и ПМПК, документы, речевое развитие, работа с семьёй.
+                {t("blogPage.subtitle")}
               </p>
             </div>
             <a
               href="/rss.xml"
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
-              aria-label="RSS-лента блога"
+              aria-label={t("blogPage.rssAria")}
             >
               <Rss className="h-4 w-4" /> RSS
             </a>
@@ -102,7 +109,7 @@ export default function Blog() {
             <Input
               value={q}
               onChange={(e) => { setQ(e.target.value); setPage(1); }}
-              placeholder="Поиск по заголовкам, описаниям и ключевым словам"
+              placeholder={t("blogPage.searchPlaceholder")}
               className="pl-9"
             />
           </div>
@@ -112,7 +119,7 @@ export default function Blog() {
               size="sm"
               onClick={() => { setCategory("all"); setPage(1); }}
             >
-              Все
+              {t("blogPage.all")}
             </Button>
             {BLOG_CATEGORIES.map((c) => (
               <Button
@@ -121,7 +128,7 @@ export default function Blog() {
                 size="sm"
                 onClick={() => { setCategory(c.value); setPage(1); }}
               >
-                {c.label}
+                {blogCategoryLabel(c.value, lang)}
               </Button>
             ))}
           </div>
@@ -134,37 +141,39 @@ export default function Blog() {
             ))}
           </div>
         ) : paged.length === 0 ? (
-          <p className="text-muted-foreground text-center py-12">Статьи не найдены.</p>
+          <p className="text-muted-foreground text-center py-12">{t("blogPage.notFound")}</p>
         ) : (
           <>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {paged.map((p) => (
+              {paged.map((p) => {
+                const loc = localizedPost(p, lang);
+                return (
                 <Link key={p.id} to={`/blog/${p.slug}`} className="group">
                   <Card className="h-full transition-shadow group-hover:shadow-md">
                     <CardHeader>
                       <div className="flex items-center justify-between mb-2">
-                        <Badge variant="secondary">{blogCategoryLabel(p.category)}</Badge>
+                        <Badge variant="secondary">{blogCategoryLabel(p.category, lang)}</Badge>
                         <span className="text-xs text-muted-foreground inline-flex items-center gap-1">
-                          <Clock className="h-3 w-3" /> {p.reading_minutes} мин
+                          <Clock className="h-3 w-3" /> {p.reading_minutes} {t("blogPage.minutes")}
                         </span>
                       </div>
                       <CardTitle className="text-lg leading-snug group-hover:text-primary transition-colors">
-                        {p.title}
+                        {loc.title}
                       </CardTitle>
-                      <CardDescription className="line-clamp-3">{p.excerpt}</CardDescription>
+                      <CardDescription className="line-clamp-3">{loc.excerpt}</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
                         <span>
-                          {new Date(p.published_at).toLocaleDateString("ru-RU", {
+                          {new Date(p.published_at).toLocaleDateString(dateLocale, {
                             day: "numeric", month: "long", year: "numeric",
                           })}
                         </span>
                         <span className="inline-flex items-center gap-3">
-                          <span className="inline-flex items-center gap-1" title="Всего просмотров">
+                          <span className="inline-flex items-center gap-1" title={t("blogPage.totalViews")}>
                             <Eye className="h-3.5 w-3.5" /> {stats[p.slug]?.total_views ?? 0}
                           </span>
-                          <span className="inline-flex items-center gap-1" title="Уникальных посетителей">
+                          <span className="inline-flex items-center gap-1" title={t("blogPage.uniqueViews")}>
                             <Users className="h-3.5 w-3.5" /> {stats[p.slug]?.unique_views ?? 0}
                           </span>
                         </span>
@@ -172,7 +181,8 @@ export default function Blog() {
                     </CardContent>
                   </Card>
                 </Link>
-              ))}
+                );
+              })}
             </div>
 
             {totalPages > 1 && (

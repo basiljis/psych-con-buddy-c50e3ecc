@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import type { BlogPost as BlogPostType } from "@/types/blog";
-import { blogCategoryLabel, stripHtml } from "@/types/blog";
+import { blogCategoryLabel, stripHtml, localizedPost } from "@/types/blog";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
 import { PublicNavbar } from "@/components/PublicNavbar";
 import LandingFooter from "@/components/LandingFooter";
@@ -46,6 +47,9 @@ function withHeadingIds(html: string): { html: string; headings: Heading[] } {
 }
 
 export default function BlogPost() {
+  const { t, i18n } = useTranslation("pages");
+  const lang = i18n.resolvedLanguage || i18n.language || "ru";
+  const isEn = lang.toLowerCase().startsWith("en");
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [post, setPost] = useState<BlogPostType | null>(null);
@@ -101,32 +105,38 @@ export default function BlogPost() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [post]);
 
+  const localized = useMemo(
+    () => (post ? localizedPost(post, lang) : { title: "", excerpt: "", content: "" }),
+    [post, lang]
+  );
+
   const { html: contentWithIds, headings } = useMemo(
-    () => (post ? withHeadingIds(post.content) : { html: "", headings: [] as Heading[] }),
-    [post]
+    () => (post ? withHeadingIds(localized.content) : { html: "", headings: [] as Heading[] }),
+    [post, localized.content]
   );
 
   const canonical = `${BASE_URL}/blog/${slug}`;
   const description = post
-    ? (post.excerpt || stripHtml(post.content).slice(0, 160))
+    ? (localized.excerpt || stripHtml(localized.content).slice(0, 160))
     : "";
   const ogImage = post?.cover_url
     ? (post.cover_url.startsWith("http") ? post.cover_url : `${BASE_URL}${post.cover_url}`)
     : `${BASE_URL}/og-image.png`;
 
   useSeoMeta({
-    title: post ? `${post.title} — Блог universum.` : "Статья — Блог universum.",
+    title: post ? `${localized.title}${t("blogPost.titleSuffix")}` : t("blogPost.fallbackTitle"),
     description,
     canonical,
     keywords: post?.keywords.join(", "),
     ogImage,
     ogType: post ? "article" : "website",
+    locale: isEn ? "en_US" : "ru_RU",
     article: post
       ? {
           publishedTime: post.published_at,
           modifiedTime: post.updated_at,
           author: post.author || "universum.",
-          section: blogCategoryLabel(post.category),
+          section: blogCategoryLabel(post.category, lang),
           tags: post.keywords,
         }
       : undefined,
@@ -135,7 +145,7 @@ export default function BlogPost() {
           {
             "@context": "https://schema.org",
             "@type": "Article",
-            headline: post.title,
+            headline: localized.title,
             description,
             image: [ogImage],
             datePublished: post.published_at,
@@ -159,16 +169,16 @@ export default function BlogPost() {
               "@id": canonical,
             },
             keywords: post.keywords.join(", "),
-            articleSection: blogCategoryLabel(post.category),
-            inLanguage: "ru-RU",
+            articleSection: blogCategoryLabel(post.category, lang),
+            inLanguage: isEn ? "en-US" : "ru-RU",
           },
           {
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Главная", item: BASE_URL },
-              { "@type": "ListItem", position: 2, name: "Блог", item: `${BASE_URL}/blog` },
-              { "@type": "ListItem", position: 3, name: post.title, item: canonical },
+              { "@type": "ListItem", position: 1, name: t("blogPage.breadcrumbHome"), item: BASE_URL },
+              { "@type": "ListItem", position: 2, name: t("blogPage.breadcrumb"), item: `${BASE_URL}/blog` },
+              { "@type": "ListItem", position: 3, name: localized.title, item: canonical },
             ],
           },
         ]
@@ -178,13 +188,15 @@ export default function BlogPost() {
   const share = async () => {
     const url = canonical;
     if (navigator.share) {
-      try { await navigator.share({ title: post?.title, url }); return; } catch { /* cancelled */ }
+      try { await navigator.share({ title: localized.title, url }); return; } catch { /* cancelled */ }
     }
     await navigator.clipboard.writeText(url);
     setCopied(true);
-    toast.success("Ссылка скопирована");
+    toast.success(t("blogPost.linkCopied"));
     setTimeout(() => setCopied(false), 2000);
   };
+
+  const dateLocale = isEn ? "en-US" : "ru-RU";
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -207,8 +219,8 @@ export default function BlogPost() {
           </div>
         ) : !post ? (
           <div className="container mx-auto max-w-3xl px-4 pt-28 md:pt-32 pb-16 text-center py-16">
-            <h1 className="text-2xl font-bold mb-4">Статья не найдена</h1>
-            <Button onClick={() => navigate("/blog")}>Вернуться в блог</Button>
+            <h1 className="text-2xl font-bold mb-4">{t("blogPost.notFoundTitle")}</h1>
+            <Button onClick={() => navigate("/blog")}>{t("blogPost.notFoundBack")}</Button>
           </div>
         ) : (
           <>
@@ -216,23 +228,23 @@ export default function BlogPost() {
             <header className="relative border-b border-border/60 bg-gradient-to-b from-accent/30 via-background to-background">
               <div className="container mx-auto max-w-3xl px-4 pt-28 md:pt-32 pb-10">
                 <nav aria-label="breadcrumb" className="text-sm text-muted-foreground mb-6">
-                  <Link to="/" className="hover:text-foreground">Главная</Link>
+                  <Link to="/" className="hover:text-foreground">{t("blogPage.breadcrumbHome")}</Link>
                   <span className="mx-2">/</span>
-                  <Link to="/blog" className="hover:text-foreground">Блог</Link>
+                  <Link to="/blog" className="hover:text-foreground">{t("blogPage.breadcrumb")}</Link>
                   <span className="mx-2">/</span>
-                  <span className="line-clamp-1 inline text-foreground/70">{post.title}</span>
+                  <span className="line-clamp-1 inline text-foreground/70">{localized.title}</span>
                 </nav>
 
                 <Link
                   to="/blog"
                   className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6"
                 >
-                  <ArrowLeft className="h-4 w-4" /> Все статьи
+                  <ArrowLeft className="h-4 w-4" /> {t("blogPost.backToBlog")}
                 </Link>
 
                 <div className="flex flex-wrap items-center gap-2 mb-5">
                   <Badge className="bg-primary/10 text-primary hover:bg-primary/15 border-0">
-                    {blogCategoryLabel(post.category)}
+                    {blogCategoryLabel(post.category, lang)}
                   </Badge>
                   {post.keywords.slice(0, 2).map((k) => (
                     <Badge key={k} variant="outline" className="font-normal">{k}</Badge>
@@ -240,26 +252,26 @@ export default function BlogPost() {
                 </div>
 
                 <h1 className="text-3xl md:text-5xl font-bold leading-[1.15] tracking-tight mb-5">
-                  {post.title}
+                  {localized.title}
                 </h1>
                 <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6 max-w-2xl">
-                  {post.excerpt}
+                  {localized.excerpt}
                 </p>
 
                 <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
                   <span className="inline-flex items-center gap-1.5">
                     <Calendar className="h-4 w-4" />
-                    {new Date(post.published_at).toLocaleDateString("ru-RU", {
+                    {new Date(post.published_at).toLocaleDateString(dateLocale, {
                       day: "numeric", month: "long", year: "numeric",
                     })}
                   </span>
                   <span className="inline-flex items-center gap-1.5">
-                    <Clock className="h-4 w-4" /> {post.reading_minutes} мин чтения
+                    <Clock className="h-4 w-4" /> {post.reading_minutes} {t("blogPost.minutesRead")}
                   </span>
-                  <span className="inline-flex items-center gap-1.5" title="Всего просмотров">
+                  <span className="inline-flex items-center gap-1.5" title={t("blogPage.totalViews")}>
                     <Eye className="h-4 w-4" /> {stats[post.slug]?.total_views ?? 0}
                   </span>
-                  <span className="inline-flex items-center gap-1.5" title="Уникальных посетителей">
+                  <span className="inline-flex items-center gap-1.5" title={t("blogPage.uniqueViews")}>
                     <Users className="h-4 w-4" /> {stats[post.slug]?.unique_views ?? 0}
                   </span>
                   <Button
@@ -268,7 +280,7 @@ export default function BlogPost() {
                     onClick={share}
                   >
                     {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
-                    Поделиться
+                    {t("blogPost.share")}
                   </Button>
                 </div>
               </div>
@@ -294,18 +306,17 @@ export default function BlogPost() {
                   <Card className="mt-10 border-primary/30 bg-gradient-to-br from-primary/5 via-accent/30 to-transparent">
                     <CardContent className="p-6 md:p-8">
                       <h3 className="text-xl md:text-2xl font-semibold mb-2">
-                        Попробуйте universum. в работе
+                        {t("blogPost.ctaTitle")}
                       </h3>
                       <p className="text-muted-foreground mb-5">
-                        Карточка ребёнка, тесты 0–18 лет, протоколы ППк, экспорт для ПМПК.
-                        Для родителей — бесплатно, для специалистов — от 330 ₽/мес.
+                        {t("blogPost.ctaText")}
                       </p>
                       <div className="flex flex-wrap gap-3">
                         <Button asChild>
-                          <Link to="/register">Начать бесплатно <ArrowRight className="h-4 w-4 ml-1" /></Link>
+                          <Link to="/register">{t("blogPost.ctaStart")} <ArrowRight className="h-4 w-4 ml-1" /></Link>
                         </Button>
                         <Button asChild variant="outline">
-                          <Link to="/pricing">Тарифы</Link>
+                          <Link to="/pricing">{t("blogPost.ctaPricing")}</Link>
                         </Button>
                       </div>
                     </CardContent>
@@ -318,7 +329,7 @@ export default function BlogPost() {
                     {headings.length > 1 && (
                       <div>
                         <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
-                          <ListOrdered className="h-3.5 w-3.5" /> Содержание
+                          <ListOrdered className="h-3.5 w-3.5" /> {t("blogPost.toc")}
                         </div>
                         <nav className="text-sm space-y-1.5 border-l border-border">
                           {headings.map((h) => (
@@ -337,11 +348,11 @@ export default function BlogPost() {
                     )}
                     <div>
                       <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
-                        Поделиться
+                        {t("blogPost.shareLabel")}
                       </div>
                       <Button size="sm" variant="outline" className="w-full gap-2" onClick={share}>
                         {copied ? <Check className="h-4 w-4" /> : <Link2 className="h-4 w-4" />}
-                        {copied ? "Скопировано" : "Скопировать ссылку"}
+                        {copied ? t("blogPost.copied") : t("blogPost.copyLink")}
                       </Button>
                     </div>
                   </div>
@@ -351,25 +362,28 @@ export default function BlogPost() {
               {/* Related */}
               {related.length > 0 && (
                 <section className="mt-16 pt-10 border-t">
-                  <h2 className="text-2xl font-bold mb-6">Читайте также</h2>
+                  <h2 className="text-2xl font-bold mb-6">{t("blogPost.related")}</h2>
                   <div className="grid md:grid-cols-3 gap-5">
-                    {related.map((r) => (
+                    {related.map((r) => {
+                      const rloc = localizedPost(r, lang);
+                      return (
                       <Link key={r.id} to={`/blog/${r.slug}`} className="group">
                         <Card className="h-full transition-shadow group-hover:shadow-md">
                           <CardContent className="p-5">
                             <Badge variant="secondary" className="mb-3">
-                              {blogCategoryLabel(r.category)}
+                              {blogCategoryLabel(r.category, lang)}
                             </Badge>
                             <h3 className="font-semibold leading-snug mb-2 group-hover:text-primary transition-colors line-clamp-3">
-                              {r.title}
+                              {rloc.title}
                             </h3>
                             <p className="text-xs text-muted-foreground inline-flex items-center gap-1">
-                              <Clock className="h-3 w-3" /> {r.reading_minutes} мин
+                              <Clock className="h-3 w-3" /> {r.reading_minutes} {t("blogPage.minutes")}
                             </p>
                           </CardContent>
                         </Card>
                       </Link>
-                    ))}
+                      );
+                    })}
                   </div>
                 </section>
               )}

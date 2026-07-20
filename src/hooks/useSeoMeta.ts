@@ -16,7 +16,9 @@ interface SeoMeta {
   };
   noIndex?: boolean;
   jsonLd?: object | object[];
+  locale?: "ru_RU" | "en_US";
 }
+
 
 const BASE_URL = "https://unvrsm.ru";
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.png`;
@@ -31,7 +33,9 @@ export function useSeoMeta({
   article,
   noIndex = false,
   jsonLd,
+  locale,
 }: SeoMeta) {
+
   useEffect(() => {
     // Title
     document.title = title;
@@ -70,7 +74,11 @@ export function useSeoMeta({
     setMeta("property", "og:url", resolvedUrl);
     setMeta("property", "og:type", ogType);
     setMeta("property", "og:site_name", "universum.");
-    setMeta("property", "og:locale", "ru_RU");
+    const resolvedLocale =
+      locale ||
+      ((document.documentElement.lang || "ru").toLowerCase().startsWith("en") ? "en_US" : "ru_RU");
+    setMeta("property", "og:locale", resolvedLocale);
+
 
     // Article-specific OG tags — clean up when not an article
     const articleTagKeys = [
@@ -132,5 +140,5 @@ export function useSeoMeta({
     return () => {
       document.querySelectorAll('[id^="seo-json-ld"]').forEach(el => el.remove());
     };
-  }, [title, description, canonical, keywords, ogImage, ogType, article, noIndex, jsonLd]);
+  }, [title, description, canonical, keywords, ogImage, ogType, article, noIndex, jsonLd, locale]);
 }
