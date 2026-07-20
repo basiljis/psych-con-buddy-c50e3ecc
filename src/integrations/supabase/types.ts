@@ -154,9 +154,11 @@ export type Database = {
           author: string
           category: Database["public"]["Enums"]["blog_category"]
           content: string
+          content_en: string | null
           cover_url: string | null
           created_at: string
           excerpt: string
+          excerpt_en: string | null
           id: string
           keywords: string[]
           published: boolean
@@ -164,15 +166,18 @@ export type Database = {
           reading_minutes: number
           slug: string
           title: string
+          title_en: string | null
           updated_at: string
         }
         Insert: {
           author?: string
           category?: Database["public"]["Enums"]["blog_category"]
           content?: string
+          content_en?: string | null
           cover_url?: string | null
           created_at?: string
           excerpt?: string
+          excerpt_en?: string | null
           id?: string
           keywords?: string[]
           published?: boolean
@@ -180,15 +185,18 @@ export type Database = {
           reading_minutes?: number
           slug: string
           title: string
+          title_en?: string | null
           updated_at?: string
         }
         Update: {
           author?: string
           category?: Database["public"]["Enums"]["blog_category"]
           content?: string
+          content_en?: string | null
           cover_url?: string | null
           created_at?: string
           excerpt?: string
+          excerpt_en?: string | null
           id?: string
           keywords?: string[]
           published?: boolean
@@ -196,6 +204,7 @@ export type Database = {
           reading_minutes?: number
           slug?: string
           title?: string
+          title_en?: string | null
           updated_at?: string
         }
         Relationships: []
