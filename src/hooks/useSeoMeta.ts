@@ -16,7 +16,9 @@ interface SeoMeta {
   };
   noIndex?: boolean;
   jsonLd?: object | object[];
+  locale?: "ru_RU" | "en_US";
 }
+
 
 const BASE_URL = "https://unvrsm.ru";
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.png`;
