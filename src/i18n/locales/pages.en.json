@@ -487,5 +487,40 @@
   },
   "stickyCta": {
     "demo": "Request a demo"
+  },
+  "blogPage": {
+    "seoTitle": "universum. blog — articles for psychologists, speech therapists and parents",
+    "seoDescription": "Practical materials on psychological-pedagogical support services, PPC and PMPK, speech development and corrective pedagogy.",
+    "breadcrumbHome": "Home",
+    "breadcrumb": "Blog",
+    "title": "Blog",
+    "subtitle": "PPC and PMPK practice, documents, speech development, working with families.",
+    "rssAria": "Blog RSS feed",
+    "searchPlaceholder": "Search titles, descriptions and keywords",
+    "all": "All",
+    "notFound": "No articles found.",
+    "minutes": "min",
+    "totalViews": "Total views",
+    "uniqueViews": "Unique visitors"
+  },
+  "blogPost": {
+    "backToBlog": "All articles",
+    "notFoundTitle": "Article not found",
+    "notFoundBack": "Back to blog",
+    "minutesRead": "min read",
+    "share": "Share",
+    "linkCopied": "Link copied",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "toc": "Contents",
+    "shareLabel": "Share",
+    "related": "Related reading",
+    "ctaTitle": "Try universum. in your practice",
+    "ctaText": "Child profile, tests for ages 0–18, PPC protocols, PMPK export. Free for parents, from 330 RUB/month for specialists.",
+    "ctaStart": "Start for free",
+    "ctaPricing": "Pricing",
+    "titleSuffix": " — universum. blog",
+    "fallbackTitle": "Article — universum. blog"
   }
 }
+
