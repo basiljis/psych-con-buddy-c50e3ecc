@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,312 +10,131 @@ import LandingFooter from "@/components/LandingFooter";
 import { PublicNavbar } from "@/components/PublicNavbar";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
 import { PpkChecklistLeadMagnet } from "@/components/PpkChecklistLeadMagnet";
-import { 
-  GraduationCap, Building2, Baby, 
-  ClipboardList, Calendar, FileText, Shield, 
+import {
+  GraduationCap, Building2, Baby,
+  ClipboardList, Calendar, FileText, Shield,
   CheckCircle, ArrowRight, Clock,
-  BarChart3, UserCheck, Gamepad2, 
-  BookOpen, CalendarCheck, Bell, Users, Target
+  BarChart3, UserCheck, Gamepad2,
+  BookOpen, CalendarCheck, Bell, Users, Target,
+  LucideIcon
 } from "lucide-react";
 
-const howItWorks = [
-  {
-    icon: FileText,
-    title: "Карточка ребёнка",
-    description: "Единый профиль с полной историей развития, тестами и рекомендациями"
-  },
-  {
-    icon: ClipboardList,
-    title: "Протоколы и заключения",
-    description: "Автоматизация ППк с генерацией документов по результатам обследования"
-  },
-  {
-    icon: Calendar,
-    title: "Планирование занятий",
-    description: "Гибкое расписание с учётом нагрузки специалистов и онлайн-записью"
-  },
-  {
-    icon: BarChart3,
-    title: "Аналитика результатов",
-    description: "Отслеживание динамики развития и эффективности коррекционной работы"
-  }
+type AudienceKey = "org" | "specialist" | "private" | "parent";
+
+const howItWorks: { id: string; icon: LucideIcon }[] = [
+  { id: "card", icon: FileText },
+  { id: "protocols", icon: ClipboardList },
+  { id: "planning", icon: Calendar },
+  { id: "analytics", icon: BarChart3 },
 ];
 
-const features = [
-  {
-    icon: ClipboardList,
-    title: "Протоколы ППк",
-    description: "Автоматизация психолого-педагогических консилиумов с генерацией заключений и рекомендаций",
-    audience: ["org", "specialist"]
-  },
-  {
-    icon: Calendar,
-    title: "Журнал учёта занятий",
-    description: "Индивидуальные и групповые занятия, серии сессий, учёт посещаемости",
-    isNew: true,
-    audience: ["org", "specialist", "private"]
-  },
-  {
-    icon: FileText,
-    title: "Карта ребёнка",
-    description: "Централизованное хранение истории развития, синхронизация с родителями",
-    audience: ["org", "specialist", "private", "parent"]
-  },
-  {
-    icon: Gamepad2,
-    title: "Игровая ребёнка",
-    description: "Интерактивные развивающие игры и упражнения для детей с отслеживанием прогресса",
-    isNew: true,
-    audience: ["parent"]
-  },
-  {
-    icon: CalendarCheck,
-    title: "Онлайн-запись",
-    description: "Родители записываются к специалистам напрямую, управление слотами",
-    isNew: true,
-    audience: ["org", "specialist", "private", "parent"]
-  },
-  {
-    icon: Target,
-    title: "Направления работы",
-    description: "Педагоги указывают специализации, система подбирает специалистов под проблематику ребёнка",
-    isNew: true,
-    audience: ["specialist", "private", "parent"]
-  },
-  {
-    icon: UserCheck,
-    title: "Подбор специалиста",
-    description: "Рекомендации специалистов на основе результатов ППк и тестов развития ребёнка",
-    isNew: true,
-    audience: ["parent"]
-  },
-  {
-    icon: BookOpen,
-    title: "Библиотека материалов",
-    description: "Рекомендации по развитию на основе результатов тестирования",
-    isNew: true,
-    audience: ["parent"]
-  },
-  {
-    icon: BarChart3,
-    title: "Аналитика и KPI",
-    description: "Сравнительная статистика, отслеживание KPI специалистов организации",
-    isNew: true,
-    audience: ["org"]
-  },
-  {
-    icon: Bell,
-    title: "Уведомления",
-    description: "Автоматические напоминания о занятиях, email и push-уведомления",
-    isNew: true,
-    audience: ["org", "specialist", "private", "parent"]
-  },
-  {
-    icon: Shield,
-    title: "Безопасность данных",
-    description: "Соответствие ФЗ-152, шифрование и хранение в РФ",
-    audience: ["org", "specialist", "private", "parent"]
-  }
+const features: { id: string; icon: LucideIcon; isNew?: boolean; audience: AudienceKey[] }[] = [
+  { id: "ppk", icon: ClipboardList, audience: ["org", "specialist"] },
+  { id: "journal", icon: Calendar, isNew: true, audience: ["org", "specialist", "private"] },
+  { id: "childCard", icon: FileText, audience: ["org", "specialist", "private", "parent"] },
+  { id: "playroom", icon: Gamepad2, isNew: true, audience: ["parent"] },
+  { id: "booking", icon: CalendarCheck, isNew: true, audience: ["org", "specialist", "private", "parent"] },
+  { id: "directions", icon: Target, isNew: true, audience: ["specialist", "private", "parent"] },
+  { id: "matching", icon: UserCheck, isNew: true, audience: ["parent"] },
+  { id: "library", icon: BookOpen, isNew: true, audience: ["parent"] },
+  { id: "analytics", icon: BarChart3, isNew: true, audience: ["org"] },
+  { id: "notifications", icon: Bell, isNew: true, audience: ["org", "specialist", "private", "parent"] },
+  { id: "security", icon: Shield, audience: ["org", "specialist", "private", "parent"] },
 ];
 
-const audienceLabels: Record<string, { label: string; color: string }> = {
-  org: { label: "Организации", color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" },
-  specialist: { label: "Педагоги", color: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400" },
-  private: { label: "Частная практика", color: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400" },
-  parent: { label: "Родители", color: "bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-400" }
+const audienceColors: Record<AudienceKey, string> = {
+  org: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+  specialist: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
+  private: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
+  parent: "bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-400",
 };
 
 const userTypes = [
   {
+    id: "org",
     icon: Building2,
-    title: "Для организаций",
-    description: "Школы, детские сады, ППМС-центры",
-    features: [
-      { text: "Управление сотрудниками и KPI", isNew: true },
-      { text: "Протоколы ППк" },
-      { text: "Групповые и серийные занятия", isNew: true },
-      { text: "Управление видимостью стоимости услуг", isNew: true }
-    ],
+    featureFlags: [{ isNew: true }, {}, { isNew: true }, { isNew: true }],
     link: "/for-organizations",
     authLink: "/register",
     color: "from-blue-500/20 to-blue-600/10",
-    borderColor: "border-blue-500/30"
+    borderColor: "border-blue-500/30",
   },
   {
+    id: "specialist",
     icon: GraduationCap,
-    title: "Для педагогов",
-    description: "Психологи, логопеды, дефектологи, частная практика",
-    features: [
-      { text: "Публичный профиль с портфолио", isNew: true },
-      { text: "Направления работы и специализации", isNew: true },
-      { text: "Онлайн-запись клиентов", isNew: true },
-      { text: "Протоколы и карты детей" }
-    ],
+    featureFlags: [{ isNew: true }, { isNew: true }, { isNew: true }, {}],
     link: "/for-specialists",
     authLink: "/register",
     color: "from-orange-500/20 to-orange-600/10",
-    borderColor: "border-orange-500/30"
+    borderColor: "border-orange-500/30",
   },
   {
+    id: "parent",
     icon: Baby,
-    title: "Для родителей",
-    description: "Личный кабинет законного представителя",
-    features: [
-      { text: "Подбор специалиста по проблеме", isNew: true },
-      { text: "Тесты развития и результаты ППк" },
-      { text: "Игровая ребёнка", isNew: true },
-      { text: "Персональные рекомендации", isNew: true }
-    ],
+    featureFlags: [{ isNew: true }, {}, { isNew: true }, { isNew: true }],
     link: "/for-parents",
     authLink: "/parent-auth",
     color: "from-pink-500/20 to-pink-600/10",
-    borderColor: "border-pink-500/30"
-  }
+    borderColor: "border-pink-500/30",
+  },
 ];
 
-interface PricingPlan {
-  name: string;
-  subtitle: string;
+interface PlanMeta {
+  id: string;
+  key: "org" | "specialistOrg" | "specialistPrivate" | "parent";
   monthlyPrice: number | null;
   yearlyPrice: number | null;
-  yearlySaving?: string;
-  freeLabel?: string;
   highlight: boolean;
-  badge?: string;
-  features: string[];
-  comingSoon?: string[];
-  cta: string;
+  hasFreeLabel?: boolean;
+  hasBadge?: boolean;
+  hasYearlySaving?: boolean;
+  hasComingSoon?: boolean;
   ctaLink: string;
 }
 
-const pricingPlans: Record<string, PricingPlan[]> = {
+const pricingPlansMeta: Record<"org" | "specialist" | "parent", PlanMeta[]> = {
   org: [
-    {
-      name: "universum. для организаций",
-      subtitle: "Полный комплекс автоматизации для образовательных организаций",
-      monthlyPrice: 2500,
-      yearlyPrice: 25500,
-      yearlySaving: "скидка 15%, ~2 125₽/мес",
-      highlight: true,
-      badge: "Всё включено",
-      features: [
-        "Протоколы ППк и заключения (неограниченно)",
-        "Карточки детей (неограниченно)",
-        "Журнал учёта занятий",
-        "Групповые и серийные сессии",
-        "Управление сотрудниками организации",
-        "KPI специалистов и аналитика",
-        "Онлайн-запись родителей",
-        "Праздничные дни организации",
-        "Публичный профиль организации",
-        "Подключение специалистов — без доп. платы",
-        "Пуш и Email-уведомления",
-        "Хранение данных по ФЗ-152",
-        "Оплата по счёту (44-ФЗ, 223-ФЗ)",
-        "Приоритетная поддержка",
-      ],
-      cta: "Начать 7 дней бесплатно",
-      ctaLink: "/register"
-    }
+    { id: "org", key: "org", monthlyPrice: 2500, yearlyPrice: 25500, hasYearlySaving: true, hasBadge: true, highlight: true, ctaLink: "/register" },
   ],
   specialist: [
-    {
-      name: "В составе организации",
-      subtitle: "Педагог, подключённый к организации с подпиской",
-      monthlyPrice: null,
-      yearlyPrice: null,
-      freeLabel: "Входит в тариф организации",
-      highlight: false,
-      features: [
-        "Доступ ко всем модулям организации",
-        "Журнал учёта занятий",
-        "Карточки прикреплённых детей",
-        "Протоколы ППк",
-        "KPI и аналитика",
-        "Email и пуш-уведомления",
-      ],
-      cta: "Войти в кабинет",
-      ctaLink: "/register"
-    },
-    {
-      name: "Частная практика",
-      subtitle: "Для педагогов, работающих самостоятельно",
-      monthlyPrice: 330,
-      yearlyPrice: 2970,
-      yearlySaving: "скидка 25%, ~248₽/мес",
-      highlight: true,
-      badge: "Частная практика",
-      features: [
-        "Карточки детей (неограниченно)",
-        "Публичный профиль с портфолио",
-        "Направления работы и специализации",
-        "Онлайн-запись клиентов",
-        "Журнал занятий и серии сессий",
-        "Аналитика загруженности",
-        "Финансовые отчёты",
-        "Пуш и Email-уведомления",
-        "Приоритетная поддержка",
-      ],
-      comingSoon: [
-        "Персональная страница-портфолио специалиста",
-        "Публикация профессиональных статей и кейсов",
-        "SEO-продвижение профиля в поиске",
-      ],
-      cta: "Начать 7 дней бесплатно",
-      ctaLink: "/register"
-    }
+    { id: "specialistOrg", key: "specialistOrg", monthlyPrice: null, yearlyPrice: null, hasFreeLabel: true, highlight: false, ctaLink: "/register" },
+    { id: "specialistPrivate", key: "specialistPrivate", monthlyPrice: 330, yearlyPrice: 2970, hasYearlySaving: true, hasBadge: true, hasComingSoon: true, highlight: true, ctaLink: "/register" },
   ],
   parent: [
-    {
-      name: "Для родителей",
-      subtitle: "Всё для развития вашего ребёнка",
-      monthlyPrice: null,
-      yearlyPrice: null,
-      freeLabel: "Бесплатно",
-      highlight: true,
-      badge: "Без оплаты",
-      features: [
-        "Личный кабинет родителя",
-        "Профили детей",
-        "Тесты развития",
-        "Результаты ППк и заключения",
-        "Игровая комната ребёнка",
-        "Подбор специалиста",
-        "Библиотека рекомендаций",
-        "Онлайн-запись к специалисту",
-      ],
-      cta: "Создать аккаунт",
-      ctaLink: "/parent-auth"
-    }
-  ]
+    { id: "parent", key: "parent", monthlyPrice: null, yearlyPrice: null, hasFreeLabel: true, hasBadge: true, highlight: true, ctaLink: "/parent-auth" },
+  ],
 };
 
-function PricingCard({ plan, billingPeriod }: { plan: typeof pricingPlans.org[0]; billingPeriod: "monthly" | "yearly" }) {
+function PricingCard({ plan, billingPeriod }: { plan: PlanMeta; billingPeriod: "monthly" | "yearly" }) {
+  const { t } = useTranslation("pages");
   const price = billingPeriod === "yearly" ? plan.yearlyPrice : plan.monthlyPrice;
-  const priceLabel = billingPeriod === "yearly" ? "год" : "месяц";
+  const priceLabel = billingPeriod === "yearly" ? t("landing.pricing.priceYear") : t("landing.pricing.priceMonth");
+  const base = `landing.pricing.plans.${plan.key}`;
+  const features = t(`${base}.features`, { returnObjects: true }) as string[];
+  const comingSoon = plan.hasComingSoon ? (t(`${base}.comingSoon`, { returnObjects: true }) as string[]) : [];
 
   return (
     <Card className={`relative flex flex-col transition-all hover:shadow-lg ${plan.highlight ? "border-primary border-2 shadow-md" : ""}`}>
-      {plan.badge && (
+      {plan.hasBadge && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-          <Badge className="px-3 py-1 text-xs">{plan.badge}</Badge>
+          <Badge className="px-3 py-1 text-xs">{t(`${base}.badge`)}</Badge>
         </div>
       )}
       <CardHeader className="pb-4">
-        <CardTitle className="text-xl">{plan.name}</CardTitle>
-        <CardDescription className="text-sm">{plan.subtitle}</CardDescription>
+        <CardTitle className="text-xl">{t(`${base}.name`)}</CardTitle>
+        <CardDescription className="text-sm">{t(`${base}.subtitle`)}</CardDescription>
         <div className="mt-4">
-          {"freeLabel" in plan && plan.freeLabel ? (
-            <div className="text-lg font-bold text-primary leading-tight">{plan.freeLabel}</div>
+          {plan.hasFreeLabel ? (
+            <div className="text-lg font-bold text-primary leading-tight">{t(`${base}.freeLabel`)}</div>
           ) : price !== null ? (
             <div>
               <span className="text-3xl font-bold">{price.toLocaleString("ru-RU")}₽</span>
               <span className="text-muted-foreground text-sm ml-1">/ {priceLabel}</span>
-              {"yearlySaving" in plan && plan.yearlySaving && billingPeriod === "yearly" && plan.monthlyPrice ? (
+              {plan.hasYearlySaving && billingPeriod === "yearly" && plan.monthlyPrice ? (
                 <>
-                  <div className="text-xs text-success mt-1 font-medium">{plan.yearlySaving}</div>
+                  <div className="text-xs text-success mt-1 font-medium">{t(`${base}.yearlySaving`)}</div>
                   <div className="text-xs text-muted-foreground/60 mt-0.5 line-through">
-                    без скидки: {(plan.monthlyPrice * 12).toLocaleString("ru-RU")}₽/год
+                    {t("landing.pricing.withoutDiscount", { price: (plan.monthlyPrice * 12).toLocaleString("ru-RU") })}
                   </div>
                 </>
               ) : null}
@@ -324,21 +144,21 @@ function PricingCard({ plan, billingPeriod }: { plan: typeof pricingPlans.org[0]
       </CardHeader>
       <CardContent className="flex-1 flex flex-col gap-4">
         <ul className="space-y-2 flex-1">
-          {plan.features.map((f) => (
+          {features.map((f) => (
             <li key={f} className="flex items-start gap-2 text-sm">
               <CheckCircle className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
               <span>{f}</span>
             </li>
           ))}
         </ul>
-        {"comingSoon" in plan && plan.comingSoon && plan.comingSoon.length > 0 && (
+        {comingSoon.length > 0 && (
           <div className="border border-dashed border-muted-foreground/30 rounded-lg p-3 bg-muted/30">
             <div className="flex items-center gap-1.5 mb-2">
               <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-              <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wide">В разработке</span>
+              <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wide">{t("landing.pricing.comingSoon")}</span>
             </div>
             <ul className="space-y-1.5">
-              {plan.comingSoon.map((f) => (
+              {comingSoon.map((f) => (
                 <li key={f} className="flex items-start gap-2 text-sm text-muted-foreground">
                   <span className="h-4 w-4 flex items-center justify-center flex-shrink-0 mt-0.5 text-muted-foreground/50">·</span>
                   <span>{f}</span>
@@ -349,7 +169,7 @@ function PricingCard({ plan, billingPeriod }: { plan: typeof pricingPlans.org[0]
         )}
         <Link to={plan.ctaLink} className="mt-2">
           <Button className="w-full" variant={plan.highlight ? "default" : "outline"}>
-            {plan.cta}
+            {t(`${base}.cta`)}
           </Button>
         </Link>
       </CardContent>
@@ -358,30 +178,30 @@ function PricingCard({ plan, billingPeriod }: { plan: typeof pricingPlans.org[0]
 }
 
 function PricingSection() {
+  const { t } = useTranslation("pages");
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "yearly">("monthly");
 
   return (
     <section className="py-20 px-4" id="pricing">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-10">
-          <Badge variant="secondary" className="mb-3">Тарифы</Badge>
-          <h2 className="text-3xl font-bold mb-4">Прозрачные цены</h2>
+          <Badge variant="secondary" className="mb-3">{t("landing.pricing.badge")}</Badge>
+          <h2 className="text-3xl font-bold mb-4">{t("landing.pricing.title")}</h2>
           <p className="text-muted-foreground max-w-xl mx-auto mb-6">
-            7 дней бесплатного доступа ко всем функциям — без привязки карты
+            {t("landing.pricing.subtitle")}
           </p>
-          {/* Billing toggle */}
           <div className="inline-flex items-center gap-2 bg-muted rounded-full px-2 py-1">
             <button
               onClick={() => setBillingPeriod("monthly")}
               className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${billingPeriod === "monthly" ? "bg-background shadow-sm" : "text-muted-foreground"}`}
             >
-              Помесячно
+              {t("landing.pricing.monthly")}
             </button>
             <button
               onClick={() => setBillingPeriod("yearly")}
               className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${billingPeriod === "yearly" ? "bg-background shadow-sm" : "text-muted-foreground"}`}
             >
-              Годовая
+              {t("landing.pricing.yearly")}
               <span className="text-[10px] bg-success/10 text-success px-1.5 py-0.5 rounded-full">−15%</span>
             </button>
           </div>
@@ -391,57 +211,57 @@ function PricingSection() {
           <TabsList className="mb-8 w-full max-w-lg mx-auto grid grid-cols-3">
             <TabsTrigger value="org" className="flex items-center justify-center gap-1.5">
               <Building2 className="h-4 w-4" />
-              Организации
+              {t("landing.pricing.tabs.org")}
             </TabsTrigger>
             <TabsTrigger value="specialist" className="flex items-center justify-center gap-1.5">
               <GraduationCap className="h-4 w-4" />
-              Педагоги
+              {t("landing.pricing.tabs.specialist")}
             </TabsTrigger>
             <TabsTrigger value="parent" className="flex items-center justify-center gap-1.5">
               <Baby className="h-4 w-4" />
-              Родители
+              {t("landing.pricing.tabs.parent")}
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="org">
             <div className="flex justify-center">
               <div className="w-full max-w-xl">
-                {pricingPlans.org.map((plan) => (
-                  <PricingCard key={plan.name} plan={plan} billingPeriod={billingPeriod} />
+                {pricingPlansMeta.org.map((plan) => (
+                  <PricingCard key={plan.id} plan={plan} billingPeriod={billingPeriod} />
                 ))}
               </div>
             </div>
             <p className="text-center text-xs text-muted-foreground mt-6">
-              Для государственных учреждений — оплата по счёту, 44-ФЗ и 223-ФЗ. <Link to="/for-organizations" className="underline">Подробнее →</Link>
+              {t("landing.pricing.orgNote")} <Link to="/for-organizations" className="underline">{t("landing.pricing.orgNoteLink")}</Link>
             </p>
           </TabsContent>
 
           <TabsContent value="specialist">
             <div className="mb-4 text-center">
               <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-                Педагоги, подключённые к организации с активной подпиской, получают полный доступ автоматически — без дополнительной оплаты.
+                {t("landing.pricing.specialistNote")}
               </p>
             </div>
             <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-              {pricingPlans.specialist.map((plan) => (
-                <PricingCard key={plan.name} plan={plan} billingPeriod={billingPeriod} />
+              {pricingPlansMeta.specialist.map((plan) => (
+                <PricingCard key={plan.id} plan={plan} billingPeriod={billingPeriod} />
               ))}
             </div>
             <p className="text-center text-xs text-muted-foreground mt-6">
-              <Link to="/for-specialists" className="underline">Подробнее о тарифах для педагогов →</Link>
+              <Link to="/for-specialists" className="underline">{t("landing.pricing.specialistLink")}</Link>
             </p>
           </TabsContent>
 
           <TabsContent value="parent">
             <div className="flex justify-center">
               <div className="w-full max-w-sm">
-                {pricingPlans.parent.map((plan) => (
-                  <PricingCard key={plan.name} plan={plan} billingPeriod={billingPeriod} />
+                {pricingPlansMeta.parent.map((plan) => (
+                  <PricingCard key={plan.id} plan={plan} billingPeriod={billingPeriod} />
                 ))}
               </div>
             </div>
             <p className="text-center text-xs text-muted-foreground mt-6">
-              Для родителей кабинет всегда бесплатен. Доступ к заключениям и рекомендациям — без подписки. <Link to="/for-parents" className="underline">Подробнее →</Link>
+              {t("landing.pricing.parentNote")} <Link to="/for-parents" className="underline">{t("landing.pricing.parentNoteLink")}</Link>
             </p>
           </TabsContent>
         </Tabs>
@@ -451,70 +271,63 @@ function PricingSection() {
 }
 
 function FeaturesSection() {
-  const [activeFilter, setActiveFilter] = useState<string | null>(null);
-  
-  const filteredFeatures = activeFilter 
-    ? features.filter(f => f.audience.includes(activeFilter))
+  const { t } = useTranslation("pages");
+  const [activeFilter, setActiveFilter] = useState<AudienceKey | null>(null);
+
+  const filteredFeatures = activeFilter
+    ? features.filter((f) => f.audience.includes(activeFilter))
     : features;
 
-  const filterButtons = [
-    { key: null, label: "Все" },
-    { key: "org", label: "Организации", icon: Building2 },
-    { key: "specialist", label: "Педагоги", icon: GraduationCap },
-    { key: "private", label: "Частная практика", icon: Users },
-    { key: "parent", label: "Родители", icon: Baby }
+  const filterButtons: { key: AudienceKey | null; labelKey: string; icon?: LucideIcon }[] = [
+    { key: null, labelKey: "all" },
+    { key: "org", labelKey: "org", icon: Building2 },
+    { key: "specialist", labelKey: "specialist", icon: GraduationCap },
+    { key: "private", labelKey: "private", icon: Users },
+    { key: "parent", labelKey: "parent", icon: Baby },
   ];
 
   return (
     <section className="py-20 px-4">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold mb-4">Возможности системы</h2>
+          <h2 className="text-3xl font-bold mb-4">{t("landing.featuresSection.title")}</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Инструменты для организаций, специалистов частной практики и родителей
+            {t("landing.featuresSection.subtitle")}
           </p>
         </div>
-        
-        {/* Filter buttons */}
+
         <div className="flex flex-wrap justify-center gap-2 mb-8">
           {filterButtons.map((btn) => (
             <button
               key={btn.key ?? "all"}
               onClick={() => setActiveFilter(btn.key)}
-              className={`
-                flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all
-                ${activeFilter === btn.key 
-                  ? "bg-primary text-primary-foreground shadow-md" 
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                activeFilter === btn.key
+                  ? "bg-primary text-primary-foreground shadow-md"
                   : "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground"
-                }
-              `}
+              }`}
             >
               {btn.icon && <btn.icon className="h-4 w-4" />}
-              {btn.label}
-              <span className={`
-                ml-1 text-xs px-1.5 py-0.5 rounded-full
-                ${activeFilter === btn.key 
-                  ? "bg-primary-foreground/20 text-primary-foreground" 
-                  : "bg-background text-muted-foreground"
-                }
-              `}>
-                {btn.key === null 
-                  ? features.length 
-                  : features.filter(f => f.audience.includes(btn.key!)).length
-                }
+              {t(`landing.featuresSection.filters.${btn.labelKey}`)}
+              <span
+                className={`ml-1 text-xs px-1.5 py-0.5 rounded-full ${
+                  activeFilter === btn.key
+                    ? "bg-primary-foreground/20 text-primary-foreground"
+                    : "bg-background text-muted-foreground"
+                }`}
+              >
+                {btn.key === null ? features.length : features.filter((f) => f.audience.includes(btn.key!)).length}
               </span>
             </button>
           ))}
         </div>
-        
+
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredFeatures.map((feature) => (
-            <Card key={feature.title} className="hover:shadow-md transition-all relative overflow-hidden animate-in fade-in-0 duration-300">
+            <Card key={feature.id} className="hover:shadow-md transition-all relative overflow-hidden animate-in fade-in-0 duration-300">
               {feature.isNew && (
                 <div className="absolute top-3 right-3">
-                  <Badge variant="success" className="text-[10px] px-2">
-                    NEW
-                  </Badge>
+                  <Badge variant="success" className="text-[10px] px-2">NEW</Badge>
                 </div>
               )}
               <CardHeader className="pb-3">
@@ -522,19 +335,19 @@ function FeaturesSection() {
                   <feature.icon className="h-5 w-5 text-primary" />
                 </div>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  {feature.title}
+                  {t(`landing.featuresSection.items.${feature.id}.title`)}
                 </CardTitle>
-                <CardDescription>{feature.description}</CardDescription>
+                <CardDescription>{t(`landing.featuresSection.items.${feature.id}.description`)}</CardDescription>
               </CardHeader>
               <CardContent className="pt-0">
                 <div className="flex flex-wrap gap-1">
                   {feature.audience.map((aud) => (
-                    <span 
-                      key={aud} 
-                      className={`text-[10px] px-1.5 py-0.5 rounded cursor-pointer transition-all hover:scale-105 ${audienceLabels[aud].color}`}
+                    <span
+                      key={aud}
+                      className={`text-[10px] px-1.5 py-0.5 rounded cursor-pointer transition-all hover:scale-105 ${audienceColors[aud]}`}
                       onClick={() => setActiveFilter(aud)}
                     >
-                      {audienceLabels[aud].label}
+                      {t(`landing.featuresSection.audienceLabels.${aud}`)}
                     </span>
                   ))}
                 </div>
@@ -542,10 +355,10 @@ function FeaturesSection() {
             </Card>
           ))}
         </div>
-        
+
         {filteredFeatures.length === 0 && (
           <div className="text-center py-12 text-muted-foreground">
-            Нет функций для выбранной категории
+            {t("landing.featuresSection.empty")}
           </div>
         )}
       </div>
@@ -554,11 +367,13 @@ function FeaturesSection() {
 }
 
 export default function Landing() {
+  const { t } = useTranslation("pages");
+
   useSeoMeta({
-    title: "universum. — ППк, расписание, сопровождение детей",
-    description: "Платформа для ППк и специалистов: психологов, логопедов, дефектологов. Протоколы, расписание, карты детей. Соответствие ФЗ-152.",
+    title: t("landing.seo.title"),
+    description: t("landing.seo.description"),
     canonical: "/landing",
-    keywords: "ППк, психолого-педагогический консилиум, ЦППМСП, ППМС-центр, протоколы ППк, психолог школы, логопед, дефектолог, расписание занятий, сопровождение детей",
+    keywords: t("landing.seo.keywords"),
     jsonLd: [
       {
         "@context": "https://schema.org",
@@ -567,14 +382,14 @@ export default function Landing() {
         "applicationCategory": "EducationalApplication",
         "operatingSystem": "Web",
         "url": "https://unvrsm.ru",
-        "description": "Платформа комплексной поддержки и развития детей: автоматизация ППк, расписание специалистов, карты детей, тесты развития.",
+        "description": t("landing.seo.schemaDescription"),
         "publisher": {
           "@type": "Organization",
           "name": "universum.",
-          "url": "https://unvrsm.ru"
-        }
-      }
-    ]
+          "url": "https://unvrsm.ru",
+        },
+      },
+    ],
   });
 
   return (
@@ -585,20 +400,20 @@ export default function Landing() {
       <section className="pt-24 md:pt-40 pb-20 px-4">
         <div className="container mx-auto text-center max-w-4xl">
           <Badge variant="secondary" className="mb-6">
-            Развитие. Для каждого
+            {t("landing.hero.badge")}
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
             universum.
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Инновационная платформа для комплексной поддержки и развития детей. Технологии, которые работают на благо каждого ребенка.
+            {t("landing.hero.subtitle")}
           </p>
-          <Button 
-            size="lg" 
+          <Button
+            size="lg"
             className="gap-2"
-            onClick={() => document.getElementById('user-types')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => document.getElementById("user-types")?.scrollIntoView({ behavior: "smooth" })}
           >
-            Начать работу
+            {t("landing.hero.cta")}
             <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
@@ -608,15 +423,14 @@ export default function Landing() {
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-10">
-            <Badge variant="secondary" className="mb-3">Начните прямо сейчас</Badge>
-            <h2 className="text-3xl font-bold mb-3">Что вы хотите сделать?</h2>
+            <Badge variant="secondary" className="mb-3">{t("landing.journey.badge")}</Badge>
+            <h2 className="text-3xl font-bold mb-3">{t("landing.journey.title")}</h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Выберите свой путь — и получите результат за 2 минуты
+              {t("landing.journey.subtitle")}
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-5">
-            {/* Director — Calculator */}
             <Link to="/for-organizations#calculator" className="group">
               <Card className="h-full border-2 border-blue-500/20 hover:border-blue-500/50 hover:shadow-xl transition-all overflow-hidden relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -624,22 +438,21 @@ export default function Landing() {
                   <div className="h-12 w-12 rounded-xl bg-blue-500/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                     <Building2 className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <p className="text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wide">Для директора</p>
-                  <CardTitle className="text-lg leading-snug">Рассчитать экономию для вашей школы</CardTitle>
+                  <p className="text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wide">{t("landing.journey.director.role")}</p>
+                  <CardTitle className="text-lg leading-snug">{t("landing.journey.director.title")}</CardTitle>
                 </CardHeader>
                 <CardContent className="relative pt-0">
                   <CardDescription className="mb-4">
-                    Узнайте, сколько часов и средств сэкономит автоматизация ППк в вашей организации
+                    {t("landing.journey.director.description")}
                   </CardDescription>
                   <span className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 dark:text-blue-400 group-hover:gap-2.5 transition-all">
-                    Открыть калькулятор
+                    {t("landing.journey.director.cta")}
                     <ArrowRight className="h-4 w-4" />
                   </span>
                 </CardContent>
               </Card>
             </Link>
 
-            {/* Psychologist — Demo */}
             <Link to="/for-specialists#demo" className="group">
               <Card className="h-full border-2 border-orange-500/20 hover:border-orange-500/50 hover:shadow-xl transition-all overflow-hidden relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-orange-600/10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -647,22 +460,21 @@ export default function Landing() {
                   <div className="h-12 w-12 rounded-xl bg-orange-500/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                     <ClipboardList className="h-6 w-6 text-orange-600 dark:text-orange-400" />
                   </div>
-                  <p className="text-xs font-medium text-orange-600 dark:text-orange-400 uppercase tracking-wide">Для психолога</p>
-                  <CardTitle className="text-lg leading-snug">Попробовать протокол ППк за 2 минуты</CardTitle>
+                  <p className="text-xs font-medium text-orange-600 dark:text-orange-400 uppercase tracking-wide">{t("landing.journey.psychologist.role")}</p>
+                  <CardTitle className="text-lg leading-snug">{t("landing.journey.psychologist.title")}</CardTitle>
                 </CardHeader>
                 <CardContent className="relative pt-0">
                   <CardDescription className="mb-4">
-                    Интерактивная демонстрация: заполните протокол и получите готовое заключение
+                    {t("landing.journey.psychologist.description")}
                   </CardDescription>
                   <span className="inline-flex items-center gap-1.5 text-sm font-medium text-orange-600 dark:text-orange-400 group-hover:gap-2.5 transition-all">
-                    Попробовать демо
+                    {t("landing.journey.psychologist.cta")}
                     <ArrowRight className="h-4 w-4" />
                   </span>
                 </CardContent>
               </Card>
             </Link>
 
-            {/* Parent — Free test */}
             <Link to="/parent-auth" className="group">
               <Card className="h-full border-2 border-pink-500/20 hover:border-pink-500/50 hover:shadow-xl transition-all overflow-hidden relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-pink-600/10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -670,15 +482,15 @@ export default function Landing() {
                   <div className="h-12 w-12 rounded-xl bg-pink-500/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                     <Baby className="h-6 w-6 text-pink-600 dark:text-pink-400" />
                   </div>
-                  <p className="text-xs font-medium text-pink-600 dark:text-pink-400 uppercase tracking-wide">Для родителя</p>
-                  <CardTitle className="text-lg leading-snug">Проверить развитие ребёнка</CardTitle>
+                  <p className="text-xs font-medium text-pink-600 dark:text-pink-400 uppercase tracking-wide">{t("landing.journey.parent.role")}</p>
+                  <CardTitle className="text-lg leading-snug">{t("landing.journey.parent.title")}</CardTitle>
                 </CardHeader>
                 <CardContent className="relative pt-0">
                   <CardDescription className="mb-4">
-                    Бесплатный тест развития по возрасту — результат и рекомендации сразу
+                    {t("landing.journey.parent.description")}
                   </CardDescription>
                   <span className="inline-flex items-center gap-1.5 text-sm font-medium text-pink-600 dark:text-pink-400 group-hover:gap-2.5 transition-all">
-                    Пройти бесплатный тест
+                    {t("landing.journey.parent.cta")}
                     <ArrowRight className="h-4 w-4" />
                   </span>
                 </CardContent>
@@ -692,10 +504,10 @@ export default function Landing() {
       <section className="py-16 px-4 bg-muted/30">
         <div className="container mx-auto max-w-2xl">
           <div className="text-center mb-6">
-            <Badge variant="secondary" className="mb-3">Полезные материалы</Badge>
-            <h2 className="text-2xl font-bold mb-2">Бесплатные материалы для специалистов</h2>
+            <Badge variant="secondary" className="mb-3">{t("landing.leadMagnet.badge")}</Badge>
+            <h2 className="text-2xl font-bold mb-2">{t("landing.leadMagnet.title")}</h2>
             <p className="text-muted-foreground text-sm">
-              Скачайте и используйте в работе — без регистрации в системе
+              {t("landing.leadMagnet.subtitle")}
             </p>
           </div>
           <PpkChecklistLeadMagnet />
@@ -706,57 +518,58 @@ export default function Landing() {
       <section id="user-types" className="py-20 px-4 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Выберите свой кабинет</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("landing.userTypesSection.title")}</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Три типа пользователей — три специализированных интерфейса для эффективной работы
+              {t("landing.userTypesSection.subtitle")}
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-6">
-            {userTypes.map((type) => (
-              <Card 
-                key={type.title} 
-                className={`relative overflow-hidden border-2 ${type.borderColor} hover:shadow-lg transition-all group`}
-              >
-                <div className={`absolute inset-0 bg-gradient-to-br ${type.color} opacity-50`} />
-                <CardHeader className="relative">
-                  <div className="h-12 w-12 rounded-xl bg-background/80 backdrop-blur flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    <type.icon className="h-6 w-6" />
-                  </div>
-                  <CardTitle>{type.title}</CardTitle>
-                  <CardDescription>{type.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="relative space-y-4">
-                  <ul className="space-y-2">
-                    {type.features.map((feature) => (
-                      <li key={typeof feature === 'string' ? feature : feature.text} className="flex items-center gap-2 text-sm">
-                        <CheckCircle className="h-4 w-4 text-success flex-shrink-0" />
-                        <span className="flex items-center gap-1.5">
-                          {typeof feature === 'string' ? feature : feature.text}
-                          {typeof feature === 'object' && feature.isNew && (
-                            <Badge variant="success" className="text-[10px] px-1.5 py-0">
-                              NEW
-                            </Badge>
-                          )}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="flex gap-2 pt-4">
-                    <Link to={type.link} className="flex-1">
-                      <Button variant="outline" className="w-full" size="sm">
-                        Подробнее
-                      </Button>
-                    </Link>
-                    <Link to={type.authLink} className="flex-1">
-                      <Button className="w-full" size="sm">
-                        Войти
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {userTypes.map((type) => {
+              const featureList = t(`landing.userTypes.${type.id}.features`, { returnObjects: true }) as string[];
+              return (
+                <Card
+                  key={type.id}
+                  className={`relative overflow-hidden border-2 ${type.borderColor} hover:shadow-lg transition-all group`}
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-br ${type.color} opacity-50`} />
+                  <CardHeader className="relative">
+                    <div className="h-12 w-12 rounded-xl bg-background/80 backdrop-blur flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <type.icon className="h-6 w-6" />
+                    </div>
+                    <CardTitle>{t(`landing.userTypes.${type.id}.title`)}</CardTitle>
+                    <CardDescription>{t(`landing.userTypes.${type.id}.description`)}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="relative space-y-4">
+                    <ul className="space-y-2">
+                      {featureList.map((text, idx) => (
+                        <li key={text} className="flex items-center gap-2 text-sm">
+                          <CheckCircle className="h-4 w-4 text-success flex-shrink-0" />
+                          <span className="flex items-center gap-1.5">
+                            {text}
+                            {type.featureFlags[idx]?.isNew && (
+                              <Badge variant="success" className="text-[10px] px-1.5 py-0">NEW</Badge>
+                            )}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="flex gap-2 pt-4">
+                      <Link to={type.link} className="flex-1">
+                        <Button variant="outline" className="w-full" size="sm">
+                          {t("landing.userTypesSection.more")}
+                        </Button>
+                      </Link>
+                      <Link to={type.authLink} className="flex-1">
+                        <Button className="w-full" size="sm">
+                          {t("landing.userTypesSection.login")}
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -768,15 +581,15 @@ export default function Landing() {
       <section className="py-20 px-4 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Как это работает</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("landing.howItWorks.title")}</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Четыре ключевых модуля для комплексного сопровождения развития ребёнка
+              {t("landing.howItWorks.subtitle")}
             </p>
           </div>
-          
+
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {howItWorks.map((item, index) => (
-              <Card key={item.title} className="relative overflow-hidden hover:shadow-lg transition-all group text-center">
+              <Card key={item.id} className="relative overflow-hidden hover:shadow-lg transition-all group text-center">
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/60 to-primary/20" />
                 <CardHeader className="pb-2">
                   <div className="mx-auto h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
@@ -785,11 +598,11 @@ export default function Landing() {
                   <div className="absolute top-4 right-4 h-8 w-8 rounded-full bg-muted flex items-center justify-center text-sm font-bold text-muted-foreground">
                     {index + 1}
                   </div>
-                  <CardTitle className="text-lg">{item.title}</CardTitle>
+                  <CardTitle className="text-lg">{t(`landing.howItWorks.items.${item.id}.title`)}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-sm">
-                    {item.description}
+                    {t(`landing.howItWorks.items.${item.id}.description`)}
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -804,27 +617,27 @@ export default function Landing() {
       {/* CTA Section */}
       <section className="py-20 px-4 bg-primary/5">
         <div className="container mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold mb-4">Готовы начать?</h2>
+          <h2 className="text-3xl font-bold mb-4">{t("landing.ctaSection.title")}</h2>
           <p className="text-muted-foreground mb-8">
-            Зарегистрируйтесь и получите 7 дней бесплатного доступа ко всем функциям системы
+            {t("landing.ctaSection.subtitle")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
             <Link to="/register">
               <Button size="lg" className="gap-2">
                 <Building2 className="h-4 w-4" />
-                Для организаций
+                {t("landing.ctaSection.org")}
               </Button>
             </Link>
             <Link to="/register">
               <Button size="lg" variant="secondary" className="gap-2">
                 <GraduationCap className="h-4 w-4" />
-                Для педагогов
+                {t("landing.ctaSection.specialist")}
               </Button>
             </Link>
             <Link to="/parent-auth">
               <Button size="lg" variant="outline" className="gap-2">
                 <Baby className="h-4 w-4" />
-                Для родителей
+                {t("landing.ctaSection.parent")}
               </Button>
             </Link>
           </div>
@@ -834,29 +647,29 @@ export default function Landing() {
       {/* Partners Section */}
       <section className="py-10 px-4 border-t">
         <div className="container mx-auto max-w-4xl">
-          <p className="text-center text-sm text-muted-foreground mb-6">Наши партнёры</p>
+          <p className="text-center text-sm text-muted-foreground mb-6">{t("landing.partners.title")}</p>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-            <a 
-              href="https://info.youcanread.ru" 
-              target="_blank" 
+            <a
+              href="https://info.youcanread.ru"
+              target="_blank"
               rel="noopener noreferrer"
               className="group transition-all hover:scale-105"
             >
-              <img 
-                src="/assets/partners/youcanread-logo.svg" 
-                alt="Читай сам" 
+              <img
+                src="/assets/partners/youcanread-logo.svg"
+                alt="Читай сам"
                 className="h-6 md:h-8 w-auto opacity-60 group-hover:opacity-100 transition-opacity dark:invert"
               />
             </a>
-            <a 
-              href="https://лабсс.рф" 
-              target="_blank" 
+            <a
+              href="https://лабсс.рф"
+              target="_blank"
               rel="noopener noreferrer"
               className="group transition-all hover:scale-105"
             >
-              <img 
-                src="/assets/partners/labss-logo.png" 
-                alt="ЛАБСС" 
+              <img
+                src="/assets/partners/labss-logo.png"
+                alt="ЛАБСС"
                 className="h-8 md:h-10 w-auto opacity-60 group-hover:opacity-100 transition-opacity"
               />
             </a>
