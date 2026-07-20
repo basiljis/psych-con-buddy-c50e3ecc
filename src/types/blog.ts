@@ -6,6 +6,9 @@ export interface BlogPost {
   title: string;
   excerpt: string;
   content: string;
+  title_en?: string | null;
+  excerpt_en?: string | null;
+  content_en?: string | null;
   category: BlogCategory;
   keywords: string[];
   cover_url: string | null;
@@ -24,8 +27,31 @@ export const BLOG_CATEGORIES: { value: BlogCategory; label: string }[] = [
   { value: "product", label: "О продукте" },
 ];
 
-export const blogCategoryLabel = (c: BlogCategory): string =>
-  BLOG_CATEGORIES.find((x) => x.value === c)?.label ?? c;
+const BLOG_CATEGORIES_EN: Record<BlogCategory, string> = {
+  specialists: "For specialists",
+  admins: "For administrators",
+  parents: "For parents",
+  product: "About the product",
+};
+
+export const blogCategoryLabel = (c: BlogCategory, lang?: string): string => {
+  if (lang && lang.toLowerCase().startsWith("en")) return BLOG_CATEGORIES_EN[c] ?? c;
+  return BLOG_CATEGORIES.find((x) => x.value === c)?.label ?? c;
+};
+
+/** Pick title/excerpt/content in the active language, falling back to Russian. */
+export function localizedPost<T extends Partial<BlogPost>>(
+  post: T,
+  lang?: string
+): { title: string; excerpt: string; content: string } {
+  const en = (lang || "").toLowerCase().startsWith("en");
+  return {
+    title: (en && post.title_en) || post.title || "",
+    excerpt: (en && post.excerpt_en) || post.excerpt || "",
+    content: (en && post.content_en) || post.content || "",
+  };
+}
+
 
 /** Canonical origin for the site — required for Zen: only absolute links survive paste. */
 export const SITE_ORIGIN = "https://unvrsm.ru";
