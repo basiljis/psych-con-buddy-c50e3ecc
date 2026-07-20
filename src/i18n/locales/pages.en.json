@@ -466,13 +466,34 @@
     "title": "Frequently asked questions",
     "subtitle": "Briefly about regulations, security and pricing",
     "items": [
-      { "q": "Does the platform comply with Moscow Department of Education Order No. 666?", "a": "Yes. All PPC protocol forms, checklists and conclusions are built strictly per Order No. 666 of the Moscow Department of Education and Science. Templates are updated regularly with regulatory changes." },
-      { "q": "Where is children's personal data stored?", "a": "Data is stored only on SberCloud servers in the Moscow region, security level UZ‑1 per Government Decree No. 1119. The platform is registered with Roskomnadzor as a personal data operator and supports Row-Level Security, two-factor authentication and trusted IP filtering." },
-      { "q": "Can an individual specialist join, rather than a whole organization?", "a": "Yes. Psychologists, speech therapists and defectologists in private practice can work in their personal account for 330 RUB per month — with child cards, scheduling, diagnostics and online payments by parents." },
-      { "q": "How long are protocols and conclusions retained?", "a": "At least 5 years, as required by Order No. 666. Documents export to PDF/DOCX/Excel with Cyrillic support and remain available in the organization's archive at any time." },
-      { "q": "What does the trial include?", "a": "Full access to all system modules for 14 days with no card required: PPC, scheduling, diagnostics, reports, child cards. Just submit a request — the administrator activates access within a business day." },
-      { "q": "Is there integration with EKIS / Moscow DOE organization registry?", "a": "Yes. The list of Moscow educational organizations syncs with EKIS automatically. For other regions organizations are added manually or via API." },
-      { "q": "Can the system be installed on our own servers (on-premise)?", "a": "Yes, we support on-premise deployment for large educational holdings and regional operators. Contact us via the demo request form." }
+      {
+        "q": "Does the platform comply with Moscow Department of Education Order No. 666?",
+        "a": "Yes. All PPC protocol forms, checklists and conclusions are built strictly per Order No. 666 of the Moscow Department of Education and Science. Templates are updated regularly with regulatory changes."
+      },
+      {
+        "q": "Where is children's personal data stored?",
+        "a": "Data is stored only on SberCloud servers in the Moscow region, security level UZ‑1 per Government Decree No. 1119. The platform is registered with Roskomnadzor as a personal data operator and supports Row-Level Security, two-factor authentication and trusted IP filtering."
+      },
+      {
+        "q": "Can an individual specialist join, rather than a whole organization?",
+        "a": "Yes. Psychologists, speech therapists and defectologists in private practice can work in their personal account for 330 RUB per month — with child cards, scheduling, diagnostics and online payments by parents."
+      },
+      {
+        "q": "How long are protocols and conclusions retained?",
+        "a": "At least 5 years, as required by Order No. 666. Documents export to PDF/DOCX/Excel with Cyrillic support and remain available in the organization's archive at any time."
+      },
+      {
+        "q": "What does the trial include?",
+        "a": "Full access to all system modules for 14 days with no card required: PPC, scheduling, diagnostics, reports, child cards. Just submit a request — the administrator activates access within a business day."
+      },
+      {
+        "q": "Is there integration with EKIS / Moscow DOE organization registry?",
+        "a": "Yes. The list of Moscow educational organizations syncs with EKIS automatically. For other regions organizations are added manually or via API."
+      },
+      {
+        "q": "Can the system be installed on our own servers (on-premise)?",
+        "a": "Yes, we support on-premise deployment for large educational holdings and regional operators. Contact us via the demo request form."
+      }
     ]
   },
   "testimonials": {
@@ -480,9 +501,21 @@
     "subtitle": "Schools, PPMS centers and private specialists across Russia",
     "ratingAria": "Rating {{rating}} of 5",
     "items": [
-      { "name": "Anna P.", "role": "Educational psychologist, School No. 1502", "text": "We moved off paper protocols — saving an hour a day per specialist. The Order 666 checklists are perfectly assembled and parents get notifications automatically." },
-      { "name": "Mikhail K.", "role": "Director of a PPMS center", "text": "Rolled out in a week for 12 specialists. Department reporting is generated in one click and workload statistics are always at hand. Support replies fast." },
-      { "name": "Elena S.", "role": "Speech therapist, private practice", "text": "Convenient to maintain child cards; parents book and pay online themselves. For 330 RUB a month I get a full CRM tailored to my specialty." }
+      {
+        "name": "Anna P.",
+        "role": "Educational psychologist, School No. 1502",
+        "text": "We moved off paper protocols — saving an hour a day per specialist. The Order 666 checklists are perfectly assembled and parents get notifications automatically."
+      },
+      {
+        "name": "Mikhail K.",
+        "role": "Director of a PPMS center",
+        "text": "Rolled out in a week for 12 specialists. Department reporting is generated in one click and workload statistics are always at hand. Support replies fast."
+      },
+      {
+        "name": "Elena S.",
+        "role": "Speech therapist, private practice",
+        "text": "Convenient to maintain child cards; parents book and pay online themselves. For 330 RUB a month I get a full CRM tailored to my specialty."
+      }
     ]
   },
   "stickyCta": {
@@ -521,6 +554,281 @@
     "ctaPricing": "Pricing",
     "titleSuffix": " — universum. blog",
     "fallbackTitle": "Article — universum. blog"
+  },
+  "landing": {
+    "seo": {
+      "title": "universum. — PPk, scheduling, child support",
+      "description": "Platform for PPk (psychological-pedagogical councils) and specialists: psychologists, speech therapists, defectologists. Protocols, scheduling, child cards. FZ-152 compliant.",
+      "keywords": "PPk, psychological-pedagogical council, school psychologist, speech therapist, defectologist, lesson scheduling, child support platform",
+      "schemaDescription": "Comprehensive platform for supporting and developing children: PPk automation, specialist scheduling, child cards, development tests."
+    },
+    "hero": {
+      "badge": "Development. For everyone",
+      "subtitle": "An innovative platform for comprehensive support and development of children. Technology that works for every child.",
+      "cta": "Get started"
+    },
+    "journey": {
+      "badge": "Start right now",
+      "title": "What would you like to do?",
+      "subtitle": "Choose your path — get a result in 2 minutes",
+      "director": {
+        "role": "For directors",
+        "title": "Calculate savings for your school",
+        "description": "See how many hours and rubles PPk automation will save your organization",
+        "cta": "Open calculator"
+      },
+      "psychologist": {
+        "role": "For psychologists",
+        "title": "Try a PPk protocol in 2 minutes",
+        "description": "Interactive demo: fill in a protocol and get a ready conclusion",
+        "cta": "Try the demo"
+      },
+      "parent": {
+        "role": "For parents",
+        "title": "Check your child's development",
+        "description": "Free age-based development test — instant results and recommendations",
+        "cta": "Take the free test"
+      }
+    },
+    "leadMagnet": {
+      "badge": "Useful materials",
+      "title": "Free materials for specialists",
+      "subtitle": "Download and use in your work — no registration required"
+    },
+    "userTypesSection": {
+      "title": "Choose your workspace",
+      "subtitle": "Three user types — three specialized interfaces for effective work",
+      "more": "Learn more",
+      "login": "Sign in"
+    },
+    "userTypes": {
+      "org": {
+        "title": "For organizations",
+        "description": "Schools, kindergartens, PPMS centers",
+        "features": [
+          "Staff management and KPIs",
+          "PPk protocols",
+          "Group and series sessions",
+          "Service pricing visibility controls"
+        ]
+      },
+      "specialist": {
+        "title": "For specialists",
+        "description": "Psychologists, speech therapists, defectologists, private practice",
+        "features": [
+          "Public profile with portfolio",
+          "Work directions and specializations",
+          "Online client booking",
+          "Protocols and child cards"
+        ]
+      },
+      "parent": {
+        "title": "For parents",
+        "description": "Legal representative's personal cabinet",
+        "features": [
+          "Specialist matching by concern",
+          "Development tests and PPk results",
+          "Child playroom",
+          "Personal recommendations"
+        ]
+      }
+    },
+    "featuresSection": {
+      "title": "Platform capabilities",
+      "subtitle": "Tools for organizations, private-practice specialists and parents",
+      "filters": {
+        "all": "All",
+        "org": "Organizations",
+        "specialist": "Specialists",
+        "private": "Private practice",
+        "parent": "Parents"
+      },
+      "audienceLabels": {
+        "org": "Organizations",
+        "specialist": "Specialists",
+        "private": "Private practice",
+        "parent": "Parents"
+      },
+      "empty": "No features for the selected category",
+      "items": {
+        "ppk": {
+          "title": "PPk protocols",
+          "description": "Automation of psychological-pedagogical councils with conclusions and recommendations"
+        },
+        "journal": {
+          "title": "Session log",
+          "description": "Individual and group sessions, session series, attendance tracking"
+        },
+        "childCard": {
+          "title": "Child card",
+          "description": "Centralized development history, synced with parents"
+        },
+        "playroom": {
+          "title": "Child playroom",
+          "description": "Interactive developmental games and exercises with progress tracking"
+        },
+        "booking": {
+          "title": "Online booking",
+          "description": "Parents book specialists directly; slot management"
+        },
+        "directions": {
+          "title": "Work directions",
+          "description": "Specialists list their specializations; the system matches them to a child's needs"
+        },
+        "matching": {
+          "title": "Specialist matching",
+          "description": "Specialist recommendations based on PPk results and development tests"
+        },
+        "library": {
+          "title": "Materials library",
+          "description": "Development recommendations based on test results"
+        },
+        "analytics": {
+          "title": "Analytics and KPIs",
+          "description": "Comparative statistics and specialist KPI tracking"
+        },
+        "notifications": {
+          "title": "Notifications",
+          "description": "Automatic session reminders, email and push notifications"
+        },
+        "security": {
+          "title": "Data security",
+          "description": "FZ-152 compliant, encryption, hosted in Russia"
+        }
+      }
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "subtitle": "Four key modules for end-to-end child development support",
+      "items": {
+        "card": {
+          "title": "Child card",
+          "description": "A unified profile with full development history, tests and recommendations"
+        },
+        "protocols": {
+          "title": "Protocols and conclusions",
+          "description": "PPk automation with document generation based on assessment results"
+        },
+        "planning": {
+          "title": "Session planning",
+          "description": "Flexible scheduling with specialist workload and online booking"
+        },
+        "analytics": {
+          "title": "Results analytics",
+          "description": "Track development dynamics and the effectiveness of corrective work"
+        }
+      }
+    },
+    "pricing": {
+      "badge": "Pricing",
+      "title": "Transparent pricing",
+      "subtitle": "7 days of free access to all features — no card required",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "priceMonth": "month",
+      "priceYear": "year",
+      "withoutDiscount": "without discount: {{price}}₽/year",
+      "comingSoon": "In development",
+      "tabs": {
+        "org": "Organizations",
+        "specialist": "Specialists",
+        "parent": "Parents"
+      },
+      "orgNote": "Public institutions — invoice payment, 44-FZ and 223-FZ.",
+      "orgNoteLink": "Learn more →",
+      "specialistNote": "Specialists connected to an organization with an active subscription get full access automatically — no additional payment.",
+      "specialistLink": "Learn more about specialist plans →",
+      "parentNote": "The parent cabinet is always free. Access to conclusions and recommendations — no subscription required.",
+      "parentNoteLink": "Learn more →",
+      "plans": {
+        "org": {
+          "name": "universum. for organizations",
+          "subtitle": "Full automation suite for educational organizations",
+          "yearlySaving": "15% off, ~2,125₽/mo",
+          "badge": "All-in-one",
+          "cta": "Start 7 days free",
+          "features": [
+            "PPk protocols and conclusions (unlimited)",
+            "Child cards (unlimited)",
+            "Session log",
+            "Group and series sessions",
+            "Organization staff management",
+            "Specialist KPIs and analytics",
+            "Parent online booking",
+            "Organization holidays",
+            "Public organization profile",
+            "Specialist onboarding — no extra fees",
+            "Push and email notifications",
+            "FZ-152 compliant data storage",
+            "Invoice payment (44-FZ, 223-FZ)",
+            "Priority support"
+          ]
+        },
+        "specialistOrg": {
+          "name": "Within an organization",
+          "subtitle": "Specialist connected to a subscribed organization",
+          "freeLabel": "Included in the organization plan",
+          "cta": "Sign in to your cabinet",
+          "features": [
+            "Access to all organization modules",
+            "Session log",
+            "Cards of assigned children",
+            "PPk protocols",
+            "KPIs and analytics",
+            "Email and push notifications"
+          ]
+        },
+        "specialistPrivate": {
+          "name": "Private practice",
+          "subtitle": "For specialists working independently",
+          "yearlySaving": "25% off, ~248₽/mo",
+          "badge": "Private practice",
+          "cta": "Start 7 days free",
+          "features": [
+            "Child cards (unlimited)",
+            "Public profile with portfolio",
+            "Work directions and specializations",
+            "Online client booking",
+            "Session log and series",
+            "Workload analytics",
+            "Financial reports",
+            "Push and email notifications",
+            "Priority support"
+          ],
+          "comingSoon": [
+            "Personal specialist portfolio page",
+            "Publishing professional articles and cases",
+            "SEO promotion of the profile in search"
+          ]
+        },
+        "parent": {
+          "name": "For parents",
+          "subtitle": "Everything for your child's development",
+          "freeLabel": "Free",
+          "badge": "No payment",
+          "cta": "Create account",
+          "features": [
+            "Parent personal cabinet",
+            "Child profiles",
+            "Development tests",
+            "PPk results and conclusions",
+            "Child playroom",
+            "Specialist matching",
+            "Recommendations library",
+            "Online specialist booking"
+          ]
+        }
+      }
+    },
+    "ctaSection": {
+      "title": "Ready to start?",
+      "subtitle": "Sign up and get 7 days of free access to all system features",
+      "org": "For organizations",
+      "specialist": "For specialists",
+      "parent": "For parents"
+    },
+    "partners": {
+      "title": "Our partners"
+    }
   }
 }
-
