@@ -33,7 +33,9 @@ export function useSeoMeta({
   article,
   noIndex = false,
   jsonLd,
+  locale,
 }: SeoMeta) {
+
   useEffect(() => {
     // Title
     document.title = title;
