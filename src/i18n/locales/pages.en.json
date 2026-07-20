@@ -460,7 +460,10 @@
     "installation": "Installation",
     "rights": "All rights reserved.",
     "patents": "Patents",
-    "registry": "Russian Software Registry"
+    "registry": "Russian Software Registry",
+    "blog": "Blog",
+    "rssAria": "Blog RSS feed",
+    "legalNav": "Legal basis"
   },
   "faq": {
     "title": "Frequently asked questions",
