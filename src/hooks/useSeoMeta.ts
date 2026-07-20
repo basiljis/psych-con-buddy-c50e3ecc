@@ -140,5 +140,5 @@ export function useSeoMeta({
     return () => {
       document.querySelectorAll('[id^="seo-json-ld"]').forEach(el => el.remove());
     };
-  }, [title, description, canonical, keywords, ogImage, ogType, article, noIndex, jsonLd]);
+  }, [title, description, canonical, keywords, ogImage, ogType, article, noIndex, jsonLd, locale]);
 }
