@@ -74,7 +74,11 @@ export function useSeoMeta({
     setMeta("property", "og:url", resolvedUrl);
     setMeta("property", "og:type", ogType);
     setMeta("property", "og:site_name", "universum.");
-    setMeta("property", "og:locale", "ru_RU");
+    const resolvedLocale =
+      locale ||
+      ((document.documentElement.lang || "ru").toLowerCase().startsWith("en") ? "en_US" : "ru_RU");
+    setMeta("property", "og:locale", resolvedLocale);
+
 
     // Article-specific OG tags — clean up when not an article
     const articleTagKeys = [
