@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -11,21 +12,29 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { FileText } from 'lucide-react';
 
-const formSchema = z.object({
-  organizationName: z.string().trim().min(3, 'Минимум 3 символа').max(200, 'Максимум 200 символов'),
-  inn: z.string().trim().regex(/^\d{10}$|^\d{12}$/, 'ИНН должен содержать 10 или 12 цифр'),
-  contactPerson: z.string().trim().min(2, 'Минимум 2 символа').max(100, 'Максимум 100 символов'),
-  email: z.string().trim().email('Некорректный email').max(255, 'Максимум 255 символов'),
-  phone: z.string().trim().regex(/^\+?[0-9\s\-()]{10,20}$/, 'Некорректный формат телефона'),
-  comment: z.string().trim().max(1000, 'Максимум 1000 символов').optional(),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+type FormValues = {
+  organizationName: string;
+  inn: string;
+  contactPerson: string;
+  email: string;
+  phone: string;
+  comment?: string;
+};
 
 export const CommercialOfferRequestForm = () => {
+  const { t } = useTranslation('pages');
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+
+  const formSchema = z.object({
+    organizationName: z.string().trim().min(3, t('commercialOffer.errors.orgMin')).max(200, t('commercialOffer.errors.orgMax')),
+    inn: z.string().trim().regex(/^\d{10}$|^\d{12}$/, t('commercialOffer.errors.innFormat')),
+    contactPerson: z.string().trim().min(2, t('commercialOffer.errors.personMin')).max(100, t('commercialOffer.errors.personMax')),
+    email: z.string().trim().email(t('commercialOffer.errors.emailInvalid')).max(255, t('commercialOffer.errors.emailMax')),
+    phone: z.string().trim().regex(/^\+?[0-9\s\-()]{10,20}$/, t('commercialOffer.errors.phoneFormat')),
+    comment: z.string().trim().max(1000, t('commercialOffer.errors.commentMax')).optional(),
+  });
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -42,7 +51,6 @@ export const CommercialOfferRequestForm = () => {
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
     try {
-      // Сохраняем запрос в базу данных
       const { error: dbError } = await supabase
         .from('commercial_offer_requests')
         .insert([{
@@ -57,7 +65,6 @@ export const CommercialOfferRequestForm = () => {
 
       if (dbError) throw dbError;
 
-      // Отправляем email уведомление
       const { error: emailError } = await supabase.functions.invoke('send-commercial-offer-request', {
         body: data
       });
@@ -67,8 +74,8 @@ export const CommercialOfferRequestForm = () => {
       }
 
       toast({
-        title: 'Запрос отправлен',
-        description: 'Мы свяжемся с вами в ближайшее время',
+        title: t('commercialOffer.toastSent'),
+        description: t('commercialOffer.toastSentDesc'),
       });
 
       form.reset();
@@ -76,8 +83,8 @@ export const CommercialOfferRequestForm = () => {
     } catch (error) {
       console.error('Error sending request:', error);
       toast({
-        title: 'Ошибка',
-        description: 'Не удалось отправить запрос. Попробуйте позже.',
+        title: t('commercialOffer.toastError'),
+        description: t('commercialOffer.toastErrorDesc'),
         variant: 'destructive',
       });
     } finally {
@@ -90,14 +97,14 @@ export const CommercialOfferRequestForm = () => {
       <DialogTrigger asChild>
         <Button variant="outline" className="w-full">
           <FileText className="mr-2 h-4 w-4" />
-          Запросить коммерческое предложение
+          {t('commercialOffer.trigger')}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Запрос коммерческого предложения</DialogTitle>
+          <DialogTitle>{t('commercialOffer.title')}</DialogTitle>
           <DialogDescription>
-            Заполните форму, и мы отправим вам коммерческое предложение с условиями подключения для вашей организации
+            {t('commercialOffer.description')}
           </DialogDescription>
         </DialogHeader>
 
@@ -108,9 +115,9 @@ export const CommercialOfferRequestForm = () => {
               name="organizationName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Название организации *</FormLabel>
+                  <FormLabel>{t('commercialOffer.orgLabel')}</FormLabel>
                   <FormControl>
-                    <Input placeholder="ГБОУ Школа №..." {...field} />
+                    <Input placeholder={t('commercialOffer.orgPh')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -122,9 +129,9 @@ export const CommercialOfferRequestForm = () => {
               name="inn"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>ИНН *</FormLabel>
+                  <FormLabel>{t('commercialOffer.innLabel')}</FormLabel>
                   <FormControl>
-                    <Input placeholder="1234567890" {...field} />
+                    <Input placeholder={t('commercialOffer.innPh')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -136,9 +143,9 @@ export const CommercialOfferRequestForm = () => {
               name="contactPerson"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Контактное лицо *</FormLabel>
+                  <FormLabel>{t('commercialOffer.personLabel')}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Иванов Иван Иванович" {...field} />
+                    <Input placeholder={t('commercialOffer.personPh')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -150,9 +157,9 @@ export const CommercialOfferRequestForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email *</FormLabel>
+                  <FormLabel>{t('commercialOffer.emailLabel')}</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="school@example.ru" {...field} />
+                    <Input type="email" placeholder={t('commercialOffer.emailPh')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -164,9 +171,9 @@ export const CommercialOfferRequestForm = () => {
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Телефон *</FormLabel>
+                  <FormLabel>{t('commercialOffer.phoneLabel')}</FormLabel>
                   <FormControl>
-                    <Input placeholder="+7 (999) 123-45-67" {...field} />
+                    <Input placeholder={t('commercialOffer.phonePh')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -178,10 +185,10 @@ export const CommercialOfferRequestForm = () => {
               name="comment"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Комментарий</FormLabel>
+                  <FormLabel>{t('commercialOffer.commentLabel')}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Укажите желаемое количество пользователей, особые требования или вопросы..."
+                      placeholder={t('commercialOffer.commentPh')}
                       className="min-h-[100px]"
                       {...field}
                     />
@@ -193,10 +200,10 @@ export const CommercialOfferRequestForm = () => {
 
             <div className="flex justify-end gap-3 pt-4">
               <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={isSubmitting}>
-                Отмена
+                {t('commercialOffer.cancel')}
               </Button>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Отправка...' : 'Отправить запрос'}
+                {isSubmitting ? t('commercialOffer.submitting') : t('commercialOffer.submit')}
               </Button>
             </div>
           </form>

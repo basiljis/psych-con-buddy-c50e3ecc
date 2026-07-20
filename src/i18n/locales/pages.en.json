@@ -460,7 +460,10 @@
     "installation": "Installation",
     "rights": "All rights reserved.",
     "patents": "Patents",
-    "registry": "Russian Software Registry"
+    "registry": "Russian Software Registry",
+    "blog": "Blog",
+    "rssAria": "Blog RSS feed",
+    "legalNav": "Legal basis"
   },
   "faq": {
     "title": "Frequently asked questions",
@@ -868,5 +871,85 @@
     "partners": {
       "title": "Our partners"
     }
+  },
+  "leadForm": {
+    "title": "Request a commercial offer",
+    "subtitle": "Tailored pricing for your organization, presentation and demo access",
+    "orgLabel": "Organization *",
+    "orgPh": "School № 1234",
+    "personLabel": "Contact person *",
+    "personPh": "Anna Ivanova",
+    "phoneLabel": "Phone *",
+    "phonePh": "+1 (___) ___-____",
+    "emailLabel": "Email *",
+    "emailPh": "info@school.com",
+    "innLabel": "Tax ID (TIN)",
+    "innPh": "7701234567",
+    "commentLabel": "Comment",
+    "commentPh": "How many specialists, which modules you are interested in...",
+    "consent": "By clicking «Submit» you agree to the processing of personal data in accordance with applicable law.",
+    "submit": "Submit request",
+    "submitting": "Sending...",
+    "successTitle": "Thanks! Request received",
+    "successDesc": "A manager will contact you within one business day at the phone number you provided.",
+    "toastRequired": "Please fill in required fields",
+    "toastRequiredDesc": "Organization, contact person, phone and email",
+    "toastSuccess": "Request submitted",
+    "toastSuccessDesc": "We will contact you within one business day",
+    "toastError": "Submission error",
+    "toastErrorFallback": "Please try again later"
+  },
+  "commercialOffer": {
+    "trigger": "Request a commercial offer",
+    "title": "Commercial offer request",
+    "description": "Fill in the form and we will send you a commercial offer with connection terms for your organization",
+    "orgLabel": "Organization name *",
+    "orgPh": "School №...",
+    "innLabel": "Tax ID (TIN) *",
+    "innPh": "1234567890",
+    "personLabel": "Contact person *",
+    "personPh": "John Doe",
+    "emailLabel": "Email *",
+    "emailPh": "school@example.com",
+    "phoneLabel": "Phone *",
+    "phonePh": "+1 (999) 123-4567",
+    "commentLabel": "Comment",
+    "commentPh": "Specify the desired number of users, special requirements or questions...",
+    "cancel": "Cancel",
+    "submit": "Send request",
+    "submitting": "Sending...",
+    "toastSent": "Request sent",
+    "toastSentDesc": "We will contact you shortly",
+    "toastError": "Error",
+    "toastErrorDesc": "Failed to send the request. Please try again later.",
+    "errors": {
+      "orgMin": "At least 3 characters",
+      "orgMax": "At most 200 characters",
+      "innFormat": "Tax ID must contain 10 or 12 digits",
+      "personMin": "At least 2 characters",
+      "personMax": "At most 100 characters",
+      "emailInvalid": "Invalid email",
+      "emailMax": "At most 255 characters",
+      "phoneFormat": "Invalid phone format",
+      "commentMax": "At most 1000 characters"
+    }
+  },
+  "patents": {
+    "seoTitle": "Patents & certificates — AIS PPC | universum.",
+    "seoDescription": "Deposit certificate for the AIS PPC component of the universum. platform. Registration number 307-082-374, issued on 22.08.2025 by RCIS / JSC NRIS.",
+    "title": "Patents & certificates",
+    "subtitle": "Registered intellectual property — components of the universum. platform.",
+    "sectionTitle": "Deposited components",
+    "cardTitle": "AIS PPC — psychological-pedagogical council module",
+    "badge": "Deposited",
+    "description": "AIS PPC is a component of the universum. platform that supports psychological-pedagogical council protocols, generates conclusions and stores student assessment results. The software has been deposited with the National Register of Intellectual Property (JSC NRIS) and registered with the Russian Center for the Circulation of Rights to the Results of Creative Activity (RCIS). The certificate confirms authorship and priority of the development.",
+    "regNumber": "Registration number:",
+    "depositDate": "Deposit date:",
+    "objectType": "Object type:",
+    "objectTypeValue": "Computer program",
+    "certNumber": "RCIS certificate №:",
+    "downloadCert": "Download certificate (PDF)",
+    "verify": "Verify on nris.ru"
   }
 }
+
