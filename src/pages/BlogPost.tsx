@@ -297,6 +297,11 @@ export default function BlogPost() {
                     dangerouslySetInnerHTML={{ __html: contentWithIds }}
                   />
 
+                  {slug && INTERACTIVE_SLUGS.has(slug) && (
+                    <DevelopmentBlocksComparison />
+                  )}
+
+
                   {post.keywords.length > 0 && (
                     <div className="mt-12 pt-6 border-t flex flex-wrap gap-2">
                       {post.keywords.map((k) => (
