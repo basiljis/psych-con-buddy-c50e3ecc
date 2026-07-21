@@ -17,6 +17,9 @@ import {
 } from "lucide-react";
 import { useLogBlogView, useBlogViewStats } from "@/hooks/useBlogViews";
 import { toast } from "sonner";
+import DevelopmentBlocksComparison from "@/components/blog/DevelopmentBlocksComparison";
+
+const INTERACTIVE_SLUGS = new Set(["5-blokov-razvitiya-rebenka"]);
 
 const BASE_URL = "https://unvrsm.ru";
 
