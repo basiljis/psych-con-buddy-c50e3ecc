@@ -48,9 +48,9 @@ const Auth = () => {
       .trim()
       .min(1, t('validation.fullNameRequired'))
       .max(200, t('validation.fullNameTooLong'))
-      .regex(/^[а-яА-ЯёЁa-zA-Z\s\-]+$/, t('validation.fullNameInvalid')),
+      .regex(/^[а-яА-ЯёЁa-zA-Z\s\-]+$/, t('validation.fullNameFormat')),
     phone: z.string()
-      .regex(/^\+?7[0-9]{10}$/, t('validation.phoneInvalid'))
+      .regex(/^\+?7[0-9]{10}$/, t('validation.phoneFormat'))
       .transform(val => val.replace(/[^0-9+]/g, '')),
     email: z.string()
       .trim()
@@ -76,9 +76,9 @@ const Auth = () => {
       .trim()
       .min(1, t('validation.fullNameRequired'))
       .max(200, t('validation.fullNameTooLong'))
-      .regex(/^[а-яА-ЯёЁa-zA-Z\s\-]+$/, t('validation.fullNameInvalid')),
+      .regex(/^[а-яА-ЯёЁa-zA-Z\s\-]+$/, t('validation.fullNameFormat')),
     phone: z.string()
-      .regex(/^\+?7[0-9]{10}$/, t('validation.phoneInvalid'))
+      .regex(/^\+?7[0-9]{10}$/, t('validation.phoneFormat'))
       .transform(val => val.replace(/[^0-9+]/g, '')),
     email: z.string()
       .trim()
@@ -196,8 +196,8 @@ const Auth = () => {
       if (profile?.is_blocked) {
         await supabase.auth.signOut();
         toast({
-          title: t('errors.blockedTitle'),
-          description: t('errors.blockedDescription'),
+          title: t('toasts.blockedTitle'),
+          description: t('toasts.blockedDesc'),
           variant: "destructive",
         });
         return;
@@ -224,11 +224,11 @@ const Auth = () => {
       }
 
       // Show welcome dialog
-      setWelcomeUserName(userProfile?.full_name || t('user.fallbackName'));
+      setWelcomeUserName(userProfile?.full_name || t('toasts.welcomeFallback'));
       setWelcomeDialogOpen(true);
     } catch (error: any) {
       toast({
-        title: t('errors.loginErrorTitle'),
+        title: t('toasts.loginError'),
         description: error.message,
         variant: "destructive",
       });
@@ -272,8 +272,8 @@ const Auth = () => {
 
       if (existingUser) {
         toast({
-          title: t('errors.emailExistsTitle'),
-          description: t('errors.emailExistsDescription'),
+          title: t('toasts.emailExistsTitle'),
+          description: t('toasts.emailExistsDesc'),
           variant: "destructive",
         });
         setLoading(false);
@@ -293,7 +293,7 @@ const Auth = () => {
       });
 
       if (authError) throw authError;
-      if (!authData.user) throw new Error(t('errors.userCreateError'));
+      if (!authData.user) throw new Error(t('toasts.userCreateError'));
 
       // Check global setting: auto-approve org users (skip admin validation)
       const autoApprove = await fetchSystemSetting<boolean>(
@@ -359,8 +359,8 @@ const Auth = () => {
 
       if (autoApprove) {
         toast({
-          title: t('errors.signupSuccessTitle'),
-          description: t('errors.signupSuccessDescription'),
+          title: t('toasts.signupSuccess'),
+          description: t('toasts.signupSuccessDesc'),
         });
         navigate("/");
       } else {
@@ -393,8 +393,8 @@ const Auth = () => {
       });
     } catch (error: any) {
       toast({
-        title: t('errors.signupErrorTitle'),
-        description: error.message || t('errors.registrationFailed'),
+        title: t('toasts.signupError'),
+        description: error.message || t('toasts.signupErrorFallback'),
         variant: "destructive",
       });
     } finally {
@@ -437,8 +437,8 @@ const Auth = () => {
 
       if (existingUser) {
         toast({
-          title: t('errors.emailExistsTitle'),
-          description: t('errors.emailExistsDescription'),
+          title: t('toasts.emailExistsTitle'),
+          description: t('toasts.emailExistsDesc'),
           variant: "destructive",
         });
         setLoading(false);
@@ -458,7 +458,7 @@ const Auth = () => {
       });
 
       if (authError) throw authError;
-      if (!authData.user) throw new Error(t('errors.userCreateError'));
+      if (!authData.user) throw new Error(t('toasts.userCreateError'));
 
       // Create profile directly for private specialists (no access request needed)
       const { error: profileError } = await supabase.from("profiles").insert({
@@ -488,7 +488,7 @@ const Auth = () => {
           body: {
             email: validatedData.email,
             fullName: validatedData.fullName,
-            organizationName: t('signup.organizationNamePrivate'),
+            organizationName: t('toasts.privatePracticeOrgName'),
           },
         });
       } catch (emailError) {
@@ -496,8 +496,8 @@ const Auth = () => {
       }
 
       toast({
-        title: t('errors.signupSuccessTitle'),
-        description: t('errors.signupSuccessDescription'),
+        title: t('toasts.signupSuccess'),
+        description: t('toasts.signupSuccessDesc'),
       });
 
       // Clear form and switch to login
@@ -515,8 +515,8 @@ const Auth = () => {
       navigate("/");
     } catch (error: any) {
       toast({
-        title: t('errors.signupErrorTitle'),
-        description: error.message || t('errors.registrationFailed'),
+        title: t('toasts.signupError'),
+        description: error.message || t('toasts.signupErrorFallback'),
         variant: "destructive",
       });
     } finally {
@@ -531,8 +531,8 @@ const Auth = () => {
     
     if (!emailValue) {
       toast({
-        title: t('errors.errorTitle'),
-        description: t('errors.resetEmailRequired'),
+        title: t('toasts.resetError'),
+        description: t('validation.resetEmailRequired'),
         variant: "destructive",
       });
       return;
@@ -542,8 +542,8 @@ const Auth = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(emailValue)) {
       toast({
-        title: t('errors.errorTitle'),
-        description: t('errors.resetEmailInvalid'),
+        title: t('toasts.resetError'),
+        description: t('validation.resetEmailInvalid'),
         variant: "destructive",
       });
       return;
@@ -559,15 +559,15 @@ const Auth = () => {
       if (error) throw error;
 
       toast({
-        title: t('errors.resetEmailSentTitle'),
-        description: t('errors.resetEmailSentDescription'),
+        title: t('toasts.resetEmailSent'),
+        description: t('toasts.resetEmailSentDesc'),
       });
       setResetEmail("");
       setResetDialogOpen(false);
     } catch (error: any) {
       toast({
-        title: t('errors.resetErrorTitle'),
-        description: error.message || t('errors.resetErrorDescription'),
+        title: t('toasts.resetError'),
+        description: error.message || t('toasts.resetErrorFallback'),
         variant: "destructive",
       });
     } finally {
@@ -585,19 +585,19 @@ const Auth = () => {
         {/* Left side - Form */}
         <div className="p-8 md:p-12 flex flex-col justify-center">
           <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold mb-2">{t('title')}</h1>
+            <h1 className="text-3xl font-bold mb-2">{t('brand')}</h1>
             <p className="text-muted-foreground text-lg">{t('tagline')}</p>
           </div>
           
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="login">{t('login.tab')}</TabsTrigger>
-              <TabsTrigger value="signup">{t('signup.tab')}</TabsTrigger>
+              <TabsTrigger value="login">{t('tabs.login')}</TabsTrigger>
+              <TabsTrigger value="signup">{t('tabs.signup')}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="login" className="space-y-4">
               <h2 className="text-2xl font-bold mb-2">{t('login.title')}</h2>
-              <p className="text-muted-foreground text-sm mb-6">{t('login.description')}</p>
+              <p className="text-muted-foreground text-sm mb-6">{t('login.subtitle')}</p>
               
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
@@ -629,37 +629,37 @@ const Auth = () => {
                   className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium" 
                   disabled={loading}
                 >
-                  {loading ? t('login.submitLoading') : t('login.submit')}
+                  {loading ? t('login.submitting') : t('login.submit')}
                 </Button>
                 
                 <div className="space-y-2">
                   <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
                     <DialogTrigger asChild>
                       <Button variant="link" className="w-full text-sm text-muted-foreground hover:text-primary">
-                        {t('forgotPassword.trigger')}
+                        {t('forgotPassword')}
                       </Button>
                     </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>{t('forgotPassword.title')}</DialogTitle>
+                      <DialogTitle>{t('resetPassword.title')}</DialogTitle>
                       <DialogDescription>
-                        {t('forgotPassword.description')}
+                        {t('resetPassword.description')}
                       </DialogDescription>
                     </DialogHeader>
                     <form onSubmit={handleResetPassword} className="space-y-4">
                       <div className="space-y-2">
-                        <Label htmlFor="reset-email">{t('forgotPassword.emailLabel')}</Label>
+                        <Label htmlFor="reset-email">{t('resetPassword.emailLabel')}</Label>
                         <Input
                           id="reset-email"
                           type="email"
-                          placeholder={t('forgotPassword.emailPlaceholder')}
+                          placeholder={t('resetPassword.emailPlaceholder')}
                           value={resetEmail}
                           onChange={(e) => setResetEmail(e.target.value)}
                           required
                         />
                       </div>
                       <Button type="submit" className="w-full" disabled={loading}>
-                        {loading ? t('forgotPassword.submitLoading') : t('forgotPassword.submit')}
+                        {loading ? t('resetPassword.submitting') : t('resetPassword.submit')}
                       </Button>
                     </form>
                   </DialogContent>
@@ -675,7 +675,7 @@ const Auth = () => {
 
             <TabsContent value="signup" className="space-y-4">
               <h2 className="text-2xl font-bold mb-2">{t('signup.title')}</h2>
-              <p className="text-muted-foreground text-sm mb-4">{t('signup.description')}</p>
+              <p className="text-muted-foreground text-sm mb-4">{t('signup.subtitle')}</p>
               
               {/* Registration mode tabs */}
               <div className="flex gap-2 mb-4">
@@ -686,7 +686,7 @@ const Auth = () => {
                   onClick={() => setRegistrationMode('private')}
                   className="flex-1"
                 >
-                  {t('signup.mode.private')}
+                  {t('signup.modes.private')}
                 </Button>
                 <Button
                   type="button"
@@ -695,7 +695,7 @@ const Auth = () => {
                   onClick={() => setRegistrationMode('organization')}
                   className="flex-1"
                 >
-                  {t('signup.mode.organization')}
+                  {t('signup.modes.organization')}
                 </Button>
               </div>
 
@@ -704,7 +704,7 @@ const Auth = () => {
                   <AutoApproveStatusHint mode="organization" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div className="space-y-2 md:col-span-2">
-                      <Label htmlFor="fullName" className="text-sm">{t('signup.fullNameLabel')}</Label>
+                      <Label htmlFor="fullName" className="text-sm">{t('signup.fields.fullName')} *</Label>
                       <Input
                         id="fullName"
                         value={signupData.fullName}
@@ -721,11 +721,11 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="phone" className="text-sm">{t('signup.phoneLabel')}</Label>
+                      <Label htmlFor="phone" className="text-sm">{t('signup.fields.phone')} *</Label>
                       <Input
                         id="phone"
                         type="tel"
-                        placeholder={t('signup.phonePlaceholder')}
+                        placeholder={t('signup.placeholders.phone')}
                         value={signupData.phone}
                         onChange={(e) => {
                           setSignupData({ ...signupData, phone: e.target.value });
@@ -740,7 +740,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="email" className="text-sm">{t('signup.emailLabel')}</Label>
+                      <Label htmlFor="email" className="text-sm">{t('signup.fields.email')} *</Label>
                       <Input
                         id="email"
                         type="email"
@@ -758,7 +758,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="password" className="text-sm">{t('signup.passwordLabel')}</Label>
+                      <Label htmlFor="password" className="text-sm">{t('signup.fields.password')} *</Label>
                       <Input
                         id="password"
                         type="password"
@@ -776,7 +776,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="position" className="text-sm">{t('signup.positionLabel')}</Label>
+                      <Label htmlFor="position" className="text-sm">{t('signup.fields.position')} *</Label>
                       <Select
                         value={signupData.positionId}
                         onValueChange={(value) => {
@@ -786,7 +786,7 @@ const Auth = () => {
                         required
                       >
                         <SelectTrigger className={`h-10 ${signupErrors.positionId ? "border-destructive focus-visible:ring-destructive" : ""}`}>
-                          <SelectValue placeholder={t('signup.positionPlaceholder')} />
+                          <SelectValue placeholder={t('signup.placeholders.selectPosition')} />
                         </SelectTrigger>
                         <SelectContent>
                           {positions.map((position) => (
@@ -802,7 +802,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="region" className="text-sm">{t('signup.regionLabel')}</Label>
+                      <Label htmlFor="region" className="text-sm">{t('signup.fields.region')} *</Label>
                       <Select
                         value={signupData.regionId}
                         onValueChange={(value) => {
@@ -812,7 +812,7 @@ const Auth = () => {
                         required
                       >
                         <SelectTrigger className={`h-10 ${signupErrors.regionId ? "border-destructive focus-visible:ring-destructive" : ""}`}>
-                          <SelectValue placeholder={t('signup.regionPlaceholder')} />
+                          <SelectValue placeholder={t('signup.placeholders.selectRegion')} />
                         </SelectTrigger>
                         <SelectContent>
                           {regions.map((region) => (
@@ -828,7 +828,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="role" className="text-sm">{t('signup.roleLabel')}</Label>
+                      <Label htmlFor="role" className="text-sm">{t('signup.fields.role')} *</Label>
                       <Select
                         value={signupData.role}
                         onValueChange={(value: "user" | "regional_operator" | "admin") => {
@@ -838,12 +838,12 @@ const Auth = () => {
                         required
                       >
                         <SelectTrigger className={`h-10 ${signupErrors.role ? "border-destructive focus-visible:ring-destructive" : ""}`}>
-                          <SelectValue placeholder={t('signup.rolePlaceholder')} />
+                          <SelectValue placeholder={t('signup.placeholders.selectRole')} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="user">{t('signup.role.user')}</SelectItem>
-                          <SelectItem value="regional_operator">{t('signup.role.regional_operator')}</SelectItem>
-                          <SelectItem value="admin">{t('signup.role.admin')}</SelectItem>
+                          <SelectItem value="user">{t('signup.roles.user')}</SelectItem>
+                          <SelectItem value="regional_operator">{t('signup.roles.regionalOperator')}</SelectItem>
+                          <SelectItem value="admin">{t('signup.roles.admin')}</SelectItem>
                         </SelectContent>
                       </Select>
                       {signupErrors.role && (
@@ -858,7 +858,7 @@ const Auth = () => {
                           setSignupData({ ...signupData, organizationId: value });
                           setSignupErrors({ ...signupErrors, organizationId: "" });
                         }}
-                        placeholder={t('signup.organizationPlaceholder')}
+                        placeholder={t('signup.placeholders.organization')}
                         regionFilter={signupData.regionId}
                       />
                       {signupErrors.organizationId && (
@@ -881,7 +881,7 @@ const Auth = () => {
                           htmlFor="dataProcessingConsent"
                           className="text-sm leading-tight cursor-pointer"
                         >
-                          {t('signup.dataConsentText')}{" "}
+                          {t('signup.fields.dataConsent')}{" "}
                           <DataProcessingAgreement />
                         </label>
                       </div>
@@ -896,7 +896,7 @@ const Auth = () => {
                     className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium" 
                     disabled={loading}
                   >
-                    {loading ? t('signup.submitLoading') : t('signup.submit')}
+                    {loading ? t('signup.submitting') : t('signup.submit')}
                   </Button>
                   
                   <div className="space-y-2">
@@ -910,7 +910,7 @@ const Auth = () => {
                   <AutoApproveStatusHint mode="private" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div className="space-y-2 md:col-span-2">
-                      <Label htmlFor="privateFullName" className="text-sm">{t('signup.fullNameLabel')}</Label>
+                      <Label htmlFor="privateFullName" className="text-sm">{t('signup.fields.fullName')} *</Label>
                       <Input
                         id="privateFullName"
                         value={privateSignupData.fullName}
@@ -927,11 +927,11 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="privatePhone" className="text-sm">{t('signup.phoneLabel')}</Label>
+                      <Label htmlFor="privatePhone" className="text-sm">{t('signup.fields.phone')} *</Label>
                       <Input
                         id="privatePhone"
                         type="tel"
-                        placeholder={t('signup.phonePlaceholder')}
+                        placeholder={t('signup.placeholders.phone')}
                         value={privateSignupData.phone}
                         onChange={(e) => {
                           setPrivateSignupData({ ...privateSignupData, phone: e.target.value });
@@ -946,7 +946,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="privateEmail" className="text-sm">{t('signup.emailLabel')}</Label>
+                      <Label htmlFor="privateEmail" className="text-sm">{t('signup.fields.email')} *</Label>
                       <Input
                         id="privateEmail"
                         type="email"
@@ -964,7 +964,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="privatePassword" className="text-sm">{t('signup.passwordLabel')}</Label>
+                      <Label htmlFor="privatePassword" className="text-sm">{t('signup.fields.password')} *</Label>
                       <Input
                         id="privatePassword"
                         type="password"
@@ -982,7 +982,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="privatePosition" className="text-sm">{t('signup.positionLabel')}</Label>
+                      <Label htmlFor="privatePosition" className="text-sm">{t('signup.fields.position')} *</Label>
                       <Select
                         value={privateSignupData.positionId}
                         onValueChange={(value) => {
@@ -992,7 +992,7 @@ const Auth = () => {
                         required
                       >
                         <SelectTrigger className={`h-10 ${privateSignupErrors.positionId ? "border-destructive focus-visible:ring-destructive" : ""}`}>
-                          <SelectValue placeholder={t('signup.positionPlaceholder')} />
+                          <SelectValue placeholder={t('signup.placeholders.selectPosition')} />
                         </SelectTrigger>
                         <SelectContent>
                           {privatePositions.map((position) => (
@@ -1008,7 +1008,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="privateRegion" className="text-sm">{t('signup.regionLabel')}</Label>
+                      <Label htmlFor="privateRegion" className="text-sm">{t('signup.fields.region')} *</Label>
                       <Select
                         value={privateSignupData.regionId}
                         onValueChange={(value) => {
@@ -1018,7 +1018,7 @@ const Auth = () => {
                         required
                       >
                         <SelectTrigger className={`h-10 ${privateSignupErrors.regionId ? "border-destructive focus-visible:ring-destructive" : ""}`}>
-                          <SelectValue placeholder={t('signup.regionPlaceholder')} />
+                          <SelectValue placeholder={t('signup.placeholders.selectRegion')} />
                         </SelectTrigger>
                         <SelectContent>
                           {regions.map((region) => (
@@ -1048,7 +1048,7 @@ const Auth = () => {
                           htmlFor="privateDataProcessingConsent"
                           className="text-sm leading-tight cursor-pointer"
                         >
-                          {t('signup.dataConsentText')}{" "}
+                          {t('signup.fields.dataConsent')}{" "}
                           <DataProcessingAgreement />
                         </label>
                       </div>
@@ -1063,7 +1063,7 @@ const Auth = () => {
                     className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium" 
                     disabled={loading}
                   >
-                    {loading ? t('signup.submitLoading') : t('signup.submit')}
+                    {loading ? t('signup.submitting') : t('signup.submit')}
                   </Button>
                   
                   <div className="space-y-2">
@@ -1088,15 +1088,15 @@ const Auth = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-white">{t('feature.childCard.title')}</h3>
-                  <span className="text-xs text-white/60 bg-white/10 px-2 py-0.5 rounded-full">{t('feature.childCard.badge')}</span>
+                  <h3 className="text-xl font-semibold text-white">{t('features.childCard.title')}</h3>
+                  <span className="text-xs text-white/60 bg-white/10 px-2 py-0.5 rounded-full">{t('features.childCard.badge')}</span>
                 </div>
               </div>
               <p className="text-white/80 text-sm leading-relaxed mb-3">
-                {t('feature.childCard.description')}
+                {t('features.childCard.description')}
               </p>
               <div className="flex flex-wrap gap-2">
-                {(t('feature.childCard.tags', { returnObjects: true }) as string[]).map((tag, index) => (
+                {Object.values(t('features.childCard.tags', { returnObjects: true }) as Record<string, string>).map((tag, index) => (
                   <span key={index} className="text-xs text-white/70 bg-white/10 px-2 py-1 rounded">{tag}</span>
                 ))}
               </div>
@@ -1110,10 +1110,10 @@ const Auth = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-semibold text-white">{t('feature.protocol.title')}</h3>
+                <h3 className="text-lg font-semibold text-white">{t('features.protocol.title')}</h3>
               </div>
               <p className="text-white/80 text-sm leading-relaxed">
-                {t('feature.protocol.description')}
+                {t('features.protocol.description')}
               </p>
             </div>
 
@@ -1125,10 +1125,10 @@ const Auth = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-semibold text-white">{t('feature.workLog.title')}</h3>
+                <h3 className="text-lg font-semibold text-white">{t('features.workLog.title')}</h3>
               </div>
               <p className="text-white/80 text-sm leading-relaxed">
-                {t('feature.workLog.description')}
+                {t('features.workLog.description')}
               </p>
             </div>
 
@@ -1141,9 +1141,9 @@ const Auth = () => {
     <Dialog open={successDialogOpen} onOpenChange={setSuccessDialogOpen}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-center text-2xl">{t('success.title')}</DialogTitle>
+          <DialogTitle className="text-center text-2xl">{t('successDialog.title')}</DialogTitle>
           <DialogDescription className="text-center pt-4 text-base leading-relaxed">
-            {t('success.description')}
+            {t('successDialog.description')}
           </DialogDescription>
         </DialogHeader>
         <div className="flex justify-center pt-4">
@@ -1154,7 +1154,7 @@ const Auth = () => {
             }}
             className="w-full"
           >
-            {t('success.cta')}
+            {t('successDialog.button')}
           </Button>
         </div>
       </DialogContent>
@@ -1176,19 +1176,19 @@ const Auth = () => {
             <div className="relative w-32 h-32 rounded-full bg-primary/10 flex items-center justify-center border-4 border-primary shadow-lg">
               <img 
                 src="/lovable-uploads/f971f75e-c922-48b7-a527-0263972e4807.png" 
-                alt={t('welcome.alt')} 
+                alt={t('welcomeDialog.title')} 
                 className="w-20 h-20 object-contain"
               />
             </div>
           </div>
           <DialogTitle className="text-center text-3xl font-bold text-foreground">
-            {t('welcome.title')}
+            {t('welcomeDialog.title')}
           </DialogTitle>
           <DialogDescription className="text-center text-xl font-medium text-foreground pt-2">
             {welcomeUserName}
           </DialogDescription>
           <p className="text-center text-muted-foreground text-base pt-2">
-            {t('welcome.subtitle')}
+            {t('welcomeDialog.subtitle')}
           </p>
         </DialogHeader>
         <div className="flex justify-center pt-6 pb-4">
@@ -1199,7 +1199,7 @@ const Auth = () => {
             className="w-full h-12 text-lg font-semibold bg-primary hover:bg-primary/90 shadow-lg"
             size="lg"
           >
-            {t('welcome.cta')}
+            {t('welcomeDialog.button')}
           </Button>
         </div>
       </DialogContent>
