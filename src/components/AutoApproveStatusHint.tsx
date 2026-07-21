@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2, ShieldCheck, ShieldAlert, Info } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { fetchSystemSetting } from "@/hooks/useSystemSetting";
@@ -14,6 +15,7 @@ interface Props {
  * Педагоги организаций — зависит от глобальной настройки auto_approve_org_users.
  */
 export const AutoApproveStatusHint = ({ mode }: Props) => {
+  const { t } = useTranslation('auth');
   const [autoApprove, setAutoApprove] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export const AutoApproveStatusHint = ({ mode }: Props) => {
     return (
       <div className="flex items-center gap-2 rounded-md border bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
         <Loader2 className="h-3.5 w-3.5 animate-spin" />
-        Проверяем режим подтверждения регистрации…
+        {t('autoApprove.checking')}
       </div>
     );
   }
@@ -49,18 +51,18 @@ export const AutoApproveStatusHint = ({ mode }: Props) => {
   const iconTone = enabled ? "text-primary" : "text-amber-600";
 
   const title = enabled
-    ? "Доступ предоставляется сразу"
-    : "Требуется подтверждение администратора";
+    ? t('autoApprove.accessGranted')
+    : t('autoApprove.adminApprovalRequired');
 
   const description = isPrivate
-    ? "Частная практика: после регистрации вы сразу попадёте в систему."
+    ? t('autoApprove.privateDesc')
     : enabled
-      ? "Педагоги школ и организаций получают доступ автоматически после регистрации."
-      : "Заявка попадёт в раздел «Заявки на доступ». Доступ откроется после ручной валидации администратором.";
+      ? t('autoApprove.orgAutoDesc')
+      : t('autoApprove.orgManualDesc');
 
   const tooltip = isPrivate
-    ? "Для частной практики автоодобрение действует всегда — не зависит от системных настроек."
-    : "Режим управляется в административной панели: Администрирование → Заявки на доступ → Подтверждение регистрации педагогов школ.";
+    ? t('autoApprove.privateTooltip')
+    : t('autoApprove.orgTooltip');
 
   return (
     <div
@@ -79,7 +81,7 @@ export const AutoApproveStatusHint = ({ mode }: Props) => {
             <button
               type="button"
               className="text-muted-foreground hover:text-foreground transition-colors mt-0.5"
-              aria-label="Подробнее о режиме подтверждения"
+              aria-label={tooltip}
             >
               <Info className="h-3.5 w-3.5" />
             </button>
