@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,60 +22,6 @@ import { PublicNavbar } from "@/components/PublicNavbar";
 import { fetchSystemSetting } from "@/hooks/useSystemSetting";
 import { AutoApproveStatusHint } from "@/components/AutoApproveStatusHint";
 
-// Schema for organization users
-const signupSchema = z.object({
-  fullName: z.string()
-    .trim()
-    .min(1, "ФИО обязательно для заполнения")
-    .max(200, "ФИО слишком длинное")
-    .regex(/^[а-яА-ЯёЁa-zA-Z\s\-]+$/, "Только буквы, пробелы и дефисы"),
-  phone: z.string()
-    .regex(/^\+?7[0-9]{10}$/, "Формат: +79991234567")
-    .transform(val => val.replace(/[^0-9+]/g, '')),
-  email: z.string()
-    .trim()
-    .email("Некорректный email")
-    .max(255, "Email слишком длинный"),
-  password: z.string()
-    .min(8, "Минимум 8 символов")
-    .regex(/[A-ZА-Я]/, "Нужна заглавная буква")
-    .regex(/[0-9]/, "Нужна цифра"),
-  positionId: z.string().min(1, "Должность обязательна для заполнения"),
-  regionId: z.string().min(1, "Регион обязателен для заполнения"),
-  organizationId: z.string().min(1, "Организация обязательна для заполнения"),
-  role: z.enum(["user", "regional_operator", "admin"], { 
-    errorMap: () => ({ message: "Роль обязательна для заполнения" })
-  }),
-  dataProcessingConsent: z.boolean().refine(val => val === true, {
-    message: "Необходимо согласие на обработку персональных данных"
-  }),
-});
-
-// Schema for private practice specialists
-const privateSignupSchema = z.object({
-  fullName: z.string()
-    .trim()
-    .min(1, "ФИО обязательно для заполнения")
-    .max(200, "ФИО слишком длинное")
-    .regex(/^[а-яА-ЯёЁa-zA-Z\s\-]+$/, "Только буквы, пробелы и дефисы"),
-  phone: z.string()
-    .regex(/^\+?7[0-9]{10}$/, "Формат: +79991234567")
-    .transform(val => val.replace(/[^0-9+]/g, '')),
-  email: z.string()
-    .trim()
-    .email("Некорректный email")
-    .max(255, "Email слишком длинный"),
-  password: z.string()
-    .min(8, "Минимум 8 символов")
-    .regex(/[A-ZА-Я]/, "Нужна заглавная буква")
-    .regex(/[0-9]/, "Нужна цифра"),
-  positionId: z.string().min(1, "Должность обязательна для заполнения"),
-  regionId: z.string().min(1, "Регион обязателен для заполнения"),
-  dataProcessingConsent: z.boolean().refine(val => val === true, {
-    message: "Необходимо согласие на обработку персональных данных"
-  }),
-});
-
 // Positions excluded for private practice
 const EXCLUDED_POSITIONS = [
   "медицинский работник",
@@ -84,6 +31,7 @@ const EXCLUDED_POSITIONS = [
 ];
 
 const Auth = () => {
+  const { t } = useTranslation('auth');
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuth();
@@ -93,6 +41,59 @@ const Auth = () => {
     navigate("/");
     return null;
   }
+
+  // Localized validation schemas
+  const signupSchema = z.object({
+    fullName: z.string()
+      .trim()
+      .min(1, t('validation.fullNameRequired'))
+      .max(200, t('validation.fullNameTooLong'))
+      .regex(/^[а-яА-ЯёЁa-zA-Z\s\-]+$/, t('validation.fullNameFormat')),
+    phone: z.string()
+      .regex(/^\+?7[0-9]{10}$/, t('validation.phoneFormat'))
+      .transform(val => val.replace(/[^0-9+]/g, '')),
+    email: z.string()
+      .trim()
+      .email(t('validation.emailInvalid'))
+      .max(255, t('validation.emailTooLong')),
+    password: z.string()
+      .min(8, t('validation.passwordMin'))
+      .regex(/[A-ZА-Я]/, t('validation.passwordUppercase'))
+      .regex(/[0-9]/, t('validation.passwordDigit')),
+    positionId: z.string().min(1, t('validation.positionRequired')),
+    regionId: z.string().min(1, t('validation.regionRequired')),
+    organizationId: z.string().min(1, t('validation.organizationRequired')),
+    role: z.enum(["user", "regional_operator", "admin"], { 
+      errorMap: () => ({ message: t('validation.roleRequired') })
+    }),
+    dataProcessingConsent: z.boolean().refine(val => val === true, {
+      message: t('validation.consentRequired')
+    }),
+  });
+
+  const privateSignupSchema = z.object({
+    fullName: z.string()
+      .trim()
+      .min(1, t('validation.fullNameRequired'))
+      .max(200, t('validation.fullNameTooLong'))
+      .regex(/^[а-яА-ЯёЁa-zA-Z\s\-]+$/, t('validation.fullNameFormat')),
+    phone: z.string()
+      .regex(/^\+?7[0-9]{10}$/, t('validation.phoneFormat'))
+      .transform(val => val.replace(/[^0-9+]/g, '')),
+    email: z.string()
+      .trim()
+      .email(t('validation.emailInvalid'))
+      .max(255, t('validation.emailTooLong')),
+    password: z.string()
+      .min(8, t('validation.passwordMin'))
+      .regex(/[A-ZА-Я]/, t('validation.passwordUppercase'))
+      .regex(/[0-9]/, t('validation.passwordDigit')),
+    positionId: z.string().min(1, t('validation.positionRequired')),
+    regionId: z.string().min(1, t('validation.regionRequired')),
+    dataProcessingConsent: z.boolean().refine(val => val === true, {
+      message: t('validation.consentRequired')
+    }),
+  });
 
   const [loading, setLoading] = useState(false);
   const [regions, setRegions] = useState<any[]>([]);
@@ -155,7 +156,7 @@ const Auth = () => {
   const [privateSignupErrors, setPrivateSignupErrors] = useState<Record<string, string>>({});
 
   // Load reference data
-  useState(() => {
+  useEffect(() => {
     const loadRefData = async () => {
       const [regionsRes, positionsRes] = await Promise.all([
         supabase.from("regions").select("*").order("name"),
@@ -166,7 +167,7 @@ const Auth = () => {
       if (positionsRes.data) setPositions(positionsRes.data);
     };
     loadRefData();
-  });
+  }, []);
   
   // Filter positions for private practice (exclude certain roles)
   const privatePositions = positions.filter(
@@ -195,8 +196,8 @@ const Auth = () => {
       if (profile?.is_blocked) {
         await supabase.auth.signOut();
         toast({
-          title: "Доступ заблокирован",
-          description: "Ваш аккаунт был заблокирован администратором",
+          title: t('toasts.blockedTitle'),
+          description: t('toasts.blockedDesc'),
           variant: "destructive",
         });
         return;
@@ -223,11 +224,11 @@ const Auth = () => {
       }
 
       // Show welcome dialog
-      setWelcomeUserName(userProfile?.full_name || "Пользователь");
+      setWelcomeUserName(userProfile?.full_name || t('toasts.welcomeFallback'));
       setWelcomeDialogOpen(true);
     } catch (error: any) {
       toast({
-        title: "Ошибка входа",
+        title: t('toasts.loginError'),
         description: error.message,
         variant: "destructive",
       });
@@ -271,8 +272,8 @@ const Auth = () => {
 
       if (existingUser) {
         toast({
-          title: "Email уже зарегистрирован",
-          description: "Пользователь с таким email уже существует. Попробуйте восстановить доступ через 'Забыли пароль?'",
+          title: t('toasts.emailExistsTitle'),
+          description: t('toasts.emailExistsDesc'),
           variant: "destructive",
         });
         setLoading(false);
@@ -292,7 +293,7 @@ const Auth = () => {
       });
 
       if (authError) throw authError;
-      if (!authData.user) throw new Error("Не удалось создать пользователя");
+      if (!authData.user) throw new Error(t('toasts.userCreateError'));
 
       // Check global setting: auto-approve org users (skip admin validation)
       const autoApprove = await fetchSystemSetting<boolean>(
@@ -358,19 +359,19 @@ const Auth = () => {
 
       if (autoApprove) {
         toast({
-          title: "Регистрация успешна!",
-          description: "Вы можете войти в систему с указанными данными.",
+          title: t('toasts.signupSuccess'),
+          description: t('toasts.signupSuccessDesc'),
         });
         navigate("/");
       } else {
-        // Сохранить user_id для страницы статуса
+        // Save pending_user_id for status page
         console.log("[Auth] Saving pending_user_id to localStorage:", authData.user.id);
         localStorage.setItem("pending_user_id", authData.user.id);
 
-        // Показать модальное окно с уведомлением
+        // Show success modal
         setSuccessDialogOpen(true);
 
-        // Автоматически закрыть модальное окно и перейти на страницу статуса через 5 секунд
+        // Auto-close modal and navigate to status page after 5 seconds
         setTimeout(() => {
           setSuccessDialogOpen(false);
           console.log("[Auth] Navigating to /access-status");
@@ -392,8 +393,8 @@ const Auth = () => {
       });
     } catch (error: any) {
       toast({
-        title: "Ошибка регистрации",
-        description: error.message || "Не удалось зарегистрировать пользователя",
+        title: t('toasts.signupError'),
+        description: error.message || t('toasts.signupErrorFallback'),
         variant: "destructive",
       });
     } finally {
@@ -436,8 +437,8 @@ const Auth = () => {
 
       if (existingUser) {
         toast({
-          title: "Email уже зарегистрирован",
-          description: "Пользователь с таким email уже существует. Попробуйте восстановить доступ через 'Забыли пароль?'",
+          title: t('toasts.emailExistsTitle'),
+          description: t('toasts.emailExistsDesc'),
           variant: "destructive",
         });
         setLoading(false);
@@ -457,7 +458,7 @@ const Auth = () => {
       });
 
       if (authError) throw authError;
-      if (!authData.user) throw new Error("Не удалось создать пользователя");
+      if (!authData.user) throw new Error(t('toasts.userCreateError'));
 
       // Create profile directly for private specialists (no access request needed)
       const { error: profileError } = await supabase.from("profiles").insert({
@@ -487,7 +488,7 @@ const Auth = () => {
           body: {
             email: validatedData.email,
             fullName: validatedData.fullName,
-            organizationName: 'Частная практика',
+            organizationName: t('toasts.privatePracticeOrgName'),
           },
         });
       } catch (emailError) {
@@ -495,8 +496,8 @@ const Auth = () => {
       }
 
       toast({
-        title: "Регистрация успешна!",
-        description: "Вы можете войти в систему с указанными данными.",
+        title: t('toasts.signupSuccess'),
+        description: t('toasts.signupSuccessDesc'),
       });
 
       // Clear form and switch to login
@@ -514,8 +515,8 @@ const Auth = () => {
       navigate("/");
     } catch (error: any) {
       toast({
-        title: "Ошибка регистрации",
-        description: error.message || "Не удалось зарегистрировать пользователя",
+        title: t('toasts.signupError'),
+        description: error.message || t('toasts.signupErrorFallback'),
         variant: "destructive",
       });
     } finally {
@@ -530,8 +531,8 @@ const Auth = () => {
     
     if (!emailValue) {
       toast({
-        title: "Ошибка",
-        description: "Введите email для восстановления пароля",
+        title: t('toasts.resetError'),
+        description: t('validation.resetEmailRequired'),
         variant: "destructive",
       });
       return;
@@ -541,8 +542,8 @@ const Auth = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(emailValue)) {
       toast({
-        title: "Ошибка",
-        description: "Некорректный формат email",
+        title: t('toasts.resetError'),
+        description: t('validation.resetEmailInvalid'),
         variant: "destructive",
       });
       return;
@@ -558,15 +559,15 @@ const Auth = () => {
       if (error) throw error;
 
       toast({
-        title: "Письмо отправлено",
-        description: "Проверьте почту для восстановления пароля. Перейдите по ссылке в письме для создания нового пароля.",
+        title: t('toasts.resetEmailSent'),
+        description: t('toasts.resetEmailSentDesc'),
       });
       setResetEmail("");
       setResetDialogOpen(false);
     } catch (error: any) {
       toast({
-        title: "Ошибка",
-        description: error.message || "Не удалось отправить письмо для восстановления пароля",
+        title: t('toasts.resetError'),
+        description: error.message || t('toasts.resetErrorFallback'),
         variant: "destructive",
       });
     } finally {
@@ -584,27 +585,27 @@ const Auth = () => {
         {/* Left side - Form */}
         <div className="p-8 md:p-12 flex flex-col justify-center">
           <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold mb-2">universum.</h1>
-            <p className="text-muted-foreground text-lg">Развитие. Для каждого</p>
+            <h1 className="text-3xl font-bold mb-2">{t('brand')}</h1>
+            <p className="text-muted-foreground text-lg">{t('tagline')}</p>
           </div>
           
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="login">Вход</TabsTrigger>
-              <TabsTrigger value="signup">Регистрация</TabsTrigger>
+              <TabsTrigger value="login">{t('tabs.login')}</TabsTrigger>
+              <TabsTrigger value="signup">{t('tabs.signup')}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="login" className="space-y-4">
-              <h2 className="text-2xl font-bold mb-2">Вход в систему</h2>
-              <p className="text-muted-foreground text-sm mb-6">Введите свои учетные данные для входа</p>
+              <h2 className="text-2xl font-bold mb-2">{t('login.title')}</h2>
+              <p className="text-muted-foreground text-sm mb-6">{t('login.subtitle')}</p>
               
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="login-email" className="text-sm font-medium">Email</Label>
+                  <Label htmlFor="login-email" className="text-sm font-medium">{t('login.emailLabel')}</Label>
                   <Input
                     id="login-email"
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder={t('login.emailPlaceholder')}
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
                     required
@@ -612,11 +613,11 @@ const Auth = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="login-password" className="text-sm font-medium">Пароль</Label>
+                  <Label htmlFor="login-password" className="text-sm font-medium">{t('login.passwordLabel')}</Label>
                   <Input
                     id="login-password"
                     type="password"
-                    placeholder="Введите пароль"
+                    placeholder={t('login.passwordPlaceholder')}
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
                     required
@@ -628,37 +629,37 @@ const Auth = () => {
                   className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium" 
                   disabled={loading}
                 >
-                  {loading ? "Вход..." : "Войти"}
+                  {loading ? t('login.submitting') : t('login.submit')}
                 </Button>
                 
                 <div className="space-y-2">
                   <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
                     <DialogTrigger asChild>
                       <Button variant="link" className="w-full text-sm text-muted-foreground hover:text-primary">
-                        Забыли пароль?
+                        {t('forgotPassword')}
                       </Button>
                     </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>Сброс пароля</DialogTitle>
+                      <DialogTitle>{t('resetPassword.title')}</DialogTitle>
                       <DialogDescription>
-                        Введите email для восстановления доступа
+                        {t('resetPassword.description')}
                       </DialogDescription>
                     </DialogHeader>
                     <form onSubmit={handleResetPassword} className="space-y-4">
                       <div className="space-y-2">
-                        <Label htmlFor="reset-email">Email</Label>
+                        <Label htmlFor="reset-email">{t('resetPassword.emailLabel')}</Label>
                         <Input
                           id="reset-email"
                           type="email"
-                          placeholder="your@email.com"
+                          placeholder={t('resetPassword.emailPlaceholder')}
                           value={resetEmail}
                           onChange={(e) => setResetEmail(e.target.value)}
                           required
                         />
                       </div>
                       <Button type="submit" className="w-full" disabled={loading}>
-                        {loading ? "Отправка..." : "Отправить ссылку для сброса"}
+                        {loading ? t('resetPassword.submitting') : t('resetPassword.submit')}
                       </Button>
                     </form>
                   </DialogContent>
@@ -673,8 +674,8 @@ const Auth = () => {
             </TabsContent>
 
             <TabsContent value="signup" className="space-y-4">
-              <h2 className="text-2xl font-bold mb-2">Регистрация</h2>
-              <p className="text-muted-foreground text-sm mb-4">Создайте новый аккаунт для работы с системой</p>
+              <h2 className="text-2xl font-bold mb-2">{t('signup.title')}</h2>
+              <p className="text-muted-foreground text-sm mb-4">{t('signup.subtitle')}</p>
               
               {/* Registration mode tabs */}
               <div className="flex gap-2 mb-4">
@@ -685,7 +686,7 @@ const Auth = () => {
                   onClick={() => setRegistrationMode('private')}
                   className="flex-1"
                 >
-                  Частная практика
+                  {t('signup.modes.private')}
                 </Button>
                 <Button
                   type="button"
@@ -694,7 +695,7 @@ const Auth = () => {
                   onClick={() => setRegistrationMode('organization')}
                   className="flex-1"
                 >
-                  Для организаций
+                  {t('signup.modes.organization')}
                 </Button>
               </div>
 
@@ -703,7 +704,7 @@ const Auth = () => {
                   <AutoApproveStatusHint mode="organization" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div className="space-y-2 md:col-span-2">
-                      <Label htmlFor="fullName" className="text-sm">ФИО *</Label>
+                      <Label htmlFor="fullName" className="text-sm">{t('signup.fields.fullName')} *</Label>
                       <Input
                         id="fullName"
                         value={signupData.fullName}
@@ -720,11 +721,11 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="phone" className="text-sm">Телефон *</Label>
+                      <Label htmlFor="phone" className="text-sm">{t('signup.fields.phone')} *</Label>
                       <Input
                         id="phone"
                         type="tel"
-                        placeholder="+7 (999) 999-99-99"
+                        placeholder={t('signup.placeholders.phone')}
                         value={signupData.phone}
                         onChange={(e) => {
                           setSignupData({ ...signupData, phone: e.target.value });
@@ -739,7 +740,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="email" className="text-sm">Email (логин) *</Label>
+                      <Label htmlFor="email" className="text-sm">{t('signup.fields.email')} *</Label>
                       <Input
                         id="email"
                         type="email"
@@ -757,7 +758,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="password" className="text-sm">Пароль *</Label>
+                      <Label htmlFor="password" className="text-sm">{t('signup.fields.password')} *</Label>
                       <Input
                         id="password"
                         type="password"
@@ -775,7 +776,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="position" className="text-sm">Должность *</Label>
+                      <Label htmlFor="position" className="text-sm">{t('signup.fields.position')} *</Label>
                       <Select
                         value={signupData.positionId}
                         onValueChange={(value) => {
@@ -785,7 +786,7 @@ const Auth = () => {
                         required
                       >
                         <SelectTrigger className={`h-10 ${signupErrors.positionId ? "border-destructive focus-visible:ring-destructive" : ""}`}>
-                          <SelectValue placeholder="Выберите должность" />
+                          <SelectValue placeholder={t('signup.placeholders.selectPosition')} />
                         </SelectTrigger>
                         <SelectContent>
                           {positions.map((position) => (
@@ -801,7 +802,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="region" className="text-sm">Регион *</Label>
+                      <Label htmlFor="region" className="text-sm">{t('signup.fields.region')} *</Label>
                       <Select
                         value={signupData.regionId}
                         onValueChange={(value) => {
@@ -811,7 +812,7 @@ const Auth = () => {
                         required
                       >
                         <SelectTrigger className={`h-10 ${signupErrors.regionId ? "border-destructive focus-visible:ring-destructive" : ""}`}>
-                          <SelectValue placeholder="Выберите регион" />
+                          <SelectValue placeholder={t('signup.placeholders.selectRegion')} />
                         </SelectTrigger>
                         <SelectContent>
                           {regions.map((region) => (
@@ -827,7 +828,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="role" className="text-sm">Роль *</Label>
+                      <Label htmlFor="role" className="text-sm">{t('signup.fields.role')} *</Label>
                       <Select
                         value={signupData.role}
                         onValueChange={(value: "user" | "regional_operator" | "admin") => {
@@ -837,12 +838,12 @@ const Auth = () => {
                         required
                       >
                         <SelectTrigger className={`h-10 ${signupErrors.role ? "border-destructive focus-visible:ring-destructive" : ""}`}>
-                          <SelectValue placeholder="Выберите роль" />
+                          <SelectValue placeholder={t('signup.placeholders.selectRole')} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="user">Пользователь</SelectItem>
-                          <SelectItem value="regional_operator">Региональный оператор</SelectItem>
-                          <SelectItem value="admin">Администратор</SelectItem>
+                          <SelectItem value="user">{t('signup.roles.user')}</SelectItem>
+                          <SelectItem value="regional_operator">{t('signup.roles.regionalOperator')}</SelectItem>
+                          <SelectItem value="admin">{t('signup.roles.admin')}</SelectItem>
                         </SelectContent>
                       </Select>
                       {signupErrors.role && (
@@ -857,7 +858,7 @@ const Auth = () => {
                           setSignupData({ ...signupData, organizationId: value });
                           setSignupErrors({ ...signupErrors, organizationId: "" });
                         }}
-                        placeholder="Если не нашли организацию выберите Иное..."
+                        placeholder={t('signup.placeholders.organization')}
                         regionFilter={signupData.regionId}
                       />
                       {signupErrors.organizationId && (
@@ -880,7 +881,7 @@ const Auth = () => {
                           htmlFor="dataProcessingConsent"
                           className="text-sm leading-tight cursor-pointer"
                         >
-                          Я согласен на обработку персональных данных в соответствии с{" "}
+                          {t('signup.fields.dataConsent')}{" "}
                           <DataProcessingAgreement />
                         </label>
                       </div>
@@ -895,7 +896,7 @@ const Auth = () => {
                     className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium" 
                     disabled={loading}
                   >
-                    {loading ? "Регистрация..." : "Зарегистрироваться"}
+                    {loading ? t('signup.submitting') : t('signup.submit')}
                   </Button>
                   
                   <div className="space-y-2">
@@ -909,7 +910,7 @@ const Auth = () => {
                   <AutoApproveStatusHint mode="private" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div className="space-y-2 md:col-span-2">
-                      <Label htmlFor="privateFullName" className="text-sm">ФИО *</Label>
+                      <Label htmlFor="privateFullName" className="text-sm">{t('signup.fields.fullName')} *</Label>
                       <Input
                         id="privateFullName"
                         value={privateSignupData.fullName}
@@ -926,11 +927,11 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="privatePhone" className="text-sm">Телефон *</Label>
+                      <Label htmlFor="privatePhone" className="text-sm">{t('signup.fields.phone')} *</Label>
                       <Input
                         id="privatePhone"
                         type="tel"
-                        placeholder="+7 (999) 999-99-99"
+                        placeholder={t('signup.placeholders.phone')}
                         value={privateSignupData.phone}
                         onChange={(e) => {
                           setPrivateSignupData({ ...privateSignupData, phone: e.target.value });
@@ -945,7 +946,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="privateEmail" className="text-sm">Email (логин) *</Label>
+                      <Label htmlFor="privateEmail" className="text-sm">{t('signup.fields.email')} *</Label>
                       <Input
                         id="privateEmail"
                         type="email"
@@ -963,7 +964,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="privatePassword" className="text-sm">Пароль *</Label>
+                      <Label htmlFor="privatePassword" className="text-sm">{t('signup.fields.password')} *</Label>
                       <Input
                         id="privatePassword"
                         type="password"
@@ -981,7 +982,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="privatePosition" className="text-sm">Должность *</Label>
+                      <Label htmlFor="privatePosition" className="text-sm">{t('signup.fields.position')} *</Label>
                       <Select
                         value={privateSignupData.positionId}
                         onValueChange={(value) => {
@@ -991,7 +992,7 @@ const Auth = () => {
                         required
                       >
                         <SelectTrigger className={`h-10 ${privateSignupErrors.positionId ? "border-destructive focus-visible:ring-destructive" : ""}`}>
-                          <SelectValue placeholder="Выберите должность" />
+                          <SelectValue placeholder={t('signup.placeholders.selectPosition')} />
                         </SelectTrigger>
                         <SelectContent>
                           {privatePositions.map((position) => (
@@ -1007,7 +1008,7 @@ const Auth = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="privateRegion" className="text-sm">Регион *</Label>
+                      <Label htmlFor="privateRegion" className="text-sm">{t('signup.fields.region')} *</Label>
                       <Select
                         value={privateSignupData.regionId}
                         onValueChange={(value) => {
@@ -1017,7 +1018,7 @@ const Auth = () => {
                         required
                       >
                         <SelectTrigger className={`h-10 ${privateSignupErrors.regionId ? "border-destructive focus-visible:ring-destructive" : ""}`}>
-                          <SelectValue placeholder="Выберите регион" />
+                          <SelectValue placeholder={t('signup.placeholders.selectRegion')} />
                         </SelectTrigger>
                         <SelectContent>
                           {regions.map((region) => (
@@ -1047,7 +1048,7 @@ const Auth = () => {
                           htmlFor="privateDataProcessingConsent"
                           className="text-sm leading-tight cursor-pointer"
                         >
-                          Я согласен на обработку персональных данных в соответствии с{" "}
+                          {t('signup.fields.dataConsent')}{" "}
                           <DataProcessingAgreement />
                         </label>
                       </div>
@@ -1062,7 +1063,7 @@ const Auth = () => {
                     className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium" 
                     disabled={loading}
                   >
-                    {loading ? "Регистрация..." : "Зарегистрироваться"}
+                    {loading ? t('signup.submitting') : t('signup.submit')}
                   </Button>
                   
                   <div className="space-y-2">
@@ -1087,17 +1088,17 @@ const Auth = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-white">Карточка ребёнка</h3>
-                  <span className="text-xs text-white/60 bg-white/10 px-2 py-0.5 rounded-full">Ядро системы</span>
+                  <h3 className="text-xl font-semibold text-white">{t('features.childCard.title')}</h3>
+                  <span className="text-xs text-white/60 bg-white/10 px-2 py-0.5 rounded-full">{t('features.childCard.badge')}</span>
                 </div>
               </div>
               <p className="text-white/80 text-sm leading-relaxed mb-3">
-                Единый профиль ребёнка: история протоколов, динамика развития, посещаемость занятий, рекомендации и сравнительный анализ.
+                {t('features.childCard.description')}
               </p>
               <div className="flex flex-wrap gap-2">
-                <span className="text-xs text-white/70 bg-white/10 px-2 py-1 rounded">📊 Динамика</span>
-                <span className="text-xs text-white/70 bg-white/10 px-2 py-1 rounded">📈 Сравнения</span>
-                <span className="text-xs text-white/70 bg-white/10 px-2 py-1 rounded">📋 Рекомендации</span>
+                {Object.values(t('features.childCard.tags', { returnObjects: true }) as Record<string, string>).map((tag, index) => (
+                  <span key={index} className="text-xs text-white/70 bg-white/10 px-2 py-1 rounded">{tag}</span>
+                ))}
               </div>
             </div>
 
@@ -1109,10 +1110,10 @@ const Auth = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-semibold text-white">Протокол ППк</h3>
+                <h3 className="text-lg font-semibold text-white">{t('features.protocol.title')}</h3>
               </div>
               <p className="text-white/80 text-sm leading-relaxed">
-                Автоматизированное формирование протоколов консилиума, заключений и рекомендаций.
+                {t('features.protocol.description')}
               </p>
             </div>
 
@@ -1124,10 +1125,10 @@ const Auth = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-semibold text-white">Журнал рабочего времени</h3>
+                <h3 className="text-lg font-semibold text-white">{t('features.workLog.title')}</h3>
               </div>
               <p className="text-white/80 text-sm leading-relaxed">
-                Календарь занятий, учёт рабочего времени, контроль нагрузки и статистика специалистов.
+                {t('features.workLog.description')}
               </p>
             </div>
 
@@ -1140,10 +1141,9 @@ const Auth = () => {
     <Dialog open={successDialogOpen} onOpenChange={setSuccessDialogOpen}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-center text-2xl">Благодарим за регистрацию!</DialogTitle>
+          <DialogTitle className="text-center text-2xl">{t('successDialog.title')}</DialogTitle>
           <DialogDescription className="text-center pt-4 text-base leading-relaxed">
-            В ближайшее время заявка будет рассмотрена администратором. 
-            После завершения проверки на указанный вами адрес электронной почты придёт соответствующее уведомление.
+            {t('successDialog.description')}
           </DialogDescription>
         </DialogHeader>
         <div className="flex justify-center pt-4">
@@ -1154,7 +1154,7 @@ const Auth = () => {
             }}
             className="w-full"
           >
-            Перейти к статусу заявки
+            {t('successDialog.button')}
           </Button>
         </div>
       </DialogContent>
@@ -1176,19 +1176,19 @@ const Auth = () => {
             <div className="relative w-32 h-32 rounded-full bg-primary/10 flex items-center justify-center border-4 border-primary shadow-lg">
               <img 
                 src="/lovable-uploads/f971f75e-c922-48b7-a527-0263972e4807.png" 
-                alt="Welcome" 
+                alt={t('welcomeDialog.title')} 
                 className="w-20 h-20 object-contain"
               />
             </div>
           </div>
           <DialogTitle className="text-center text-3xl font-bold text-foreground">
-            Добро пожаловать!
+            {t('welcomeDialog.title')}
           </DialogTitle>
           <DialogDescription className="text-center text-xl font-medium text-foreground pt-2">
             {welcomeUserName}
           </DialogDescription>
           <p className="text-center text-muted-foreground text-base pt-2">
-            Вы успешно вошли в систему universum
+            {t('welcomeDialog.subtitle')}
           </p>
         </DialogHeader>
         <div className="flex justify-center pt-6 pb-4">
@@ -1199,7 +1199,7 @@ const Auth = () => {
             className="w-full h-12 text-lg font-semibold bg-primary hover:bg-primary/90 shadow-lg"
             size="lg"
           >
-            Перейти к работе
+            {t('welcomeDialog.button')}
           </Button>
         </div>
       </DialogContent>

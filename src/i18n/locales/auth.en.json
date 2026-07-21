@@ -1,0 +1,442 @@
+{
+  "seoTitle": "Sign in — universum.",
+  "brand": "universum.",
+  "tagline": "Development. For everyone.",
+  "tabs": {
+    "login": "Sign in",
+    "signup": "Sign up"
+  },
+  "login": {
+    "title": "Sign in",
+    "subtitle": "Enter your credentials to sign in",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter password",
+    "submit": "Sign in",
+    "submitting": "Signing in..."
+  },
+  "forgotPassword": "Forgot password?",
+  "resetPassword": {
+    "title": "Reset password",
+    "description": "Enter your email to restore access",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "submit": "Send reset link",
+    "submitting": "Sending..."
+  },
+  "signup": {
+    "title": "Create account",
+    "subtitle": "Create a new account to work with the system",
+    "modes": {
+      "private": "Private practice",
+      "organization": "For organizations"
+    },
+    "fields": {
+      "fullName": "Full name",
+      "phone": "Phone",
+      "email": "Email (login)",
+      "password": "Password",
+      "position": "Position",
+      "region": "Region",
+      "role": "Role",
+      "organization": "Organization",
+      "dataConsent": "I agree to the processing of personal data in accordance with the"
+    },
+    "placeholders": {
+      "fullName": "Ivanov Ivan Ivanovich",
+      "phone": "+7 (999) 999-99-99",
+      "email": "your@email.com",
+      "selectPosition": "Select position",
+      "selectRegion": "Select region",
+      "selectRole": "Select role",
+      "organization": "If you can't find your organization, select Other..."
+    },
+    "roles": {
+      "user": "User",
+      "regionalOperator": "Regional operator",
+      "admin": "Administrator"
+    },
+    "submit": "Sign up",
+    "submitting": "Signing up..."
+  },
+  "validation": {
+    "fullNameRequired": "Full name is required",
+    "fullNameTooLong": "Full name is too long",
+    "fullNameFormat": "Only letters, spaces and hyphens",
+    "phoneFormat": "Format: +79991234567",
+    "emailInvalid": "Invalid email",
+    "emailTooLong": "Email is too long",
+    "passwordMin": "At least 8 characters",
+    "passwordUppercase": "An uppercase letter is required",
+    "passwordDigit": "A digit is required",
+    "positionRequired": "Position is required",
+    "regionRequired": "Region is required",
+    "organizationRequired": "Organization is required",
+    "roleRequired": "Role is required",
+    "consentRequired": "Consent to personal data processing is required",
+    "resetEmailRequired": "Enter email for password reset",
+    "resetEmailInvalid": "Invalid email format"
+  },
+  "toasts": {
+    "blockedTitle": "Access blocked",
+    "blockedDesc": "Your account has been blocked by an administrator",
+    "loginError": "Sign-in error",
+    "welcomeFallback": "User",
+    "emailExistsTitle": "Email already registered",
+    "emailExistsDesc": "A user with this email already exists. Try restoring access via 'Forgot password?'",
+    "signupError": "Registration error",
+    "signupErrorFallback": "Failed to register user",
+    "userCreateError": "Failed to create user",
+    "resetEmailSent": "Email sent",
+    "resetEmailSentDesc": "Check your email for password recovery instructions. Follow the link in the email to create a new password.",
+    "resetError": "Error",
+    "resetErrorFallback": "Failed to send password reset email",
+    "signupSuccess": "Registration successful!",
+    "signupSuccessDesc": "You can now sign in with the provided details.",
+    "privatePracticeOrgName": "Private practice"
+  },
+  "successDialog": {
+    "title": "Thank you for registering!",
+    "description": "Your request will be reviewed by an administrator shortly. You will receive a notification at the email address you provided once the review is complete.",
+    "button": "Go to request status"
+  },
+  "welcomeDialog": {
+    "title": "Welcome!",
+    "subtitle": "You have successfully signed in to universum",
+    "button": "Go to work"
+  },
+  "features": {
+    "childCard": {
+      "title": "Child card",
+      "badge": "System core",
+      "description": "A unified child profile: protocol history, development dynamics, attendance, recommendations and comparative analysis.",
+      "tags": {
+        "dynamics": "Dynamics",
+        "comparisons": "Comparisons",
+        "recommendations": "Recommendations"
+      }
+    },
+    "protocol": {
+      "title": "PPC protocol",
+      "description": "Automated generation of council protocols, conclusions and recommendations."
+    },
+    "workLog": {
+      "title": "Work log",
+      "description": "Class calendar, working time tracking, workload control and specialist statistics."
+    }
+  },
+  "autoApprove": {
+    "checking": "Checking registration confirmation mode…",
+    "accessGranted": "Access is granted immediately",
+    "adminApprovalRequired": "Administrator confirmation required",
+    "privateDesc": "Private practice: after registration you will enter the system immediately.",
+    "orgAutoDesc": "School and organization educators get access automatically after registration.",
+    "orgManualDesc": "The request will go to the 'Access requests' section. Access will be opened after manual validation by the administrator.",
+    "privateTooltip": "Auto-approval is always enabled for private practice — independent of system settings.",
+    "orgTooltip": "This mode is managed in the admin panel: Administration → Access requests → Approve school educator registration."
+  },
+  "organizationSelector": {
+    "label": "Educational organization",
+    "placeholder": "Select organization",
+    "loading": "Loading...",
+    "searchPlaceholder": "Search by name, district or number...",
+    "notFound": "Organizations not found. Add a new organization in the 'Organizations' section",
+    "empty": "No available organizations. Go to the 'Organizations' section to add one",
+    "hint": "Didn't find your organization? Contact your administrator",
+    "manual": "added manually"
+  },
+  "systemInfo": {
+    "trigger": "More about the system",
+    "title": "universum.",
+    "tagline": "Development. For everyone.",
+    "purpose": {
+      "title": "Purpose of the system",
+      "intro": "universum. is a platform for comprehensive child development support.",
+      "childCard": {
+        "title": "Child card — the core of the system",
+        "description": "Centralized profile combining all child development data: protocol results, indicator dynamics, class history and personalized recommendations."
+      },
+      "protocols": {
+        "title": "PPC protocols",
+        "description": "Automation of psychological-pedagogical councils: structured assessment using checklists, generation of conclusions and recommendations."
+      },
+      "workLog": {
+        "title": "Work log",
+        "description": "Planning and tracking of individual and group sessions, attendance control, specialist workload statistics."
+      }
+    },
+    "features": {
+      "title": "Key features",
+      "items": [
+        "Creating and maintaining electronic PPC protocols",
+        "Structured assessment of student development using checklists",
+        "Automatic generation of conclusions and recommendations",
+        "Work directions — the system matches educators to a child's needs",
+        "Public specialist profiles with qualifications, directions and fees",
+        "Educator recommendations for parents based on PPC and test results",
+        "Cost visibility management (administrator / specialist)",
+        "Control of required documents",
+        "Statistics and analytics on protocols, specialist KPIs",
+        "Export protocols to PDF and Excel",
+        "Access management for different user levels",
+        "Child cards with protocol history and development dynamics",
+        "Session planning and tracking",
+        "Interactive business processes and instructions for all roles"
+      ]
+    },
+    "childCard": {
+      "title": "Child card",
+      "intro": "The centralized child profile combines all information about their development, sessions and progress.",
+      "cards": {
+        "personal": {
+          "title": "Personal data",
+          "description": "Full name, date of birth, gender, parent contacts, education level"
+        },
+        "history": {
+          "title": "Protocol history",
+          "description": "All PPC protocols with conclusions and recommendations"
+        },
+        "dynamics": {
+          "title": "Development dynamics",
+          "description": "Charts and comparison of indicators across protocols"
+        },
+        "matching": {
+          "title": "Specialist matching",
+          "description": "Educator recommendations based on identified issues and work directions"
+        },
+        "attendance": {
+          "title": "Attendance tracking",
+          "description": "Attendance statistics for sessions"
+        },
+        "recommendations": {
+          "title": "Recommendations",
+          "description": "Personalized recommendations and booking educators by direction"
+        }
+      }
+    },
+    "roles": {
+      "title": "User roles",
+      "specialist": "PPC Specialist: creates protocols, maintains schedule, public profile with work directions, manages service cost",
+      "admin": "Organization administrator: manages staff, sets cost visibility, KPIs and analytics for the organization",
+      "regional": "Regional operator: views protocols of all organizations in the region, regional analytics",
+      "systemAdmin": "System administrator: full access to all functions, user and organization management, business processes"
+    },
+    "workflow": {
+      "title": "Workflow",
+      "steps": [
+        "Register in the system and receive access after administrator approval",
+        "Create a new protocol with student details",
+        "Check required documents",
+        "Fill in the structured assessment checklist",
+        "Automatically generate a conclusion based on assessments",
+        "Save the protocol and generate reports"
+      ]
+    },
+    "support": {
+      "title": "Technical support",
+      "text": "If you have questions or technical problems, contact your organization administrator or the system technical support service."
+    },
+    "security": {
+      "title": "Data security",
+      "text": "All personal data of students and their parents is reliably protected. Access to protocols is provided only to authorized specialists in accordance with their role. The system complies with personal data legislation."
+    },
+    "developer": {
+      "title": "Developer information",
+      "name": "IE Zagladin V.S.",
+      "tin": "TIN: 770702169499",
+      "psrn": "PSRNIE: 323774600132891"
+    },
+    "pricing": {
+      "title": "Pricing",
+      "monthly": {
+        "title": "Monthly subscription",
+        "description": "Perfect for testing",
+        "price": "2 500 ₽",
+        "period": "per month"
+      },
+      "yearly": {
+        "title": "Yearly subscription",
+        "description": "15% savings",
+        "price": "25 500 ₽",
+        "period": "per year",
+        "note": "instead of 30 000 ₽"
+      },
+      "trial": {
+        "text": "Trial period: after request approval, a 7-day trial with unlimited protocols is provided"
+      },
+      "types": {
+        "title": "Subscription types",
+        "card": {
+          "title": "Card payment",
+          "description": "We accept MIR cards, SBP and other online payment methods. Fast connection and instant subscription activation."
+        },
+        "invoice": {
+          "title": "Invoice for legal entity",
+          "description": "Educational organizations can pay by bank transfer. We provide all necessary accounting documents."
+        },
+        "portal": {
+          "title": "Purchase through supplier portals",
+          "description": "The system is available for procurement through official supplier portals in accordance with 44-FZ and 223-FZ."
+        }
+      }
+    }
+  },
+  "supportDialog": {
+    "trigger": "Support",
+    "title": "Support",
+    "description": "We are always ready to help you",
+    "intro": "If you have any questions, our team is ready to help!<br />Write to us — we will reply within 24 hours.",
+    "email": {
+      "label": "Email",
+      "value": "info@profilaktika.site"
+    },
+    "hours": {
+      "label": "Working hours",
+      "value": "Mon–Fri, 10:00–18:00 MSK"
+    },
+    "chat": {
+      "label": "Online chat",
+      "value": "You can also contact us via the chat at the bottom of the page!"
+    },
+    "helpWith": {
+      "title": "We help with:",
+      "items": [
+        "Sign-in and authorization issues",
+        "Subscription payment",
+        "Protocols and reports",
+        "Privacy questions"
+      ]
+    },
+    "thanks": "Thank you for using universum."
+  },
+  "authFooter": {
+    "forTeachers": "For educators",
+    "forParents": "For parents",
+    "offer": "Public offer",
+    "privacy": "Privacy policy",
+    "contacts": "Contacts",
+    "developer": "IE Zagladin V.S.",
+    "tin": "TIN: 770702169499",
+    "psrn": "PSRNIE: 323774600132891",
+    "rights": "All rights reserved.",
+    "offerDialog": {
+      "title": "Public offer",
+      "description": "Public offer agreement for services",
+      "sections": [
+        {
+          "title": "1. General provisions",
+          "text": "This document is the official offer (public offer) of Individual Entrepreneur Zagladin V.S. (hereinafter 'Contractor') to any individual or legal entity (hereinafter 'Customer') to enter into a contract for the provision of access to the automated information system 'PPC' (hereinafter 'System' or 'Service')."
+        },
+        {
+          "title": "2. Subject of the contract",
+          "text": "The Contractor undertakes to provide the Customer with access to the System for creating, storing and managing psychological-pedagogical council (PPC) protocols, and the Customer undertakes to pay for the services in accordance with the Contractor's tariffs."
+        },
+        {
+          "title": "3. Cost of services",
+          "text": "The cost of services is determined by the current tariff plans: Monthly subscription: 2 500 ₽ per month; Yearly subscription: 25 500 ₽ per year (15% savings). A 7-day trial with full access to all features is provided."
+        },
+        {
+          "title": "4. Payment procedure",
+          "text": "Payment is made by transfer to the Contractor's settlement account or through the YuKassa payment system. The service is considered rendered from the moment access to the System is provided."
+        },
+        {
+          "title": "5. Contact details",
+          "text": "IE Zagladin V.S., TIN: 770702169499, PSRNIE: 323774600132891"
+        }
+      ]
+    },
+    "privacyDialog": {
+      "title": "Privacy policy",
+      "description": "Processing and protection of personal data",
+      "sections": [
+        {
+          "title": "1. General provisions",
+          "text": "This Privacy Policy defines the procedure for processing and protecting personal data of users of the 'PPC' System in accordance with the requirements of Federal Law No. 152-FZ 'On Personal Data' dated 27.07.2006."
+        },
+        {
+          "title": "2. Data collected",
+          "text": "In the process of using the System, the following categories of data may be processed: full name, contact phone number, email address of the user; position and place of work; data about children (full name, date of birth, education level); results of psychological-pedagogical assessments; PPC session protocols."
+        },
+        {
+          "title": "3. Purposes of processing",
+          "text": "Personal data is processed for the purposes of: providing access to the System; creating and storing PPC protocols; generating statistical reports; communicating with users."
+        },
+        {
+          "title": "4. Data protection",
+          "text": "The operator applies organizational and technical measures to protect personal data in accordance with the requirements of 152-FZ. All data is stored on secure servers using encryption and access control. Access to personal data is provided only to authorized employees of educational organizations."
+        },
+        {
+          "title": "5. Rights of data subjects",
+          "text": "Users have the right to: receive information about the processing of their personal data; request clarification, blocking or deletion of data; withdraw consent to data processing; appeal the operator's actions or inaction to Roskomnadzor or in court."
+        },
+        {
+          "title": "6. Operator contacts",
+          "text": "IE Zagladin V.S., TIN: 770702169499, PSRNIE: 323774600132891, Email: info@profilaktika.site"
+        }
+      ]
+    },
+    "contactsDialog": {
+      "title": "Contact information",
+      "description": "Contact us for assistance",
+      "sections": [
+        {
+          "title": "Technical support",
+          "text": "Email: info@profilaktika.site\nWorking hours: Mon–Fri, 9:00–18:00 (MSK)"
+        },
+        {
+          "title": "Legal details",
+          "text": "IE Zagladin V.S.\nTIN: 770702169499\nPSRNIE: 323774600132891"
+        },
+        {
+          "title": "Commercial questions",
+          "text": "To receive a commercial offer, fill out the form in the system or write to email: info@profilaktika.site"
+        }
+      ]
+    }
+  },
+  "dataProcessingAgreement": {
+    "trigger": "personal data processing agreement",
+    "title": "Consent to personal data processing",
+    "description": "Please review the terms of personal data processing",
+    "sections": [
+      {
+        "title": "1. General provisions",
+        "text": "I hereby give my consent to the processing of my personal data in accordance with Federal Law No. 152-FZ 'On Personal Data' dated 27.07.2006."
+      },
+      {
+        "title": "2. Personal data",
+        "text": "Personal data includes the following information: full name; email address; phone number; position and place of work; region and organization; data on created protocols and documents."
+      },
+      {
+        "title": "3. Purposes of processing",
+        "text": "Personal data is processed for the following purposes: providing access to the information system; user identification; maintaining records of psychological-pedagogical council protocols; generating reports and statistics; ensuring information security; sending notifications related to the system operation."
+      },
+      {
+        "title": "4. Methods of processing",
+        "text": "Personal data is processed using automation tools and without them. Processing includes collection, recording, systematization, accumulation, storage, clarification (updating, modification), extraction, use, transfer (provision, access), anonymization, blocking, deletion and destruction of personal data."
+      },
+      {
+        "title": "5. Transfer of personal data",
+        "text": "Personal data is not transferred to third parties, except as provided by the legislation of the Russian Federation. Access to personal data is granted only to authorized employees of the educational organization and system administrators."
+      },
+      {
+        "title": "6. Security of personal data",
+        "text": "The operator ensures the security of personal data by applying organizational and technical measures aimed at protecting personal data from unauthorized or accidental access, destruction, modification, blocking, copying, provision, distribution, as well as other unlawful actions."
+      },
+      {
+        "title": "7. Validity period",
+        "text": "This consent is valid from the moment it is provided until it is withdrawn. The consent may be withdrawn by the personal data subject by sending a written request to the operator."
+      },
+      {
+        "title": "8. Rights of data subjects",
+        "text": "The personal data subject has the right to: receive information about the presence of personal data; request clarification of their personal data; request blocking or destruction of personal data; withdraw consent to personal data processing; appeal the operator's actions or inaction."
+      },
+      {
+        "title": "9. Contact information",
+        "text": "For questions about personal data processing, you can contact the system administrator through the feedback functionality in your personal account or at the email address specified in your profile settings."
+      }
+    ],
+    "footer": "By providing my personal data during registration, I confirm that I have read this agreement and agree to the terms of processing my personal data."
+  }
+}
