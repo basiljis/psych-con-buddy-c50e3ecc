@@ -5,16 +5,18 @@ import ru from "./locales/ru.json";
 import en from "./locales/en.json";
 import pagesRu from "./locales/pages.ru.json";
 import pagesEn from "./locales/pages.en.json";
+import authRu from "./locales/auth.ru.json";
+import authEn from "./locales/auth.en.json";
 
 void i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources: {
-      ru: { translation: ru, pages: pagesRu },
-      en: { translation: en, pages: pagesEn },
+      ru: { translation: ru, pages: pagesRu, auth: authRu },
+      en: { translation: en, pages: pagesEn, auth: authEn },
     },
-    ns: ["translation", "pages"],
+    ns: ["translation", "pages", "auth"],
     defaultNS: "translation",
     fallbackLng: "ru",
     supportedLngs: ["ru", "en"],
