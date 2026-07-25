@@ -601,6 +601,7 @@ const STR = {
     tourFinish: "Done",
     tourClose: "Close hints",
     beginnerLabel: "Beginner note",
+    practicalLabel: "What it means in practice",
     learningOn: "Learning mode on — a short note explaining how the frameworks differ appears under each block.",
   },
 };
