@@ -203,6 +203,10 @@ const BLOCKS: Block[] = [
         ru: "Mathematik, Naturwissenschaft, Technik — три отдельных домена ([[STEM|stem]]-подход).",
         en: "Mathematik, Naturwissenschaft, Technik — three separate [[STEM|stem]] domains.",
       },
+      china: {
+        ru: "科学 (Kēxué) — наука: математические представления и естественно-научные исследования как две подобласти, акцент на любознательности и наблюдении.",
+        en: "科学 (Kēxué, Science) — mathematical concepts and scientific inquiry as two sub-strands, emphasis on curiosity and observation.",
+      },
     },
   },
   {
