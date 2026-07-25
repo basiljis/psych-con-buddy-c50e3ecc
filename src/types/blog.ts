@@ -18,6 +18,12 @@ export interface BlogPost {
   published_at: string;
   created_at: string;
   updated_at: string;
+  seo_title?: string | null;
+  seo_description?: string | null;
+  og_image?: string | null;
+  seo_title_en?: string | null;
+  seo_description_en?: string | null;
+  og_image_en?: string | null;
 }
 
 export const BLOG_CATEGORIES: { value: BlogCategory; label: string }[] = [
