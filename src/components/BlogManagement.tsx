@@ -273,6 +273,8 @@ export function BlogManagement() {
           )}
         </CardContent>
       </Card>
+        </TabsContent>
+      </Tabs>
 
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
