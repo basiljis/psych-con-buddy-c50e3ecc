@@ -141,6 +141,10 @@ const BLOCKS: Block[] = [
         ru: "Körper, Bewegung, Gesundheit — тело, движение, здоровье как единый образовательный домен.",
         en: "Körper, Bewegung, Gesundheit — body, motion, health as one educational domain.",
       },
+      china: {
+        ru: "健康 (Jiànkāng) — здоровье: физическое развитие, ЗОЖ, безопасность и эмоциональное благополучие в одном домене.",
+        en: "健康 (Jiànkāng, Health) — physical development, healthy habits, safety and emotional wellbeing in one domain.",
+      },
     },
   },
   {
