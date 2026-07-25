@@ -653,11 +653,85 @@ export default function DevelopmentBlocksComparison() {
             </button>
           );
         })}
-        <div className="ml-auto flex items-center gap-2">
-          <span className="text-xs text-muted-foreground">{s.highlight}</span>
-          <Switch checked={highlight} onCheckedChange={setHighlight} />
+        <div className="ml-auto flex flex-wrap items-center gap-3">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <GraduationCap className={`h-4 w-4 ${learning ? "text-primary" : "text-muted-foreground"}`} />
+            <span className="text-xs text-muted-foreground">{s.learning}</span>
+            <Switch checked={learning} onCheckedChange={enableLearning} />
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <span className="text-xs text-muted-foreground">{s.highlight}</span>
+            <Switch checked={highlight} onCheckedChange={setHighlight} />
+          </label>
         </div>
       </div>
+
+      {/* Guided tour */}
+      {learning && (
+        <div className="mb-4 rounded-xl border border-primary/30 bg-primary/5 p-4 md:p-5">
+          <div className="flex items-start gap-3">
+            <div className="rounded-lg bg-primary text-primary-foreground p-2 shrink-0">
+              <Lightbulb className="h-4 w-4" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-3 mb-2">
+                <div className="text-xs font-semibold uppercase tracking-wider text-primary">
+                  {s.tourTitle} · {s.tourStep} {tourStep + 1} {s.tourOf} {TOUR_STEPS.length}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => enableLearning(false)}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label={s.tourClose}
+                  title={s.tourClose}
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              <h4 className="font-semibold text-base md:text-lg mb-1 leading-tight">
+                {TOUR_STEPS[tourStep].title[lang]}
+              </h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {TOUR_STEPS[tourStep].body[lang]}
+              </p>
+              <div className="mt-3 h-1 w-full rounded-full bg-primary/15 overflow-hidden">
+                <div
+                  className="h-full bg-primary transition-all duration-300"
+                  style={{ width: `${((tourStep + 1) / TOUR_STEPS.length) * 100}%` }}
+                />
+              </div>
+              <div className="mt-3 flex items-center justify-between gap-2">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setTourStep((n) => Math.max(0, n - 1))}
+                  disabled={tourStep === 0}
+                  className="gap-1"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  {s.tourPrev}
+                </Button>
+                {tourStep < TOUR_STEPS.length - 1 ? (
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => setTourStep((n) => Math.min(TOUR_STEPS.length - 1, n + 1))}
+                    className="gap-1"
+                  >
+                    {s.tourNext}
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                ) : (
+                  <Button type="button" size="sm" onClick={() => enableLearning(false)}>
+                    {s.tourFinish}
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Table */}
       <Card className="overflow-hidden">
