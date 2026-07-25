@@ -34,6 +34,7 @@ Deno.serve(async (req) => {
       .from("blog_posts")
       .select("slug,title,excerpt,content,category,author,published_at,cover_url")
       .eq("published", true)
+      .lte("published_at", new Date().toISOString())
       .order("published_at", { ascending: false })
       .limit(100);
 
