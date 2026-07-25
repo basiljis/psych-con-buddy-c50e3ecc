@@ -395,7 +395,7 @@ export default function BlogPost() {
                     {related.map((r) => {
                       const rloc = localizedPost(r, lang);
                       return (
-                      <Link key={r.id} to={`/blog/${r.slug}`} className="group">
+                      <Link key={r.id} to={`/blog/${r.slug}`} className="group" onClick={() => logClick(`/blog/${r.slug}`, "related")}>
                         <Card className="h-full transition-shadow group-hover:shadow-md">
                           <CardContent className="p-5">
                             <Badge variant="secondary" className="mb-3">
