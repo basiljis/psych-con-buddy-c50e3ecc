@@ -762,8 +762,8 @@ export default function DevelopmentBlocksComparison() {
                 {BLOCKS.map((b) => {
                   const baseText = stripMarkers(b.cells.fgos[lang]);
                   return (
-                    <>
-                      <tr key={b.id} className="border-t border-border/60 align-top">
+                    <FragmentWithKey key={b.id}>
+                      <tr className="border-t border-border/60 align-top">
                         <th
                           scope="row"
                           className="p-3 md:p-4 text-left font-medium sticky left-0 bg-background z-10"
