@@ -340,10 +340,10 @@ export default function BlogPost() {
                         {t("blogPost.ctaText")}
                       </p>
                       <div className="flex flex-wrap gap-3">
-                        <Button asChild>
+                        <Button asChild onClick={() => logClick("/register", "cta")}>
                           <Link to="/register">{t("blogPost.ctaStart")} <ArrowRight className="h-4 w-4 ml-1" /></Link>
                         </Button>
-                        <Button asChild variant="outline">
+                        <Button asChild variant="outline" onClick={() => logClick("/pricing", "cta")}>
                           <Link to="/pricing">{t("blogPost.ctaPricing")}</Link>
                         </Button>
                       </div>
