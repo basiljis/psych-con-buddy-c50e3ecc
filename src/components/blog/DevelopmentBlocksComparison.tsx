@@ -17,7 +17,7 @@ import { Sparkles, ExternalLink, BookOpen, GraduationCap, ChevronLeft, ChevronRi
  * с определением и ссылкой на первоисточник (сноска).
  */
 
-type ApproachId = "fgos" | "headstart" | "eyfs" | "who" | "germany";
+type ApproachId = "fgos" | "headstart" | "eyfs" | "who" | "germany" | "china";
 
 type CellText = { ru: string; en: string };
 
@@ -91,6 +91,19 @@ const APPROACHES: Approach[] = [
       url: "https://www.ifp.bayern.de/veroeffentlichungen/BEP.php",
     },
   },
+  {
+    id: "china",
+    short: { ru: "Guide 3–6 (Китай)", en: "Guide 3–6 (China)" },
+    full: {
+      ru: "Руководство по обучению и развитию детей 3–6 лет (МО КНР, 2012)",
+      en: "Guide for the Learning and Development of Children Aged 3–6 (MOE China, 2012)",
+    },
+    region: { ru: "Китай", en: "China" },
+    source: {
+      label: "moe.gov.cn",
+      url: "http://www.moe.gov.cn/srcsite/A06/s3327/201210/t20121009_143254.html",
+    },
+  },
 ];
 
 type BlockId = "physical" | "speech" | "cognitive" | "social" | "play";
@@ -128,6 +141,10 @@ const BLOCKS: Block[] = [
         ru: "Körper, Bewegung, Gesundheit — тело, движение, здоровье как единый образовательный домен.",
         en: "Körper, Bewegung, Gesundheit — body, motion, health as one educational domain.",
       },
+      china: {
+        ru: "健康 (Jiànkāng) — здоровье: физическое развитие, ЗОЖ, безопасность и эмоциональное благополучие в одном домене.",
+        en: "健康 (Jiànkāng, Health) — physical development, healthy habits, safety and emotional wellbeing in one domain.",
+      },
     },
   },
   {
@@ -154,6 +171,10 @@ const BLOCKS: Block[] = [
       germany: {
         ru: "Sprache und Literacy — билингвальный акцент, ранняя грамотность через диалог.",
         en: "Sprache und Literacy — bilingual focus, early literacy through dialogue.",
+      },
+      china: {
+        ru: "语言 (Yǔyán) — язык: слушание и говорение + чтение и письмо как две подобласти, ранняя иероглифика через игру.",
+        en: "语言 (Yǔyán, Language) — listening/speaking + reading/writing as two sub-strands, early character literacy through play.",
       },
     },
   },
@@ -182,6 +203,10 @@ const BLOCKS: Block[] = [
         ru: "Mathematik, Naturwissenschaft, Technik — три отдельных домена ([[STEM|stem]]-подход).",
         en: "Mathematik, Naturwissenschaft, Technik — three separate [[STEM|stem]] domains.",
       },
+      china: {
+        ru: "科学 (Kēxué) — наука: математические представления и естественно-научные исследования как две подобласти, акцент на любознательности и наблюдении.",
+        en: "科学 (Kēxué, Science) — mathematical concepts and scientific inquiry as two sub-strands, emphasis on curiosity and observation.",
+      },
     },
   },
   {
@@ -209,6 +234,10 @@ const BLOCKS: Block[] = [
         ru: "Soziale und emotionale Kompetenzen + Werte — включая ценностное воспитание.",
         en: "Soziale und emotionale Kompetenzen + values education explicitly included.",
       },
+      china: {
+        ru: "社会 (Shèhuì) — общество: межличностные отношения + социальная адаптация, с акцентом на коллективизм, уважение и национальную идентичность.",
+        en: "社会 (Shèhuì, Society) — interpersonal relations + social adaptation, with emphasis on collectivism, respect and national identity.",
+      },
     },
   },
   {
@@ -235,6 +264,10 @@ const BLOCKS: Block[] = [
       germany: {
         ru: "Ästhetik, Kunst und Kultur + Musik — отдельные эстетические домены.",
         en: "Ästhetik, Kunst und Kultur + Musik as separate aesthetic domains.",
+      },
+      china: {
+        ru: "艺术 (Yìshù) — искусство: восприятие и выражение через музыку и ИЗО; игра пронизывает все пять доменов и признана основной формой обучения.",
+        en: "艺术 (Yìshù, Arts) — perception and expression through music and visual arts; play cross-cuts all five domains and is recognised as the primary form of learning.",
       },
     },
   },
