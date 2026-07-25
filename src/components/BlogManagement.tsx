@@ -385,6 +385,94 @@ export function BlogManagement() {
                 <Label htmlFor="published">Опубликовать</Label>
               </div>
             </div>
+
+            <div className="border-t pt-4 mt-2 space-y-4">
+              <div>
+                <h4 className="text-sm font-semibold">SEO и социальные превью</h4>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Переопределяют &lt;title&gt;, meta description и og:image. Если пусто — используются заголовок и описание статьи.
+                </p>
+              </div>
+
+              <div className="grid gap-3">
+                <div className="grid gap-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="seo_title">SEO title (RU)</Label>
+                    <span className="text-xs text-muted-foreground tabular-nums">{form.seo_title.length}/60</span>
+                  </div>
+                  <Input
+                    id="seo_title" maxLength={80} value={form.seo_title}
+                    placeholder="Оптимально 50–60 символов"
+                    onChange={(e) => setForm({ ...form, seo_title: e.target.value })}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="seo_description">Meta description (RU)</Label>
+                    <span className="text-xs text-muted-foreground tabular-nums">{form.seo_description.length}/160</span>
+                  </div>
+                  <Textarea
+                    id="seo_description" rows={2} maxLength={200} value={form.seo_description}
+                    placeholder="До 160 символов, с ключевыми словами"
+                    onChange={(e) => setForm({ ...form, seo_description: e.target.value })}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="og_image">og:image URL (RU)</Label>
+                  <Input
+                    id="og_image" value={form.og_image}
+                    placeholder="https://… или /blog/xxx.jpg (1200×630)"
+                    onChange={(e) => setForm({ ...form, og_image: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <details className="rounded-md border p-3">
+                <summary className="text-sm font-medium cursor-pointer select-none">SEO для английской версии</summary>
+                <div className="grid gap-3 mt-3">
+                  <div className="grid gap-2">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="seo_title_en">SEO title (EN)</Label>
+                      <span className="text-xs text-muted-foreground tabular-nums">{form.seo_title_en.length}/60</span>
+                    </div>
+                    <Input
+                      id="seo_title_en" maxLength={80} value={form.seo_title_en}
+                      onChange={(e) => setForm({ ...form, seo_title_en: e.target.value })}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="seo_description_en">Meta description (EN)</Label>
+                      <span className="text-xs text-muted-foreground tabular-nums">{form.seo_description_en.length}/160</span>
+                    </div>
+                    <Textarea
+                      id="seo_description_en" rows={2} maxLength={200} value={form.seo_description_en}
+                      onChange={(e) => setForm({ ...form, seo_description_en: e.target.value })}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="og_image_en">og:image URL (EN)</Label>
+                    <Input
+                      id="og_image_en" value={form.og_image_en}
+                      onChange={(e) => setForm({ ...form, og_image_en: e.target.value })}
+                    />
+                  </div>
+                </div>
+              </details>
+
+              {(form.seo_title || form.title) && (
+                <div className="rounded-md border bg-muted/30 p-3">
+                  <div className="text-xs text-muted-foreground mb-1">Превью в поиске</div>
+                  <div className="text-[13px] text-emerald-700 truncate">unvrsm.ru › blog › {form.slug || "…"}</div>
+                  <div className="text-[17px] leading-snug text-primary truncate">
+                    {form.seo_title || form.title}
+                  </div>
+                  <div className="text-sm text-muted-foreground line-clamp-2">
+                    {form.seo_description || form.excerpt}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpenDialog(false)}>Отмена</Button>
