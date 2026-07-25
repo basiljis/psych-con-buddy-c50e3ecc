@@ -4,7 +4,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
-import { Sparkles, ExternalLink, BookOpen } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sparkles, ExternalLink, BookOpen, GraduationCap, ChevronLeft, ChevronRight, X, Lightbulb } from "lucide-react";
 
 /**
  * Interactive comparison of the 5 development domains across
