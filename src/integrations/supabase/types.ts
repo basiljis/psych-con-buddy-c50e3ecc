@@ -194,9 +194,15 @@ export type Database = {
           excerpt_en: string | null
           id: string
           keywords: string[]
+          og_image: string | null
+          og_image_en: string | null
           published: boolean
           published_at: string
           reading_minutes: number
+          seo_description: string | null
+          seo_description_en: string | null
+          seo_title: string | null
+          seo_title_en: string | null
           slug: string
           title: string
           title_en: string | null
@@ -213,9 +219,15 @@ export type Database = {
           excerpt_en?: string | null
           id?: string
           keywords?: string[]
+          og_image?: string | null
+          og_image_en?: string | null
           published?: boolean
           published_at?: string
           reading_minutes?: number
+          seo_description?: string | null
+          seo_description_en?: string | null
+          seo_title?: string | null
+          seo_title_en?: string | null
           slug: string
           title: string
           title_en?: string | null
@@ -232,9 +244,15 @@ export type Database = {
           excerpt_en?: string | null
           id?: string
           keywords?: string[]
+          og_image?: string | null
+          og_image_en?: string | null
           published?: boolean
           published_at?: string
           reading_minutes?: number
+          seo_description?: string | null
+          seo_description_en?: string | null
+          seo_title?: string | null
+          seo_title_en?: string | null
           slug?: string
           title?: string
           title_en?: string | null
