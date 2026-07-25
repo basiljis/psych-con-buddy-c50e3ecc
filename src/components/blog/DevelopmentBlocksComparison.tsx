@@ -265,6 +265,10 @@ const BLOCKS: Block[] = [
         ru: "Ästhetik, Kunst und Kultur + Musik — отдельные эстетические домены.",
         en: "Ästhetik, Kunst und Kultur + Musik as separate aesthetic domains.",
       },
+      china: {
+        ru: "艺术 (Yìshù) — искусство: восприятие и выражение через музыку и ИЗО; игра пронизывает все пять доменов и признана основной формой обучения.",
+        en: "艺术 (Yìshù, Arts) — perception and expression through music and visual arts; play cross-cuts all five domains and is recognised as the primary form of learning.",
+      },
     },
   },
 ];
