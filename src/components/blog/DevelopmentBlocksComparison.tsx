@@ -91,6 +91,19 @@ const APPROACHES: Approach[] = [
       url: "https://www.ifp.bayern.de/veroeffentlichungen/BEP.php",
     },
   },
+  {
+    id: "china",
+    short: { ru: "Guide 3–6 (Китай)", en: "Guide 3–6 (China)" },
+    full: {
+      ru: "Руководство по обучению и развитию детей 3–6 лет (МО КНР, 2012)",
+      en: "Guide for the Learning and Development of Children Aged 3–6 (MOE China, 2012)",
+    },
+    region: { ru: "Китай", en: "China" },
+    source: {
+      label: "moe.gov.cn",
+      url: "http://www.moe.gov.cn/srcsite/A06/s3327/201210/t20121009_143254.html",
+    },
+  },
 ];
 
 type BlockId = "physical" | "speech" | "cognitive" | "social" | "play";
