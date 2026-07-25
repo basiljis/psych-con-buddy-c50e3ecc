@@ -35,6 +35,12 @@ const empty = {
   author: "Команда universum.",
   reading_minutes: 5,
   published: true,
+  seo_title: "",
+  seo_description: "",
+  og_image: "",
+  seo_title_en: "",
+  seo_description_en: "",
+  og_image_en: "",
 };
 
 function slugify(s: string): string {
@@ -91,6 +97,12 @@ export function BlogManagement() {
       author: p.author,
       reading_minutes: p.reading_minutes,
       published: p.published,
+      seo_title: p.seo_title ?? "",
+      seo_description: p.seo_description ?? "",
+      og_image: p.og_image ?? "",
+      seo_title_en: p.seo_title_en ?? "",
+      seo_description_en: p.seo_description_en ?? "",
+      og_image_en: p.og_image_en ?? "",
     });
     setOpenDialog(true);
   };
@@ -111,6 +123,12 @@ export function BlogManagement() {
       author: form.author.trim() || "Команда universum.",
       reading_minutes: Number(form.reading_minutes) || 5,
       published: form.published,
+      seo_title: form.seo_title.trim() || null,
+      seo_description: form.seo_description.trim() || null,
+      og_image: form.og_image.trim() || null,
+      seo_title_en: form.seo_title_en.trim() || null,
+      seo_description_en: form.seo_description_en.trim() || null,
+      og_image_en: form.og_image_en.trim() || null,
     };
 
     const { error } = editing
