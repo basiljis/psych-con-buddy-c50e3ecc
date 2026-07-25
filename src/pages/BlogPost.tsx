@@ -15,7 +15,7 @@ import {
   ArrowLeft, ArrowRight, Clock, Calendar, Eye, Users,
   Share2, Link2, ListOrdered, Check,
 } from "lucide-react";
-import { useLogBlogView, useBlogViewStats } from "@/hooks/useBlogViews";
+import { useLogBlogView, useBlogViewStats, useLogBlogClick } from "@/hooks/useBlogViews";
 import { toast } from "sonner";
 import DevelopmentBlocksComparison from "@/components/blog/DevelopmentBlocksComparison";
 
@@ -63,6 +63,23 @@ export default function BlogPost() {
   const articleRef = useRef<HTMLElement>(null);
   const { stats } = useBlogViewStats();
   useLogBlogView(post ? slug : undefined);
+  const logClick = useLogBlogClick(post ? slug : undefined);
+
+  // Delegate clicks on links inside the rendered article HTML
+  useEffect(() => {
+    const el = articleRef.current;
+    if (!el || !post) return;
+    const handler = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement | null)?.closest("a");
+      if (!target) return;
+      const href = target.getAttribute("href");
+      if (!href) return;
+      const isExternal = /^https?:\/\//i.test(href) && !href.includes("unvrsm.ru");
+      logClick(href, isExternal ? "external" : "internal");
+    };
+    el.addEventListener("click", handler);
+    return () => el.removeEventListener("click", handler);
+  }, [post, logClick]);
 
   useEffect(() => {
     if (!slug) return;
@@ -323,10 +340,10 @@ export default function BlogPost() {
                         {t("blogPost.ctaText")}
                       </p>
                       <div className="flex flex-wrap gap-3">
-                        <Button asChild>
+                        <Button asChild onClick={() => logClick("/register", "cta")}>
                           <Link to="/register">{t("blogPost.ctaStart")} <ArrowRight className="h-4 w-4 ml-1" /></Link>
                         </Button>
-                        <Button asChild variant="outline">
+                        <Button asChild variant="outline" onClick={() => logClick("/pricing", "cta")}>
                           <Link to="/pricing">{t("blogPost.ctaPricing")}</Link>
                         </Button>
                       </div>
@@ -378,7 +395,7 @@ export default function BlogPost() {
                     {related.map((r) => {
                       const rloc = localizedPost(r, lang);
                       return (
-                      <Link key={r.id} to={`/blog/${r.slug}`} className="group">
+                      <Link key={r.id} to={`/blog/${r.slug}`} className="group" onClick={() => logClick(`/blog/${r.slug}`, "related")}>
                         <Card className="h-full transition-shadow group-hover:shadow-md">
                           <CardContent className="p-5">
                             <Badge variant="secondary" className="mb-3">

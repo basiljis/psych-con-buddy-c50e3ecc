@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 export type BlogViewStat = {
@@ -21,6 +21,29 @@ function getVisitorId(): string {
     return id;
   } catch {
     return "anon";
+  }
+}
+
+export function classifySource(referrer: string): string {
+  if (!referrer) return "direct";
+  try {
+    const h = new URL(referrer).hostname.replace(/^www\./, "").toLowerCase();
+    if (h.includes("google.")) return "google";
+    if (h.includes("yandex.") || h.includes("ya.ru")) return "yandex";
+    if (h.includes("dzen.ru") || h.includes("zen.yandex")) return "dzen";
+    if (h.includes("t.me") || h.includes("telegram")) return "telegram";
+    if (h.includes("vk.com") || h.includes("vk.ru")) return "vk";
+    if (h.includes("mail.ru")) return "mail";
+    if (h.includes("bing.")) return "bing";
+    if (h.includes("duckduckgo.")) return "duckduckgo";
+    if (h.includes("facebook.") || h.includes("fb.com")) return "facebook";
+    if (h.includes("twitter.") || h.includes("x.com")) return "twitter";
+    if (h.includes("linkedin.")) return "linkedin";
+    if (h.includes("youtube.") || h.includes("youtu.be")) return "youtube";
+    if (h.includes("unvrsm.ru") || h.includes("lovable.app")) return "internal";
+    return h;
+  } catch {
+    return "other";
   }
 }
 
@@ -54,9 +77,38 @@ export function useLogBlogView(slug: string | undefined) {
     } catch {
       // ignore
     }
+    const referrer = typeof document !== "undefined" ? document.referrer : "";
+    const path = typeof window !== "undefined" ? window.location.pathname : "";
     supabase
       .from("blog_views")
-      .insert({ post_slug: slug, visitor_id: getVisitorId() })
+      .insert({
+        post_slug: slug,
+        visitor_id: getVisitorId(),
+        referrer: referrer || null,
+        source: classifySource(referrer),
+        path: path || null,
+      })
       .then(() => {});
   }, [slug]);
+}
+
+export function useLogBlogClick(slug: string | undefined) {
+  return useCallback(
+    (url: string, linkType: "external" | "cta" | "related" | "internal" = "external") => {
+      if (!slug || !url) return;
+      const referrer = typeof document !== "undefined" ? document.referrer : "";
+      supabase
+        .from("blog_link_clicks")
+        .insert({
+          post_slug: slug,
+          url,
+          link_type: linkType,
+          visitor_id: getVisitorId(),
+          referrer: referrer || null,
+          source: classifySource(referrer),
+        })
+        .then(() => {});
+    },
+    [slug],
+  );
 }
