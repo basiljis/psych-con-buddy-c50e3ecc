@@ -762,34 +762,56 @@ export default function DevelopmentBlocksComparison() {
                 {BLOCKS.map((b) => {
                   const baseText = stripMarkers(b.cells.fgos[lang]);
                   return (
-                    <tr key={b.id} className="border-t border-border/60 align-top">
-                      <th
-                        scope="row"
-                        className="p-3 md:p-4 text-left font-medium sticky left-0 bg-background z-10"
-                      >
-                        <div className="flex items-center gap-2">
-                          <span aria-hidden className="text-lg">{b.emoji}</span>
-                          <span>{b.title[lang]}</span>
-                        </div>
-                      </th>
-                      {visibleApproaches.map((a) => {
-                        const raw = b.cells[a.id][lang];
-                        const differs =
-                          !a.baseline && stripMarkers(raw) !== baseText;
-                        return (
+                    <>
+                      <tr key={b.id} className="border-t border-border/60 align-top">
+                        <th
+                          scope="row"
+                          className="p-3 md:p-4 text-left font-medium sticky left-0 bg-background z-10"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span aria-hidden className="text-lg">{b.emoji}</span>
+                            <span>{b.title[lang]}</span>
+                          </div>
+                        </th>
+                        {visibleApproaches.map((a) => {
+                          const raw = b.cells[a.id][lang];
+                          const differs =
+                            !a.baseline && stripMarkers(raw) !== baseText;
+                          return (
+                            <td
+                              key={a.id}
+                              className={`p-3 md:p-4 leading-relaxed transition-colors ${
+                                highlight && differs
+                                  ? "bg-amber-50 dark:bg-amber-500/10 ring-1 ring-inset ring-amber-300/50 dark:ring-amber-400/30"
+                                  : ""
+                              }`}
+                            >
+                              {renderWithTerms(raw, lang, s)}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                      {learning && (
+                        <tr key={`${b.id}-note`} className="border-t border-primary/20">
                           <td
-                            key={a.id}
-                            className={`p-3 md:p-4 leading-relaxed transition-colors ${
-                              highlight && differs
-                                ? "bg-amber-50 dark:bg-amber-500/10 ring-1 ring-inset ring-amber-300/50 dark:ring-amber-400/30"
-                                : ""
-                            }`}
+                            colSpan={visibleApproaches.length + 1}
+                            className="p-3 md:p-4 bg-primary/5"
                           >
-                            {renderWithTerms(raw, lang, s)}
+                            <div className="flex items-start gap-2 text-sm">
+                              <Lightbulb className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                              <div className="min-w-0">
+                                <span className="text-[11px] font-semibold uppercase tracking-wider text-primary mr-2">
+                                  {s.beginnerLabel}
+                                </span>
+                                <span className="text-foreground/90 leading-relaxed">
+                                  {BEGINNER_NOTES[b.id][lang]}
+                                </span>
+                              </div>
+                            </div>
                           </td>
-                        );
-                      })}
-                    </tr>
+                        </tr>
+                      )}
+                    </>
                   );
                 })}
               </tbody>
