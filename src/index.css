@@ -14,7 +14,7 @@
 
 /* Blog article prose refinements */
 @layer components {
-  .blog-prose { max-width: none; color: hsl(var(--foreground)); }
+  .blog-prose { max-width: none; color: hsl(var(--foreground)); min-width: 0; overflow-wrap: break-word; }
 
   .blog-prose :where(h2, h3, h4) { scroll-margin-top: 7rem; letter-spacing: -0.01em; }
   .blog-prose :where(h2) {
@@ -66,9 +66,20 @@
   }
   .blog-prose :where(code)::before,
   .blog-prose :where(code)::after { content: none; }
-  .blog-prose :where(table) { font-size: 0.9375rem; }
-  .blog-prose :where(th) { background: hsl(var(--muted)); font-weight: 600; text-align: left; padding: 0.75rem; }
+  .blog-prose :where(table) {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 0.9375rem;
+    border-collapse: collapse;
+  }
+  .blog-prose :where(th) { background: hsl(var(--muted)); font-weight: 600; text-align: left; padding: 0.75rem; white-space: nowrap; }
   .blog-prose :where(td) { padding: 0.75rem; border-top: 1px solid hsl(var(--border)); }
+  @media (max-width: 640px) {
+    .blog-prose :where(th, td) { padding: 0.5rem 0.625rem; font-size: 0.875rem; }
+  }
   .blog-prose :where(hr) { margin: 2.5rem 0; border-color: hsl(var(--border) / 0.6); }
   .blog-prose > p:first-of-type::first-letter {
     float: left;
