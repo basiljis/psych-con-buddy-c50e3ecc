@@ -73,6 +73,7 @@ export default function BlogPost() {
         .select("*")
         .eq("slug", slug)
         .eq("published", true)
+        .lte("published_at", new Date().toISOString())
         .maybeSingle();
       setPost((data as BlogPostType | null) ?? null);
       setLoading(false);
