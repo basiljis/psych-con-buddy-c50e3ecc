@@ -849,6 +849,7 @@ export default function DevelopmentBlocksComparison() {
   })();
   const [learning, setLearning] = useState<boolean>(initialTour.learning);
   const [tourStep, setTourStep] = useState<number>(initialTour.step);
+  const [exampleFor, setExampleFor] = useState<BlockId | null>(null);
   const hydrated = useRef(false);
 
   useEffect(() => {
