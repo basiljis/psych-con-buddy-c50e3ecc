@@ -218,8 +218,12 @@ export function BlogManagement() {
       <Tabs defaultValue="posts" className="space-y-6">
         <TabsList>
           <TabsTrigger value="posts">Статьи</TabsTrigger>
+          <TabsTrigger value="comments"><MessageSquare className="h-4 w-4 mr-1.5" />Комментарии</TabsTrigger>
           <TabsTrigger value="analytics"><BarChart3 className="h-4 w-4 mr-1.5" />Аналитика</TabsTrigger>
         </TabsList>
+        <TabsContent value="comments" className="mt-0">
+          <BlogCommentsModeration />
+        </TabsContent>
         <TabsContent value="analytics" className="mt-0">
           <BlogAnalyticsDashboard />
         </TabsContent>
