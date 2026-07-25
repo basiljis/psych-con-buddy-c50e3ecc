@@ -451,6 +451,70 @@ const BEGINNER_NOTES: Record<BlockId, CellText> = {
   },
 };
 
+/** Практические рекомендации специалистам для каждого блока. */
+const PRACTICAL_TIPS: Record<BlockId, { ru: string[]; en: string[] }> = {
+  physical: {
+    ru: [
+      "На диагностике фиксируйте отдельно крупную и мелкую моторику — пробы Озерецкого + графомоторные задания.",
+      "В ИОМ включайте 2–3 короткие двигательные паузы (5–7 мин) в структуру каждого занятия.",
+      "Для детей с СДВГ добавляйте сенсомоторные разминки перед речевыми и когнитивными пробами.",
+    ],
+    en: [
+      "Assess gross and fine motor skills separately — Ozeretsky-style tasks + graphomotor probes.",
+      "Build 2–3 short movement breaks (5–7 min) into every individual session plan.",
+      "For children with ADHD add sensorimotor warm-ups before speech and cognitive tasks.",
+    ],
+  },
+  speech: {
+    ru: [
+      "Разделяйте в заключении устную речь и предпосылки грамотности — это ожидают ПМПК и школьные логопеды.",
+      "Для билингвов оценивайте оба языка: слабый язык — не всегда речевое нарушение.",
+      "Родителям давайте 1 короткое речевое упражнение в день (3–5 мин) вместо длинных списков.",
+    ],
+    en: [
+      "In your report split oral language and pre-literacy — PMPK and school SLPs expect it.",
+      "For bilingual children assess both languages: a weaker language is not automatically a disorder.",
+      "Give parents one short daily language activity (3–5 min) instead of long homework lists.",
+    ],
+  },
+  cognitive: {
+    ru: [
+      "Включайте в диагностику отдельные пробы на математические представления (счёт, ряд, сериация) — их часто пропускают.",
+      "Для дошкольников с ЗПР планируйте когнитивные задания короткими блоками по 7–10 минут.",
+      "Фиксируйте не только результат, но и стратегию решения — это ключевой показатель динамики.",
+    ],
+    en: [
+      "Add explicit math tasks (counting, sequencing, seriation) to your assessment — they are often skipped.",
+      "For preschoolers with developmental delay plan cognitive tasks in 7–10 min blocks.",
+      "Record not only the answer but the child's strategy — it is the key indicator of progress.",
+    ],
+  },
+  social: {
+    ru: [
+      "На первой встрече оцените привязанность и саморегуляцию — это фундамент для остальных сфер.",
+      "В группе используйте визуальное расписание и правила с картинками — снижает поведенческие срывы.",
+      "Родителям объясняйте разницу между «непослушанием» и трудностями эмоциональной регуляции.",
+    ],
+    en: [
+      "At the first session assess attachment and self-regulation — they underpin every other domain.",
+      "In group work use visual schedules and picture-based rules — it reduces behavioural incidents.",
+      "Explain to parents the difference between 'disobedience' and emotion-regulation difficulties.",
+    ],
+  },
+  play: {
+    ru: [
+      "Используйте свободную игру как диагностический инструмент: 10–15 минут наблюдения дают больше, чем формальные пробы.",
+      "В коррекционных занятиях встраивайте цель в игровой сюжет, а не давайте её напрямую как задание.",
+      "Фиксируйте инициативу и устойчивость интереса — это предикторы школьной готовности.",
+    ],
+    en: [
+      "Use free play as an assessment tool: 10–15 min of observation reveal more than formal probes.",
+      "Embed therapeutic goals into a play scenario rather than presenting them as tasks.",
+      "Track initiative and sustained interest — they predict school readiness.",
+    ],
+  },
+};
+
 type TourStep = { title: CellText; body: CellText };
 
 const TOUR_STEPS: TourStep[] = [
