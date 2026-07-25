@@ -172,6 +172,10 @@ const BLOCKS: Block[] = [
         ru: "Sprache und Literacy — билингвальный акцент, ранняя грамотность через диалог.",
         en: "Sprache und Literacy — bilingual focus, early literacy through dialogue.",
       },
+      china: {
+        ru: "语言 (Yǔyán) — язык: слушание и говорение + чтение и письмо как две подобласти, ранняя иероглифика через игру.",
+        en: "语言 (Yǔyán, Language) — listening/speaking + reading/writing as two sub-strands, early character literacy through play.",
+      },
     },
   },
   {
