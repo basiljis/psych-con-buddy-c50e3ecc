@@ -149,6 +149,69 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_comments: {
+        Row: {
+          author_email: string | null
+          author_name: string
+          content: string
+          created_at: string
+          id: string
+          ip_address: string | null
+          is_author_reply: boolean
+          parent_id: string | null
+          post_id: string
+          status: Database["public"]["Enums"]["blog_comment_status"]
+          updated_at: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          author_email?: string | null
+          author_name: string
+          content: string
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          is_author_reply?: boolean
+          parent_id?: string | null
+          post_id: string
+          status?: Database["public"]["Enums"]["blog_comment_status"]
+          updated_at?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          author_email?: string | null
+          author_name?: string
+          content?: string
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          is_author_reply?: boolean
+          parent_id?: string | null
+          post_id?: string
+          status?: Database["public"]["Enums"]["blog_comment_status"]
+          updated_at?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_comments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "blog_comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "blog_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "blog_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blog_link_clicks: {
         Row: {
           created_at: string
@@ -3566,6 +3629,7 @@ export type Database = {
         | "parent"
         | "private_specialist"
       blog_category: "specialists" | "admins" | "parents" | "product"
+      blog_comment_status: "pending" | "approved" | "rejected" | "spam"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -3703,6 +3767,7 @@ export const Constants = {
         "private_specialist",
       ],
       blog_category: ["specialists", "admins", "parents", "product"],
+      blog_comment_status: ["pending", "approved", "rejected", "spam"],
     },
   },
 } as const
