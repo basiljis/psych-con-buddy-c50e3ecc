@@ -18,6 +18,7 @@ import {
 import { useLogBlogView, useBlogViewStats, useLogBlogClick } from "@/hooks/useBlogViews";
 import { toast } from "sonner";
 import DevelopmentBlocksComparison from "@/components/blog/DevelopmentBlocksComparison";
+import BlogComments from "@/components/blog/BlogComments";
 
 const INTERACTIVE_SLUGS = new Set(["5-blokov-razvitiya-rebenka"]);
 
@@ -394,6 +395,9 @@ export default function BlogPost() {
                   </div>
                 </aside>
               </div>
+
+              {/* Comments */}
+              <BlogComments postId={post.id} isEn={isEn} />
 
               {/* Related */}
               {related.length > 0 && (
