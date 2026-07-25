@@ -1156,6 +1156,49 @@ export default function DevelopmentBlocksComparison() {
       </div>
 
       <p className="mt-3 text-xs text-muted-foreground">{s.hint}</p>
+
+      <Dialog open={exampleFor !== null} onOpenChange={(o) => !o && setExampleFor(null)}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          {exampleFor && (() => {
+            const block = BLOCKS.find((x) => x.id === exampleFor)!;
+            const ex = LESSON_EXAMPLES[exampleFor][lang];
+            return (
+              <>
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2 text-left">
+                    <PlayCircle className="h-5 w-5 text-emerald-600" />
+                    {s.exampleTitle}: {block.title[lang]}
+                  </DialogTitle>
+                  <DialogDescription className="flex flex-wrap gap-x-4 gap-y-1 text-left">
+                    <span className="inline-flex items-center gap-1">
+                      <Clock className="h-3.5 w-3.5" /> <strong>{s.exampleTotal}:</strong> {ex.totalMin}
+                    </span>
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="mt-2 text-sm">
+                  <p className="mb-4 text-foreground/90">
+                    <span className="font-semibold">{s.exampleGoal}:</span> {ex.goal}
+                  </p>
+                  <ol className="relative border-l-2 border-emerald-500/30 pl-5 space-y-4">
+                    {ex.stages.map((st, i) => (
+                      <li key={i} className="relative">
+                        <span className="absolute -left-[27px] top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-bold text-white">
+                          {i + 1}
+                        </span>
+                        <div className="flex flex-wrap items-baseline gap-x-2">
+                          <span className="text-xs font-mono text-emerald-700 dark:text-emerald-400">{st.time}</span>
+                          <span className="font-semibold text-foreground">{st.name}</span>
+                        </div>
+                        <p className="mt-1 text-foreground/80 leading-relaxed">{st.desc}</p>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
