@@ -1,4 +1,4 @@
-import { Fragment as FragmentWithKey, useMemo, useState } from "react";
+import { Fragment as FragmentWithKey, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -585,12 +585,47 @@ export default function DevelopmentBlocksComparison() {
     new Set(["fgos", "headstart", "eyfs"]),
   );
   const [highlight, setHighlight] = useState(true);
-  const [learning, setLearning] = useState(false);
-  const [tourStep, setTourStep] = useState(0);
+  const STORAGE_KEY = "devBlocksComparison.tour";
+  const initialTour = (() => {
+    if (typeof window === "undefined") return { learning: false, step: 0 };
+    try {
+      const raw = window.localStorage.getItem(STORAGE_KEY);
+      if (!raw) return { learning: false, step: 0 };
+      const parsed = JSON.parse(raw) as { learning?: boolean; step?: number };
+      const step = Math.min(
+        Math.max(0, Number(parsed.step) || 0),
+        TOUR_STEPS.length - 1,
+      );
+      return { learning: !!parsed.learning, step };
+    } catch {
+      return { learning: false, step: 0 };
+    }
+  })();
+  const [learning, setLearning] = useState<boolean>(initialTour.learning);
+  const [tourStep, setTourStep] = useState<number>(initialTour.step);
+  const hydrated = useRef(false);
+
+  useEffect(() => {
+    // Skip the first run to avoid clobbering storage before user interaction
+    if (!hydrated.current) {
+      hydrated.current = true;
+      return;
+    }
+    try {
+      window.localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ learning, step: tourStep }),
+      );
+    } catch {
+      /* ignore quota / private-mode errors */
+    }
+  }, [learning, tourStep]);
 
   const enableLearning = (on: boolean) => {
     setLearning(on);
-    if (on) setTourStep(0);
+    // Keep the saved step when re-enabling so users resume where they left off.
+    // Only reset when the tour is closed after being completed.
+    if (on && tourStep >= TOUR_STEPS.length - 1) setTourStep(0);
   };
 
   const toggle = (id: ApproachId) => {
