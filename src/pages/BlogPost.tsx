@@ -396,6 +396,9 @@ export default function BlogPost() {
                 </aside>
               </div>
 
+              {/* Comments */}
+              <BlogComments postId={post.id} isEn={isEn} />
+
               {/* Related */}
               {related.length > 0 && (
                 <section className="mt-16 pt-10 border-t">

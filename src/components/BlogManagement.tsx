@@ -18,11 +18,12 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Pencil, Trash2, Copy, ExternalLink, Rss, ImageDown, BarChart3 } from "lucide-react";
+import { Plus, Pencil, Trash2, Copy, ExternalLink, Rss, ImageDown, BarChart3, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 import { downloadZenCover } from "@/lib/zen-cover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BlogAnalyticsDashboard } from "@/components/BlogAnalyticsDashboard";
+import { BlogCommentsModeration } from "@/components/BlogCommentsModeration";
 
 const empty = {
   slug: "",
