@@ -36,6 +36,7 @@ export default function Blog() {
         .from("blog_posts")
         .select("*")
         .eq("published", true)
+        .lte("published_at", new Date().toISOString())
         .order("published_at", { ascending: false });
       setPosts((data ?? []) as BlogPost[]);
       setLoading(false);

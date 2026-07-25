@@ -73,6 +73,7 @@ export default function BlogPost() {
         .select("*")
         .eq("slug", slug)
         .eq("published", true)
+        .lte("published_at", new Date().toISOString())
         .maybeSingle();
       setPost((data as BlogPostType | null) ?? null);
       setLoading(false);
@@ -86,6 +87,7 @@ export default function BlogPost() {
         .from("blog_posts")
         .select("*")
         .eq("published", true)
+        .lte("published_at", new Date().toISOString())
         .eq("category", post.category)
         .neq("slug", post.slug)
         .order("published_at", { ascending: false })

@@ -224,6 +224,11 @@ export function BlogManagement() {
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <Badge variant="secondary">{blogCategoryLabel(p.category)}</Badge>
                       {!p.published && <Badge variant="outline">Черновик</Badge>}
+                      {p.published && new Date(p.published_at) > new Date() && (
+                        <Badge className="bg-amber-500 hover:bg-amber-600">
+                          Запланирована на {new Date(p.published_at).toLocaleDateString("ru-RU")}
+                        </Badge>
+                      )}
                       <span className="text-xs text-muted-foreground">
                         {new Date(p.published_at).toLocaleDateString("ru-RU")}
                       </span>
