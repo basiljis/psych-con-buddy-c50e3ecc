@@ -183,7 +183,7 @@ export function BlogManagement() {
   };
 
   const copyRss = async () => {
-    const url = `https://oxyjmeslnmhewlpgzlmf.supabase.co/functions/v1/blog-rss`;
+    const url = `https://unvrsm.ru/rss.xml`;
     try {
       await navigator.clipboard.writeText(url);
       toast({ title: "Ссылка на RSS скопирована", description: url });
