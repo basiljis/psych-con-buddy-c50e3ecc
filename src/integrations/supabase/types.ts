@@ -149,6 +149,39 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_link_clicks: {
+        Row: {
+          created_at: string
+          id: string
+          link_type: string
+          post_slug: string
+          referrer: string | null
+          source: string | null
+          url: string
+          visitor_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          link_type?: string
+          post_slug: string
+          referrer?: string | null
+          source?: string | null
+          url: string
+          visitor_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          link_type?: string
+          post_slug?: string
+          referrer?: string | null
+          source?: string | null
+          url?: string
+          visitor_id?: string | null
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           author: string
@@ -213,19 +246,28 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          path: string | null
           post_slug: string
+          referrer: string | null
+          source: string | null
           visitor_id: string
         }
         Insert: {
           created_at?: string
           id?: string
+          path?: string | null
           post_slug: string
+          referrer?: string | null
+          source?: string | null
           visitor_id: string
         }
         Update: {
           created_at?: string
           id?: string
+          path?: string | null
           post_slug?: string
+          referrer?: string | null
+          source?: string | null
           visitor_id?: string
         }
         Relationships: []
@@ -3422,12 +3464,48 @@ export type Database = {
       generate_protocol_number: { Args: never; Returns: string }
       generate_telegram_link_code: { Args: never; Returns: string }
       generate_verification_code: { Args: never; Returns: string }
+      get_blog_analytics: {
+        Args: never
+        Returns: {
+          clicks_total: number
+          ctr: number
+          post_slug: string
+          total_views: number
+          unique_views: number
+          views_30d: number
+          views_7d: number
+        }[]
+      }
+      get_blog_sources: {
+        Args: { _slug?: string }
+        Returns: {
+          source: string
+          unique_views: number
+          views: number
+        }[]
+      }
+      get_blog_top_links: {
+        Args: { _limit?: number; _slug?: string }
+        Returns: {
+          clicks: number
+          link_type: string
+          url: string
+        }[]
+      }
       get_blog_view_stats: {
         Args: never
         Returns: {
           post_slug: string
           total_views: number
           unique_views: number
+        }[]
+      }
+      get_blog_views_timeseries: {
+        Args: { _days?: number; _slug?: string }
+        Returns: {
+          day: string
+          unique_views: number
+          views: number
         }[]
       }
       get_legal_view_stats: {
