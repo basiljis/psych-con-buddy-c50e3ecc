@@ -138,15 +138,23 @@ export default function BlogPost() {
   );
 
   const canonical = `${BASE_URL}/blog/${slug}`;
+  const seoTitleOverride = post ? (isEn ? post.seo_title_en : post.seo_title) : null;
+  const seoDescOverride = post ? (isEn ? post.seo_description_en : post.seo_description) : null;
+  const ogImageOverride = post ? (isEn ? post.og_image_en : post.og_image) : null;
   const description = post
-    ? (localized.excerpt || stripHtml(localized.content).slice(0, 160))
+    ? ((seoDescOverride && seoDescOverride.trim()) ||
+       localized.excerpt ||
+       stripHtml(localized.content).slice(0, 160))
     : "";
-  const ogImage = post?.cover_url
-    ? (post.cover_url.startsWith("http") ? post.cover_url : `${BASE_URL}${post.cover_url}`)
+  const resolvedCover = (ogImageOverride && ogImageOverride.trim()) || post?.cover_url || null;
+  const ogImage = resolvedCover
+    ? (resolvedCover.startsWith("http") ? resolvedCover : `${BASE_URL}${resolvedCover}`)
     : `${BASE_URL}/og-image.png`;
 
   useSeoMeta({
-    title: post ? `${localized.title}${t("blogPost.titleSuffix")}` : t("blogPost.fallbackTitle"),
+    title: post
+      ? ((seoTitleOverride && seoTitleOverride.trim()) || `${localized.title}${t("blogPost.titleSuffix")}`)
+      : t("blogPost.fallbackTitle"),
     description,
     canonical,
     keywords: post?.keywords.join(", "),
