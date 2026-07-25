@@ -234,6 +234,10 @@ const BLOCKS: Block[] = [
         ru: "Soziale und emotionale Kompetenzen + Werte — включая ценностное воспитание.",
         en: "Soziale und emotionale Kompetenzen + values education explicitly included.",
       },
+      china: {
+        ru: "社会 (Shèhuì) — общество: межличностные отношения + социальная адаптация, с акцентом на коллективизм, уважение и национальную идентичность.",
+        en: "社会 (Shèhuì, Society) — interpersonal relations + social adaptation, with emphasis on collectivism, respect and national identity.",
+      },
     },
   },
   {
