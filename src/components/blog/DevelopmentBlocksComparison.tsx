@@ -811,7 +811,7 @@ export default function DevelopmentBlocksComparison() {
                           </td>
                         </tr>
                       )}
-                    </>
+                    </FragmentWithKey>
                   );
                 })}
               </tbody>
