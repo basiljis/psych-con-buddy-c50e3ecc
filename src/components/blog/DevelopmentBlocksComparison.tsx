@@ -1102,8 +1102,20 @@ export default function DevelopmentBlocksComparison() {
                             <div className="flex items-start gap-2 text-sm">
                               <GraduationCap className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                               <div className="min-w-0 flex-1">
-                                <div className="text-[11px] font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 mb-1.5">
-                                  {s.practicalLabel}
+                                <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                                  <div className="text-[11px] font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+                                    {s.practicalLabel}
+                                  </div>
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    className="h-6 px-2 gap-1 text-[11px] border-emerald-500/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/10"
+                                    onClick={() => setExampleFor(b.id)}
+                                  >
+                                    <PlayCircle className="h-3 w-3" />
+                                    {s.showExample}
+                                  </Button>
                                 </div>
                                 <ul className="space-y-1 text-foreground/90 leading-relaxed list-disc pl-5 marker:text-emerald-600 dark:marker:text-emerald-400">
                                   {PRACTICAL_TIPS[b.id][lang].map((tip, i) => (
