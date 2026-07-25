@@ -585,6 +585,13 @@ export default function DevelopmentBlocksComparison() {
     new Set(["fgos", "headstart", "eyfs"]),
   );
   const [highlight, setHighlight] = useState(true);
+  const [learning, setLearning] = useState(false);
+  const [tourStep, setTourStep] = useState(0);
+
+  const enableLearning = (on: boolean) => {
+    setLearning(on);
+    if (on) setTourStep(0);
+  };
 
   const toggle = (id: ApproachId) => {
     setActive((prev) => {
