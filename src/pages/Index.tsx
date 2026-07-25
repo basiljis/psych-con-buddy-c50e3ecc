@@ -460,7 +460,17 @@ const Index = () => {
               
               <div className="h-8 w-px bg-border hidden lg:block" />
               <div className="flex items-center gap-2">
-                <MobileMenu activeTab={activeTab} onTabChange={setActiveTab} isAdmin={isAdmin} canAccessPublication={canAccessPublication} />
+                <MobileMenu
+                  activeTab={activeTab}
+                  onTabChange={setActiveTab}
+                  isAdmin={isAdmin}
+                  isOrgAdmin={isOrgAdmin}
+                  isDirector={isDirector}
+                  hasOrganizationAccess={hasOrganizationAccess}
+                  isPrivateSpecialist={isPrivateSpecialist}
+                  canAccessPublication={canAccessPublication}
+                  adminViewMode={adminViewMode}
+                />
                 <NotificationsDialog onNavigate={setActiveTab} />
                 <button
                   onClick={() => navigate("/profile")}
