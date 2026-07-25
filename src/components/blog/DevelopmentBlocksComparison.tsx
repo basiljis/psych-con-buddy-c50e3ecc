@@ -745,6 +745,11 @@ const STR = {
     beginnerLabel: "Beginner note",
     practicalLabel: "What it means in practice",
     learningOn: "Learning mode on — a short note explaining how the frameworks differ appears under each block.",
+    showExample: "Show example",
+    exampleTitle: "Sample session structure",
+    exampleGoal: "Goal",
+    exampleTotal: "Duration",
+    exampleClose: "Close",
   },
 };
 
