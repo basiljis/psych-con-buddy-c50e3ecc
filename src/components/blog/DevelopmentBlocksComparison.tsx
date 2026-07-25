@@ -17,7 +17,7 @@ import { Sparkles, ExternalLink, BookOpen, GraduationCap, ChevronLeft, ChevronRi
  * с определением и ссылкой на первоисточник (сноска).
  */
 
-type ApproachId = "fgos" | "headstart" | "eyfs" | "who" | "germany";
+type ApproachId = "fgos" | "headstart" | "eyfs" | "who" | "germany" | "china";
 
 type CellText = { ru: string; en: string };
 
