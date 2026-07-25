@@ -945,6 +945,28 @@ export default function DevelopmentBlocksComparison() {
                           </td>
                         </tr>
                       )}
+                      {learning && (
+                        <tr key={`${b.id}-tips`} className="border-t border-emerald-500/20">
+                          <td
+                            colSpan={visibleApproaches.length + 1}
+                            className="p-3 md:p-4 bg-emerald-500/5"
+                          >
+                            <div className="flex items-start gap-2 text-sm">
+                              <GraduationCap className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                              <div className="min-w-0 flex-1">
+                                <div className="text-[11px] font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 mb-1.5">
+                                  {s.practicalLabel}
+                                </div>
+                                <ul className="space-y-1 text-foreground/90 leading-relaxed list-disc pl-5 marker:text-emerald-600 dark:marker:text-emerald-400">
+                                  {PRACTICAL_TIPS[b.id][lang].map((tip, i) => (
+                                    <li key={i}>{tip}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
                     </FragmentWithKey>
                   );
                 })}
