@@ -18,9 +18,11 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Pencil, Trash2, Copy, ExternalLink, Rss, ImageDown } from "lucide-react";
+import { Plus, Pencil, Trash2, Copy, ExternalLink, Rss, ImageDown, BarChart3 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { downloadZenCover } from "@/lib/zen-cover";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BlogAnalyticsDashboard } from "@/components/BlogAnalyticsDashboard";
 
 const empty = {
   slug: "",
@@ -194,6 +196,15 @@ export function BlogManagement() {
 
   return (
     <div className="space-y-6">
+      <Tabs defaultValue="posts" className="space-y-6">
+        <TabsList>
+          <TabsTrigger value="posts">Статьи</TabsTrigger>
+          <TabsTrigger value="analytics"><BarChart3 className="h-4 w-4 mr-1.5" />Аналитика</TabsTrigger>
+        </TabsList>
+        <TabsContent value="analytics" className="mt-0">
+          <BlogAnalyticsDashboard />
+        </TabsContent>
+        <TabsContent value="posts" className="mt-0 space-y-6">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0">
           <div>
