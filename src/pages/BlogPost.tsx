@@ -290,8 +290,9 @@ export default function BlogPost() {
             </header>
 
             <div className="container mx-auto max-w-6xl px-4 py-12 md:py-16">
-              <div className="grid lg:grid-cols-[1fr_240px] gap-10">
-                <article ref={articleRef}>
+              <div className="grid lg:grid-cols-[minmax(0,1fr)_240px] gap-10">
+                <article ref={articleRef} className="min-w-0">
+
                   <div
                     className="prose prose-slate dark:prose-invert max-w-none blog-prose"
                     dangerouslySetInnerHTML={{ __html: contentWithIds }}
