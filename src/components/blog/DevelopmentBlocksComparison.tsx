@@ -716,6 +716,11 @@ const STR = {
     beginnerLabel: "Пояснение для новичков",
     practicalLabel: "Что это означает на практике",
     learningOn: "Обучение включено — под каждым блоком появилось короткое пояснение отличий между подходами.",
+    showExample: "Показать пример",
+    exampleTitle: "Пример структуры занятия",
+    exampleGoal: "Цель",
+    exampleTotal: "Длительность",
+    exampleClose: "Закрыть",
   },
   en: {
     title: "Interactive comparison of development domains",
