@@ -1,10 +1,11 @@
-import { useMemo, useState } from "react";
+import { Fragment as FragmentWithKey, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
-import { Sparkles, ExternalLink, BookOpen } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sparkles, ExternalLink, BookOpen, GraduationCap, ChevronLeft, ChevronRight, X, Lightbulb } from "lucide-react";
 
 /**
  * Interactive comparison of the 5 development domains across
@@ -393,6 +394,70 @@ const GLOSSARY: Record<string, Term> = {
   },
 };
 
+/** Пояснения для новичков: чем подходы отличаются друг от друга в каждом блоке. */
+const BEGINNER_NOTES: Record<BlockId, CellText> = {
+  physical: {
+    ru: "ФГОС объединяет моторику и ЗОЖ в один блок. Head Start и EYFS выделяют «здоровье и самообслуживание» отдельным акцентом, ВОЗ — вообще ставит здоровье и питание в основу ухода. Германия объединяет тело, движение и здоровье в единый образовательный домен.",
+    en: "FGOS bundles motor skills and healthy lifestyle together. Head Start and EYFS make 'health and self-care' a separate strand; WHO puts health and nutrition at the foundation of care. Germany merges body, motion and health into one educational domain.",
+  },
+  speech: {
+    ru: "ФГОС говорит о «речевом развитии» целиком. Англоязычные подходы (Head Start, EYFS) разделяют устную речь и грамотность (literacy) на два отдельных направления. ВОЗ вписывает язык в отзывчивое взаимодействие взрослого и ребёнка.",
+    en: "FGOS treats 'speech development' as a whole. English-language frameworks (Head Start, EYFS) split oral language and literacy into two separate strands. WHO embeds language inside responsive caregiving.",
+  },
+  cognitive: {
+    ru: "У ФГОС — общий блок «познавательное развитие». Head Start и EYFS выделяют математику отдельно. Германия идёт дальше и делит когнитивное развитие на три STEM-домена: математика, естественные науки, техника.",
+    en: "FGOS uses a single 'cognitive development' block. Head Start and EYFS make mathematics a separate strand. Germany goes further and splits cognition into three STEM domains: math, natural sciences and technology.",
+  },
+  social: {
+    ru: "Все подходы согласны, что социально-эмоциональное развитие — фундамент. EYFS даже относит его к «prime areas». ВОЗ делает акцент на привязанности и безопасности, Германия добавляет ценностное воспитание.",
+    en: "All frameworks agree social-emotional development is foundational. EYFS lists it among the 'prime areas'. WHO emphasises attachment and safety; Germany explicitly adds values education.",
+  },
+  play: {
+    ru: "ФГОС видит игру как сквозную деятельность, а искусство — как отдельный блок. Head Start добавляет «подходы к обучению» (инициатива, любознательность). EYFS вводит характеристики эффективного обучения на основе игры.",
+    en: "FGOS treats play as cross-cutting and the arts as a separate block. Head Start adds 'approaches to learning' (initiative, curiosity). EYFS defines play-based characteristics of effective learning.",
+  },
+};
+
+type TourStep = { title: CellText; body: CellText };
+
+const TOUR_STEPS: TourStep[] = [
+  {
+    title: { ru: "Шаг 1. Базовый подход", en: "Step 1. Baseline framework" },
+    body: {
+      ru: "ФГОС ДО закреплён как базовый — его нельзя отключить. Все остальные подходы сравниваются именно с ним, чтобы вам было проще увидеть отличия от привычной российской модели.",
+      en: "FGOS DO is pinned as baseline — it can't be turned off. Every other framework is compared to it so you can see how it diverges from the familiar Russian model.",
+    },
+  },
+  {
+    title: { ru: "Шаг 2. Включайте подходы", en: "Step 2. Toggle frameworks" },
+    body: {
+      ru: "Нажмите на «таблетку» подхода (Head Start, EYFS, ВОЗ, Германия), чтобы добавить или убрать колонку. Начните с 2–3 подходов — так проще сравнивать.",
+      en: "Click a framework pill (Head Start, EYFS, WHO, Germany) to add or remove its column. Start with 2–3 frameworks — it makes comparison easier.",
+    },
+  },
+  {
+    title: { ru: "Шаг 3. Подсветка отличий", en: "Step 3. Highlight differences" },
+    body: {
+      ru: "Переключатель «Подсвечивать отличия» окрашивает ячейки, которые отличаются от ФГОС. Так вы за секунду видите, где подход расходится с российской моделью.",
+      en: "The 'Highlight differences' switch tints cells that diverge from FGOS. In a second you can see exactly where a framework departs from the Russian model.",
+    },
+  },
+  {
+    title: { ru: "Шаг 4. Термины и сноски", en: "Step 4. Glossary & footnotes" },
+    body: {
+      ru: "Подчёркнутые пунктиром слова (например, «мелкая моторика», «STEM», «привязанность») — кликабельны. В поповере — короткое определение и ссылка на первоисточник (CDC, ASHA, WHO, NAEYC).",
+      en: "Dotted-underline words (e.g. 'fine motor', 'STEM', 'attachment') are clickable. The popover gives a short definition and a link to a primary source (CDC, ASHA, WHO, NAEYC).",
+    },
+  },
+  {
+    title: { ru: "Шаг 5. Заметки для новичков", en: "Step 5. Beginner notes" },
+    body: {
+      ru: "Под каждой строкой появляется жёлтая заметка: краткое объяснение, чем подходы отличаются в этой сфере развития и почему это важно. Можно выключить, когда освоитесь.",
+      en: "A yellow note appears below each row: a short explanation of how the frameworks differ in this domain and why it matters. Turn it off once you're comfortable.",
+    },
+  },
+];
+
 const STR = {
   ru: {
     title: "Сравнительная таблица блоков развития",
@@ -400,12 +465,22 @@ const STR = {
       "Включайте подходы, чтобы увидеть, как одни и те же сферы развития описаны в разных странах. Отличия от ФГОС ДО подсвечиваются. Кликайте по подчёркнутым терминам — там определение и ссылка на источник.",
     baseline: "Базовый подход",
     highlight: "Подсвечивать отличия",
+    learning: "Режим обучения",
     approaches: "Подходы",
     domain: "Сфера развития",
     source: "Источник",
     definition: "Определение",
     openSource: "Открыть источник",
     hint: "Совет: включите 2–3 подхода и наводите на подчёркнутые термины — раскроются определения и сноски.",
+    tourTitle: "Пошаговая экскурсия",
+    tourStep: "Шаг",
+    tourOf: "из",
+    tourPrev: "Назад",
+    tourNext: "Далее",
+    tourFinish: "Готово",
+    tourClose: "Закрыть подсказки",
+    beginnerLabel: "Пояснение для новичков",
+    learningOn: "Обучение включено — под каждым блоком появилось короткое пояснение отличий между подходами.",
   },
   en: {
     title: "Interactive comparison of development domains",
@@ -413,12 +488,22 @@ const STR = {
       "Toggle frameworks to see how the same domains are framed across countries. Cells that diverge from FGOS DO are highlighted. Click underlined terms for definitions and sources.",
     baseline: "Baseline",
     highlight: "Highlight differences",
+    learning: "Learning mode",
     approaches: "Frameworks",
     domain: "Domain",
     source: "Source",
     definition: "Definition",
     openSource: "Open source",
     hint: "Tip: enable 2–3 frameworks and click underlined terms to reveal definitions and footnotes.",
+    tourTitle: "Guided tour",
+    tourStep: "Step",
+    tourOf: "of",
+    tourPrev: "Back",
+    tourNext: "Next",
+    tourFinish: "Done",
+    tourClose: "Close hints",
+    beginnerLabel: "Beginner note",
+    learningOn: "Learning mode on — a short note explaining how the frameworks differ appears under each block.",
   },
 };
 
@@ -500,6 +585,13 @@ export default function DevelopmentBlocksComparison() {
     new Set(["fgos", "headstart", "eyfs"]),
   );
   const [highlight, setHighlight] = useState(true);
+  const [learning, setLearning] = useState(false);
+  const [tourStep, setTourStep] = useState(0);
+
+  const enableLearning = (on: boolean) => {
+    setLearning(on);
+    if (on) setTourStep(0);
+  };
 
   const toggle = (id: ApproachId) => {
     setActive((prev) => {
@@ -561,11 +653,85 @@ export default function DevelopmentBlocksComparison() {
             </button>
           );
         })}
-        <div className="ml-auto flex items-center gap-2">
-          <span className="text-xs text-muted-foreground">{s.highlight}</span>
-          <Switch checked={highlight} onCheckedChange={setHighlight} />
+        <div className="ml-auto flex flex-wrap items-center gap-3">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <GraduationCap className={`h-4 w-4 ${learning ? "text-primary" : "text-muted-foreground"}`} />
+            <span className="text-xs text-muted-foreground">{s.learning}</span>
+            <Switch checked={learning} onCheckedChange={enableLearning} />
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <span className="text-xs text-muted-foreground">{s.highlight}</span>
+            <Switch checked={highlight} onCheckedChange={setHighlight} />
+          </label>
         </div>
       </div>
+
+      {/* Guided tour */}
+      {learning && (
+        <div className="mb-4 rounded-xl border border-primary/30 bg-primary/5 p-4 md:p-5">
+          <div className="flex items-start gap-3">
+            <div className="rounded-lg bg-primary text-primary-foreground p-2 shrink-0">
+              <Lightbulb className="h-4 w-4" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-3 mb-2">
+                <div className="text-xs font-semibold uppercase tracking-wider text-primary">
+                  {s.tourTitle} · {s.tourStep} {tourStep + 1} {s.tourOf} {TOUR_STEPS.length}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => enableLearning(false)}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label={s.tourClose}
+                  title={s.tourClose}
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              <h4 className="font-semibold text-base md:text-lg mb-1 leading-tight">
+                {TOUR_STEPS[tourStep].title[lang]}
+              </h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {TOUR_STEPS[tourStep].body[lang]}
+              </p>
+              <div className="mt-3 h-1 w-full rounded-full bg-primary/15 overflow-hidden">
+                <div
+                  className="h-full bg-primary transition-all duration-300"
+                  style={{ width: `${((tourStep + 1) / TOUR_STEPS.length) * 100}%` }}
+                />
+              </div>
+              <div className="mt-3 flex items-center justify-between gap-2">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setTourStep((n) => Math.max(0, n - 1))}
+                  disabled={tourStep === 0}
+                  className="gap-1"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  {s.tourPrev}
+                </Button>
+                {tourStep < TOUR_STEPS.length - 1 ? (
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => setTourStep((n) => Math.min(TOUR_STEPS.length - 1, n + 1))}
+                    className="gap-1"
+                  >
+                    {s.tourNext}
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                ) : (
+                  <Button type="button" size="sm" onClick={() => enableLearning(false)}>
+                    {s.tourFinish}
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Table */}
       <Card className="overflow-hidden">
@@ -596,34 +762,56 @@ export default function DevelopmentBlocksComparison() {
                 {BLOCKS.map((b) => {
                   const baseText = stripMarkers(b.cells.fgos[lang]);
                   return (
-                    <tr key={b.id} className="border-t border-border/60 align-top">
-                      <th
-                        scope="row"
-                        className="p-3 md:p-4 text-left font-medium sticky left-0 bg-background z-10"
-                      >
-                        <div className="flex items-center gap-2">
-                          <span aria-hidden className="text-lg">{b.emoji}</span>
-                          <span>{b.title[lang]}</span>
-                        </div>
-                      </th>
-                      {visibleApproaches.map((a) => {
-                        const raw = b.cells[a.id][lang];
-                        const differs =
-                          !a.baseline && stripMarkers(raw) !== baseText;
-                        return (
+                    <FragmentWithKey key={b.id}>
+                      <tr className="border-t border-border/60 align-top">
+                        <th
+                          scope="row"
+                          className="p-3 md:p-4 text-left font-medium sticky left-0 bg-background z-10"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span aria-hidden className="text-lg">{b.emoji}</span>
+                            <span>{b.title[lang]}</span>
+                          </div>
+                        </th>
+                        {visibleApproaches.map((a) => {
+                          const raw = b.cells[a.id][lang];
+                          const differs =
+                            !a.baseline && stripMarkers(raw) !== baseText;
+                          return (
+                            <td
+                              key={a.id}
+                              className={`p-3 md:p-4 leading-relaxed transition-colors ${
+                                highlight && differs
+                                  ? "bg-amber-50 dark:bg-amber-500/10 ring-1 ring-inset ring-amber-300/50 dark:ring-amber-400/30"
+                                  : ""
+                              }`}
+                            >
+                              {renderWithTerms(raw, lang, s)}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                      {learning && (
+                        <tr key={`${b.id}-note`} className="border-t border-primary/20">
                           <td
-                            key={a.id}
-                            className={`p-3 md:p-4 leading-relaxed transition-colors ${
-                              highlight && differs
-                                ? "bg-amber-50 dark:bg-amber-500/10 ring-1 ring-inset ring-amber-300/50 dark:ring-amber-400/30"
-                                : ""
-                            }`}
+                            colSpan={visibleApproaches.length + 1}
+                            className="p-3 md:p-4 bg-primary/5"
                           >
-                            {renderWithTerms(raw, lang, s)}
+                            <div className="flex items-start gap-2 text-sm">
+                              <Lightbulb className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                              <div className="min-w-0">
+                                <span className="text-[11px] font-semibold uppercase tracking-wider text-primary mr-2">
+                                  {s.beginnerLabel}
+                                </span>
+                                <span className="text-foreground/90 leading-relaxed">
+                                  {BEGINNER_NOTES[b.id][lang]}
+                                </span>
+                              </div>
+                            </div>
                           </td>
-                        );
-                      })}
-                    </tr>
+                        </tr>
+                      )}
+                    </FragmentWithKey>
                   );
                 })}
               </tbody>
