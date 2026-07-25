@@ -5,7 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { Sparkles, ExternalLink, BookOpen, GraduationCap, ChevronLeft, ChevronRight, X, Lightbulb } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Sparkles, ExternalLink, BookOpen, GraduationCap, ChevronLeft, ChevronRight, X, Lightbulb, PlayCircle, Clock } from "lucide-react";
 
 /**
  * Interactive comparison of the 5 development domains across
@@ -515,6 +516,142 @@ const PRACTICAL_TIPS: Record<BlockId, { ru: string[]; en: string[] }> = {
   },
 };
 
+/** Пример структуры коррекционно-развивающего занятия (30–45 минут) для каждой сферы. */
+type LessonStage = { time: string; name: string; desc: string };
+type LessonExample = { totalMin: string; goal: string; stages: LessonStage[] };
+const LESSON_EXAMPLES: Record<BlockId, { ru: LessonExample; en: LessonExample }> = {
+  physical: {
+    ru: {
+      totalMin: "35 минут",
+      goal: "Развитие крупной и мелкой моторики, межполушарного взаимодействия у ребёнка 5–6 лет.",
+      stages: [
+        { time: "0–3 мин", name: "Приветствие и настрой", desc: "Ритуал встречи, короткая беседа о самочувствии, дыхательная разминка (4 вдоха-выдоха)." },
+        { time: "3–10 мин", name: "Крупная моторика", desc: "Полоса препятствий: ходьба по линии, прыжки в обручи, ползание на четвереньках, бросок мяча в цель." },
+        { time: "10–18 мин", name: "Межполушарные упражнения", desc: "«Кулак-ребро-ладонь», рисование двумя руками одновременно, зеркальное копирование поз." },
+        { time: "18–28 мин", name: "Мелкая моторика", desc: "Прищепки, шнуровка, обводка по контуру, штриховка в заданном направлении." },
+        { time: "28–33 мин", name: "Графомоторное задание", desc: "Копирование фигур или письмо элементов букв в тетради в клетку." },
+        { time: "33–35 мин", name: "Рефлексия", desc: "Ребёнок показывает, что получилось лучше всего; специалист фиксирует наблюдения в протоколе." },
+      ],
+    },
+    en: {
+      totalMin: "35 min",
+      goal: "Develop gross and fine motor skills and interhemispheric coordination in a 5–6 y.o. child.",
+      stages: [
+        { time: "0–3 min", name: "Greeting & tuning-in", desc: "Ritual greeting, brief check-in, breathing warm-up (4 inhales–exhales)." },
+        { time: "3–10 min", name: "Gross motor", desc: "Obstacle course: walking on a line, jumping into hoops, quadruped crawling, target throwing." },
+        { time: "10–18 min", name: "Cross-hemisphere tasks", desc: "'Fist–edge–palm', bilateral drawing, mirror posture copying." },
+        { time: "18–28 min", name: "Fine motor", desc: "Clothes-pegs, lacing, tracing contours, hatching in a given direction." },
+        { time: "28–33 min", name: "Graphomotor task", desc: "Copying shapes or writing letter elements in a squared notebook." },
+        { time: "33–35 min", name: "Reflection", desc: "Child shows what worked best; specialist records observations in the protocol." },
+      ],
+    },
+  },
+  speech: {
+    ru: {
+      totalMin: "40 минут",
+      goal: "Развитие звукопроизношения, фонематического слуха и связной речи у ребёнка 5–7 лет.",
+      stages: [
+        { time: "0–3 мин", name: "Приветствие", desc: "Ритуал, короткий диалог, эмоциональный настрой." },
+        { time: "3–10 мин", name: "Артикуляционная и дыхательная гимнастика", desc: "5–6 упражнений перед зеркалом, дыхание «свеча», «пёрышко»." },
+        { time: "10–18 мин", name: "Постановка/автоматизация звука", desc: "Работа над целевым звуком в слогах и словах с наглядным материалом." },
+        { time: "18–28 мин", name: "Фонематический слух", desc: "Игры: «Поймай звук», деление слов на слоги, определение позиции звука в слове." },
+        { time: "28–37 мин", name: "Связная речь", desc: "Составление рассказа по серии картинок или пересказ короткого текста (4–6 предложений)." },
+        { time: "37–40 мин", name: "Домашнее задание и рефлексия", desc: "Одно короткое речевое упражнение на день для родителей; отметка в дневнике занятий." },
+      ],
+    },
+    en: {
+      totalMin: "40 min",
+      goal: "Develop articulation, phonemic awareness and connected speech in a 5–7 y.o. child.",
+      stages: [
+        { time: "0–3 min", name: "Greeting", desc: "Ritual, short dialogue, emotional tuning-in." },
+        { time: "3–10 min", name: "Articulation & breathing", desc: "5–6 mirror exercises, 'candle' and 'feather' breathing." },
+        { time: "10–18 min", name: "Target sound work", desc: "Elicitation / automation of the target sound in syllables and words with visuals." },
+        { time: "18–28 min", name: "Phonemic awareness", desc: "'Catch the sound', syllable segmentation, sound-position tasks." },
+        { time: "28–37 min", name: "Connected speech", desc: "Story building from a picture series or retelling a short text (4–6 sentences)." },
+        { time: "37–40 min", name: "Homework & reflection", desc: "One short daily language task for parents; entry in the session log." },
+      ],
+    },
+  },
+  cognitive: {
+    ru: {
+      totalMin: "30 минут",
+      goal: "Развитие внимания, памяти и элементарных математических представлений у ребёнка с ЗПР 6 лет.",
+      stages: [
+        { time: "0–3 мин", name: "Разминка-настрой", desc: "Игра «Что изменилось?» — тренировка произвольного внимания." },
+        { time: "3–12 мин", name: "Когнитивный блок №1", desc: "Задания на классификацию, сериацию, поиск закономерностей (7–10 мин, с наглядным материалом)." },
+        { time: "12–15 мин", name: "Двигательная пауза", desc: "Короткая физминутка со счётом или пальчиковая гимнастика." },
+        { time: "15–24 мин", name: "Когнитивный блок №2", desc: "Математические представления: счёт в пределах 10, состав числа, простые задачи в картинках." },
+        { time: "24–28 мин", name: "Память", desc: "Запоминание 5–7 картинок или короткого ряда слов с последующим воспроизведением." },
+        { time: "28–30 мин", name: "Рефлексия", desc: "Ребёнок называет самое интересное задание; фиксация стратегии решения, а не только результата." },
+      ],
+    },
+    en: {
+      totalMin: "30 min",
+      goal: "Develop attention, memory and early math skills in a 6 y.o. child with developmental delay.",
+      stages: [
+        { time: "0–3 min", name: "Warm-up", desc: "'What has changed?' game — voluntary attention training." },
+        { time: "3–12 min", name: "Cognitive block #1", desc: "Classification, seriation, pattern-finding tasks (7–10 min, with manipulatives)." },
+        { time: "12–15 min", name: "Movement break", desc: "Short physical break with counting or finger gymnastics." },
+        { time: "15–24 min", name: "Cognitive block #2", desc: "Math ideas: counting to 10, number composition, simple picture problems." },
+        { time: "24–28 min", name: "Memory", desc: "Recall 5–7 pictures or a short word list." },
+        { time: "28–30 min", name: "Reflection", desc: "Child names the most interesting task; record the strategy, not only the answer." },
+      ],
+    },
+  },
+  social: {
+    ru: {
+      totalMin: "40 минут",
+      goal: "Развитие эмоциональной регуляции и социальных навыков в малой группе (3–4 ребёнка) 6–7 лет.",
+      stages: [
+        { time: "0–5 мин", name: "Круг приветствия", desc: "Каждый называет своё настроение (карточки эмоций), обсуждаем визуальное расписание занятия." },
+        { time: "5–15 мин", name: "Эмоциональная грамотность", desc: "Игра «Угадай эмоцию» по фотографиям или пиктограммам; обсуждение ситуаций." },
+        { time: "15–25 мин", name: "Социальный навык", desc: "Ролевая игра на одну целевую ситуацию (просьба, отказ, извинение) с проговариванием фраз." },
+        { time: "25–33 мин", name: "Саморегуляция", desc: "Техника «Черепаха» или «Светофор»; дыхательное упражнение 4-7-8." },
+        { time: "33–38 мин", name: "Совместная деятельность", desc: "Кооперативная игра или общий рисунок с распределением ролей." },
+        { time: "38–40 мин", name: "Ритуал прощания", desc: "Каждый называет, что удалось; специалист даёт короткую позитивную обратную связь." },
+      ],
+    },
+    en: {
+      totalMin: "40 min",
+      goal: "Develop emotional regulation and social skills in a small group (3–4 kids), ages 6–7.",
+      stages: [
+        { time: "0–5 min", name: "Greeting circle", desc: "Each child names their mood (emotion cards); review visual session schedule." },
+        { time: "5–15 min", name: "Emotional literacy", desc: "'Guess the emotion' with photos or pictograms; discuss real-life situations." },
+        { time: "15–25 min", name: "Social skill", desc: "Role-play of one target situation (asking, refusing, apologising) with modelled phrases." },
+        { time: "25–33 min", name: "Self-regulation", desc: "'Turtle' or 'Traffic light' technique; 4-7-8 breathing." },
+        { time: "33–38 min", name: "Joint activity", desc: "Cooperative game or shared drawing with distributed roles." },
+        { time: "38–40 min", name: "Closing ritual", desc: "Each child names one success; specialist gives short positive feedback." },
+      ],
+    },
+  },
+  play: {
+    ru: {
+      totalMin: "45 минут",
+      goal: "Развитие сюжетно-ролевой игры, инициативы и творческого воображения у ребёнка 5–6 лет.",
+      stages: [
+        { time: "0–5 мин", name: "Свободное наблюдение", desc: "Ребёнок выбирает материал сам; специалист наблюдает и фиксирует инициативу и устойчивость интереса." },
+        { time: "5–15 мин", name: "Совместная игра", desc: "Специалист присоединяется, поддерживает сюжет, вводит новую роль или предмет-заместитель." },
+        { time: "15–25 мин", name: "Творческий блок", desc: "Рисование, лепка или конструирование по мотивам разыгранного сюжета." },
+        { time: "25–35 мин", name: "Развитие сюжета", desc: "Введение проблемной ситуации в игру, поиск решения вместе с ребёнком." },
+        { time: "35–42 мин", name: "Рассказ о игре", desc: "Ребёнок пересказывает сюжет — развитие связной речи и рефлексии." },
+        { time: "42–45 мин", name: "Уборка и прощание", desc: "Совместная уборка материалов как часть саморегуляции; ритуал завершения." },
+      ],
+    },
+    en: {
+      totalMin: "45 min",
+      goal: "Develop role-play, initiative and creative imagination in a 5–6 y.o. child.",
+      stages: [
+        { time: "0–5 min", name: "Free observation", desc: "Child picks the materials; specialist observes initiative and sustained interest." },
+        { time: "5–15 min", name: "Joint play", desc: "Specialist joins in, supports the storyline, introduces a new role or substitute object." },
+        { time: "15–25 min", name: "Creative block", desc: "Drawing, modelling or building based on the enacted story." },
+        { time: "25–35 min", name: "Plot development", desc: "Introduce a problem into the play and solve it together with the child." },
+        { time: "35–42 min", name: "Story retelling", desc: "Child retells the play scenario — connected speech and reflection." },
+        { time: "42–45 min", name: "Clean-up & farewell", desc: "Joint clean-up as self-regulation practice; closing ritual." },
+      ],
+    },
+  },
+};
+
 type TourStep = { title: CellText; body: CellText };
 
 const TOUR_STEPS: TourStep[] = [
@@ -579,6 +716,11 @@ const STR = {
     beginnerLabel: "Пояснение для новичков",
     practicalLabel: "Что это означает на практике",
     learningOn: "Обучение включено — под каждым блоком появилось короткое пояснение отличий между подходами.",
+    showExample: "Показать пример",
+    exampleTitle: "Пример структуры занятия",
+    exampleGoal: "Цель",
+    exampleTotal: "Длительность",
+    exampleClose: "Закрыть",
   },
   en: {
     title: "Interactive comparison of development domains",
@@ -603,6 +745,11 @@ const STR = {
     beginnerLabel: "Beginner note",
     practicalLabel: "What it means in practice",
     learningOn: "Learning mode on — a short note explaining how the frameworks differ appears under each block.",
+    showExample: "Show example",
+    exampleTitle: "Sample session structure",
+    exampleGoal: "Goal",
+    exampleTotal: "Duration",
+    exampleClose: "Close",
   },
 };
 
@@ -702,6 +849,7 @@ export default function DevelopmentBlocksComparison() {
   })();
   const [learning, setLearning] = useState<boolean>(initialTour.learning);
   const [tourStep, setTourStep] = useState<number>(initialTour.step);
+  const [exampleFor, setExampleFor] = useState<BlockId | null>(null);
   const hydrated = useRef(false);
 
   useEffect(() => {
@@ -954,8 +1102,20 @@ export default function DevelopmentBlocksComparison() {
                             <div className="flex items-start gap-2 text-sm">
                               <GraduationCap className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                               <div className="min-w-0 flex-1">
-                                <div className="text-[11px] font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 mb-1.5">
-                                  {s.practicalLabel}
+                                <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                                  <div className="text-[11px] font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+                                    {s.practicalLabel}
+                                  </div>
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    className="h-6 px-2 gap-1 text-[11px] border-emerald-500/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/10"
+                                    onClick={() => setExampleFor(b.id)}
+                                  >
+                                    <PlayCircle className="h-3 w-3" />
+                                    {s.showExample}
+                                  </Button>
                                 </div>
                                 <ul className="space-y-1 text-foreground/90 leading-relaxed list-disc pl-5 marker:text-emerald-600 dark:marker:text-emerald-400">
                                   {PRACTICAL_TIPS[b.id][lang].map((tip, i) => (
@@ -996,6 +1156,49 @@ export default function DevelopmentBlocksComparison() {
       </div>
 
       <p className="mt-3 text-xs text-muted-foreground">{s.hint}</p>
+
+      <Dialog open={exampleFor !== null} onOpenChange={(o) => !o && setExampleFor(null)}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          {exampleFor && (() => {
+            const block = BLOCKS.find((x) => x.id === exampleFor)!;
+            const ex = LESSON_EXAMPLES[exampleFor][lang];
+            return (
+              <>
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2 text-left">
+                    <PlayCircle className="h-5 w-5 text-emerald-600" />
+                    {s.exampleTitle}: {block.title[lang]}
+                  </DialogTitle>
+                  <DialogDescription className="flex flex-wrap gap-x-4 gap-y-1 text-left">
+                    <span className="inline-flex items-center gap-1">
+                      <Clock className="h-3.5 w-3.5" /> <strong>{s.exampleTotal}:</strong> {ex.totalMin}
+                    </span>
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="mt-2 text-sm">
+                  <p className="mb-4 text-foreground/90">
+                    <span className="font-semibold">{s.exampleGoal}:</span> {ex.goal}
+                  </p>
+                  <ol className="relative border-l-2 border-emerald-500/30 pl-5 space-y-4">
+                    {ex.stages.map((st, i) => (
+                      <li key={i} className="relative">
+                        <span className="absolute -left-[27px] top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-bold text-white">
+                          {i + 1}
+                        </span>
+                        <div className="flex flex-wrap items-baseline gap-x-2">
+                          <span className="text-xs font-mono text-emerald-700 dark:text-emerald-400">{st.time}</span>
+                          <span className="font-semibold text-foreground">{st.name}</span>
+                        </div>
+                        <p className="mt-1 text-foreground/80 leading-relaxed">{st.desc}</p>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
