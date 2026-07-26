@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export interface Notification {
   id: string;
-  type: "draft_protocol" | "pending_request" | "expiring_subscription" | "pending_commercial_offer" | "pending_subscription_request";
+  type: "draft_protocol" | "pending_request" | "expiring_subscription" | "pending_commercial_offer" | "pending_subscription_request" | "pending_blog_comment";
   title: string;
   description: string;
   created_at: string;
