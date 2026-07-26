@@ -28,6 +28,8 @@ export default function Blog() {
   const [category, setCategory] = useState<BlogCategory | "all">("all");
   const [page, setPage] = useState(1);
   const { stats } = useBlogViewStats();
+  const [likesTotal, setLikesTotal] = useState<number>(0);
+  const [uniqueVisitors, setUniqueVisitors] = useState<number>(0);
 
   useEffect(() => {
     (async () => {
@@ -41,7 +43,28 @@ export default function Blog() {
       setPosts((data ?? []) as BlogPost[]);
       setLoading(false);
     })();
+
+    (async () => {
+      const { count } = await (supabase as any)
+        .from("blog_comment_likes")
+        .select("*", { count: "exact", head: true });
+      setLikesTotal(count ?? 0);
+    })();
+
+    (async () => {
+      const { data } = await (supabase as any)
+        .from("blog_views")
+        .select("visitor_id")
+        .limit(10000);
+      const uniques = new Set((data ?? []).map((r: any) => r.visitor_id).filter(Boolean));
+      setUniqueVisitors(uniques.size);
+    })();
   }, []);
+
+  const totalViews = useMemo(
+    () => Object.values(stats).reduce((sum: number, s: any) => sum + (s?.total_views ?? 0), 0),
+    [stats]
+  );
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
