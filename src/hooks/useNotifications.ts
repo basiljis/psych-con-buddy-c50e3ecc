@@ -67,6 +67,21 @@ export function useNotifications() {
     },
   });
 
+  const { data: pendingBlogComments = [] } = useQuery({
+    queryKey: ["pending-blog-comments"],
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("blog_comments")
+        .select("id, author_name, created_at, post:blog_posts(title)")
+        .eq("status", "pending")
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      return data || [];
+    },
+    refetchInterval: 60_000,
+  });
+
   // Проверка истекающих подписок (за 7 дней до окончания)
   const { data: expiringSubscriptions = [] } = useQuery({
     queryKey: ["expiring-subscriptions"],
