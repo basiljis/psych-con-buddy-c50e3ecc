@@ -93,7 +93,7 @@ export default function BlogComments({ postId, isEn = false }: Props) {
     setSubmitting(true);
     const { data: sessionData } = await supabase.auth.getSession();
     const uid = sessionData.session?.user?.id ?? null;
-    const { error } = await (supabase as any).from("blog_comments").insert({
+    const { data: inserted, error } = await (supabase as any).from("blog_comments").insert({
       post_id: postId,
       parent_id: replyTo?.id ?? null,
       author_name: parsed.data.author_name,
@@ -101,11 +101,16 @@ export default function BlogComments({ postId, isEn = false }: Props) {
       content: parsed.data.content,
       status: "pending",
       user_id: uid,
-    });
+    }).select("id").single();
     setSubmitting(false);
     if (error) {
       toast.error(labels.error);
       return;
+    }
+    if (inserted?.id) {
+      supabase.functions
+        .invoke("notify-blog-comment", { body: { kind: "new_pending", commentId: inserted.id } })
+        .catch((err) => console.warn("notify-blog-comment failed", err));
     }
     toast.success(labels.thanks);
     setName(""); setEmail(""); setContent(""); setReplyTo(null);
