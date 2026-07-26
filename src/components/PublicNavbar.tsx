@@ -96,81 +96,113 @@ export function PublicNavbar({
                   <Menu className="h-5 w-5" aria-hidden="true" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-80">
-                <SheetHeader>
+              <SheetContent
+                side="right"
+                className="w-80 max-w-[90vw] flex flex-col p-0 gap-0"
+              >
+                <SheetHeader className="px-6 pt-6 pb-3 shrink-0 border-b">
                   <SheetTitle>{t('nav.menu')}</SheetTitle>
                 </SheetHeader>
-                <div className="mt-6 space-y-4">
-                  <div className="space-y-2">
-                    <p className="text-xs font-medium text-muted-foreground px-3">{t('nav.catalog')}</p>
-                    <Link
-                      to="/specialists"
-                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${isSpecialistsCatalog ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
-                    >
-                      <GraduationCap className="h-4 w-4" />
-                      {t('nav.findSpecialist')}
-                    </Link>
-                    <Link
-                      to="/organizations"
-                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${isOrganizationsCatalog ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
-                    >
-                      <Building2 className="h-4 w-4" />
-                      {t('nav.findOrganization')}
-                    </Link>
-                  </div>
-
-                  <div className="border-t pt-4 space-y-2">
-                    <p className="text-xs font-medium text-muted-foreground px-3">{t('nav.info')}</p>
-                    <Link
-                      to="/for-organizations"
-                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'organizations' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
-                    >
-                      <Building2 className="h-4 w-4" />
-                      {t('nav.organizations')}
-                    </Link>
-                    <Link
-                      to="/for-specialists"
-                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'specialists' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
-                    >
-                      <GraduationCap className="h-4 w-4" />
-                      {t('nav.specialists')}
-                    </Link>
-                    <Link
-                      to="/for-parents"
-                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'parents' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
-                    >
-                      <Heart className="h-4 w-4" />
-                      {t('nav.parents')}
-                    </Link>
-                    <Link
-                      to="/instructions"
-                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'instructions' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
-                    >
-                      <BookOpen className="h-4 w-4" />
-                      {t('nav.instructions')}
-                    </Link>
-                    <Link
-                      to="/legal"
-                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'legal' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
-                    >
-                      <Scale className="h-4 w-4" />
-                      {t('nav.legal')}
-                    </Link>
-                  </div>
-
-                  {showHomeButton && (
-                    <div className="border-t pt-4">
-                      <Link to="/" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted transition-colors">
-                        <Home className="h-4 w-4" />
-                        {t('nav.home')}
+                <div
+                  className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-4 pb-10 pt-4"
+                  style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
+                >
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <p className="text-xs font-medium text-muted-foreground px-3">{t('nav.catalog')}</p>
+                      <Link
+                        to="/specialists"
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${isSpecialistsCatalog ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
+                      >
+                        <GraduationCap className="h-4 w-4" />
+                        {t('nav.findSpecialist')}
+                      </Link>
+                      <Link
+                        to="/organizations"
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${isOrganizationsCatalog ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
+                      >
+                        <Building2 className="h-4 w-4" />
+                        {t('nav.findOrganization')}
                       </Link>
                     </div>
-                  )}
 
-                  <div className="border-t pt-4">
-                    <Link to={authLink} className="block">
-                      <Button className="w-full">{t('nav.login')}</Button>
-                    </Link>
+                    <div className="border-t pt-4 space-y-2">
+                      <p className="text-xs font-medium text-muted-foreground px-3">{t('nav.info')}</p>
+                      <Link
+                        to="/for-organizations"
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'organizations' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
+                      >
+                        <Building2 className="h-4 w-4" />
+                        {t('nav.organizations')}
+                      </Link>
+                      <Link
+                        to="/for-specialists"
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'specialists' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
+                      >
+                        <GraduationCap className="h-4 w-4" />
+                        {t('nav.specialists')}
+                      </Link>
+                      <Link
+                        to="/for-parents"
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'parents' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
+                      >
+                        <Heart className="h-4 w-4" />
+                        {t('nav.parents')}
+                      </Link>
+                      <Link
+                        to="/pricing"
+                        className="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors hover:bg-muted"
+                      >
+                        <Wallet className="h-4 w-4" />
+                        {t('nav.pricing', 'Тарифы')}
+                      </Link>
+                    </div>
+
+                    <div className="border-t pt-4 space-y-2">
+                      <p className="text-xs font-medium text-muted-foreground px-3">{t('nav.resources', 'Ресурсы')}</p>
+                      <Link
+                        to="/blog"
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'blog' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
+                      >
+                        <Newspaper className="h-4 w-4" />
+                        {t('nav.blog')}
+                      </Link>
+                      <Link
+                        to="/instructions"
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'instructions' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
+                      >
+                        <BookOpen className="h-4 w-4" />
+                        {t('nav.instructions')}
+                      </Link>
+                      <Link
+                        to="/legal"
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'legal' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
+                      >
+                        <Scale className="h-4 w-4" />
+                        {t('nav.legal')}
+                      </Link>
+                    </div>
+
+                    {showHomeButton && (
+                      <div className="border-t pt-4">
+                        <Link to="/" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted transition-colors">
+                          <Home className="h-4 w-4" />
+                          {t('nav.home')}
+                        </Link>
+                      </div>
+                    )}
+
+                    <div className="border-t pt-4 space-y-2">
+                      <Link to={authLink} className="block">
+                        <Button className="w-full">{t('nav.login')}</Button>
+                      </Link>
+                      <Link to="/register" className="block">
+                        <Button variant="outline" className="w-full gap-2">
+                          <UserPlus className="h-4 w-4" />
+                          {t('nav.register', 'Регистрация')}
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </SheetContent>
