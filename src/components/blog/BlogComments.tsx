@@ -211,25 +211,35 @@ export default function BlogComments({ postId, isEn = false }: Props) {
     );
   };
 
-  const renderOne = (c: Comment, depth = 0) => (
-    <div key={c.id} className={depth ? "ml-6 md:ml-10 border-l pl-4" : ""}>
-      <Card className={c.is_author_reply ? "border-primary/40 bg-primary/5" : ""}>
-        <CardContent className="p-4">
-          <div className="flex items-center gap-2 mb-1.5 text-sm">
-            <span className="font-semibold">{c.author_name}</span>
-            {c.is_author_reply && (
-              <Badge variant="secondary" className="gap-1"><ShieldCheck className="h-3 w-3" /> {labels.author}</Badge>
-            )}
-            <span className="text-xs text-muted-foreground ml-auto">
-              {new Date(c.created_at).toLocaleDateString(isEn ? "en-US" : "ru-RU", {
-                year: "numeric", month: "short", day: "numeric",
-              })}
-            </span>
-          </div>
-          <div className="text-sm whitespace-pre-wrap leading-relaxed">{c.content}</div>
-          <div className="mt-2 flex items-center gap-1 flex-wrap">
-            <LikeButton c={c} />
-            {depth === 0 && (
+  const renderOne = (c: Comment, depth = 0) => {
+    const indentDepth = Math.min(depth, 4);
+    return (
+      <div
+        key={c.id}
+        className={depth ? "border-l pl-3 md:pl-4 mt-2" : ""}
+        style={depth ? { marginLeft: `${indentDepth * (window.innerWidth < 768 ? 12 : 20)}px` } : undefined}
+      >
+        <Card className={c.is_author_reply ? "border-primary/40 bg-primary/5" : ""}>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2 mb-1.5 text-sm flex-wrap">
+              <span className="font-semibold">{c.author_name}</span>
+              {c.is_author_reply && (
+                <Badge variant="secondary" className="gap-1"><ShieldCheck className="h-3 w-3" /> {labels.author}</Badge>
+              )}
+              {depth > 0 && (
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+                  {isEn ? `Level ${depth + 1}` : `Уровень ${depth + 1}`}
+                </Badge>
+              )}
+              <span className="text-xs text-muted-foreground ml-auto">
+                {new Date(c.created_at).toLocaleDateString(isEn ? "en-US" : "ru-RU", {
+                  year: "numeric", month: "short", day: "numeric",
+                })}
+              </span>
+            </div>
+            <div className="text-sm whitespace-pre-wrap leading-relaxed">{c.content}</div>
+            <div className="mt-2 flex items-center gap-1 flex-wrap">
+              <LikeButton c={c} />
               <Button
                 size="sm" variant="ghost" className="h-8 px-2 text-xs"
                 onClick={() => {
@@ -239,13 +249,13 @@ export default function BlogComments({ postId, isEn = false }: Props) {
               >
                 {labels.reply}
               </Button>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-      {childrenOf(c.id).map((ch) => renderOne(ch, depth + 1))}
-    </div>
-  );
+            </div>
+          </CardContent>
+        </Card>
+        {childrenOf(c.id).map((ch) => renderOne(ch, depth + 1))}
+      </div>
+    );
+  };
 
   return (
     <section className="mt-16 pt-10 border-t" id="comments">
