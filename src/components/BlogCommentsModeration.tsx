@@ -90,7 +90,7 @@ export function BlogCommentsModeration() {
     const authorName = sessionData.session?.user?.user_metadata?.full_name
       || sessionData.session?.user?.email
       || "Редакция universum.";
-    const { error } = await (supabase as any).from("blog_comments").insert({
+    const { data: inserted, error } = await (supabase as any).from("blog_comments").insert({
       post_id: parent.post_id,
       parent_id: parent.id,
       author_name: authorName,
@@ -98,9 +98,14 @@ export function BlogCommentsModeration() {
       status: "approved",
       is_author_reply: true,
       user_id: uid,
-    });
+    }).select("id").single();
     setBusy(null);
     if (error) return toast.error("Не удалось отправить ответ");
+    if (inserted?.id) {
+      supabase.functions
+        .invoke("notify-blog-comment", { body: { kind: "author_reply", commentId: inserted.id } })
+        .catch((err) => console.warn("notify-blog-comment failed", err));
+    }
     toast.success("Ответ опубликован");
     setReplyFor(null);
     setReplyText("");

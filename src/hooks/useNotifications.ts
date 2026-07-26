@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export interface Notification {
   id: string;
-  type: "draft_protocol" | "pending_request" | "expiring_subscription" | "pending_commercial_offer" | "pending_subscription_request";
+  type: "draft_protocol" | "pending_request" | "expiring_subscription" | "pending_commercial_offer" | "pending_subscription_request" | "pending_blog_comment";
   title: string;
   description: string;
   created_at: string;
@@ -67,6 +67,21 @@ export function useNotifications() {
     },
   });
 
+  const { data: pendingBlogComments = [] } = useQuery({
+    queryKey: ["pending-blog-comments"],
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("blog_comments")
+        .select("id, author_name, created_at, post:blog_posts(title)")
+        .eq("status", "pending")
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      return data || [];
+    },
+    refetchInterval: 60_000,
+  });
+
   // Проверка истекающих подписок (за 7 дней до окончания)
   const { data: expiringSubscriptions = [] } = useQuery({
     queryKey: ["expiring-subscriptions"],
@@ -123,6 +138,14 @@ export function useNotifications() {
       description: `Заявка от ${request.organization_name} ожидает рассмотрения`,
       created_at: request.created_at,
       link: "administration-subscriptions",
+    })),
+    ...pendingBlogComments.map((c: any) => ({
+      id: `blog-comment-${c.id}`,
+      type: "pending_blog_comment" as const,
+      title: "Новый комментарий в блоге",
+      description: `${c.author_name}${c.post?.title ? ` — «${c.post.title}»` : ""} ждёт модерации`,
+      created_at: c.created_at,
+      link: "administration-blog",
     })),
     ...expiringSubscriptions.map((subscription) => {
       const daysLeft = Math.ceil(
