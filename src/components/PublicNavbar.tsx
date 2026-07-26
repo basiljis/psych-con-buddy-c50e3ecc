@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,25 @@ interface PublicNavbarProps {
   authLink?: string;
 }
 
+type PageKey = NonNullable<PublicNavbarProps['currentPage']>;
+
+function getPageKeyFromPath(pathname: string): PageKey {
+  const path = pathname.toLowerCase();
+  if (path.startsWith('/for-organizations')) return 'organizations';
+  if (path.startsWith('/for-specialists')) return 'specialists';
+  if (path.startsWith('/for-parents')) return 'parents';
+  if (path.startsWith('/specialists')) return 'catalog-specialists';
+  if (path.startsWith('/organizations')) return 'catalog-organizations';
+  if (path.startsWith('/instructions')) return 'instructions';
+  if (path.startsWith('/legal')) return 'legal';
+  if (path.startsWith('/blog')) return 'blog';
+  if (path.startsWith('/auth')) return 'auth';
+  if (path === '/' || path.startsWith('/landing')) return 'landing';
+  if (path.startsWith('/privacy')) return 'privacy';
+  if (path.startsWith('/partnership')) return 'partnership';
+  return 'other';
+}
+
 export function PublicNavbar({
   showHomeButton = true,
   currentPage,
@@ -25,10 +44,12 @@ export function PublicNavbar({
   authLink = '/auth'
 }: PublicNavbarProps) {
   const { t } = useTranslation();
+  const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const closeMobileMenu = () => setMobileOpen(false);
-  const isSpecialistsCatalog = currentPage === 'catalog-specialists';
-  const isOrganizationsCatalog = currentPage === 'catalog-organizations';
+  const activePage = currentPage ?? getPageKeyFromPath(location.pathname);
+  const isSpecialistsCatalog = activePage === 'catalog-specialists';
+  const isOrganizationsCatalog = activePage === 'catalog-organizations';
 
   return (
     <>
@@ -44,38 +65,38 @@ export function PublicNavbar({
           <nav className="hidden md:flex items-center gap-6 flex-1 justify-center">
             <Link
               to="/for-organizations"
-              className={`text-sm ${currentPage === 'organizations' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
+              className={`text-sm ${activePage === 'organizations' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
             >
               {t('nav.organizations')}
             </Link>
             <Link
               to="/for-specialists"
-              className={`text-sm ${currentPage === 'specialists' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
+              className={`text-sm ${activePage === 'specialists' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
             >
               {t('nav.specialists')}
             </Link>
             <Link
               to="/for-parents"
-              className={`text-sm ${currentPage === 'parents' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
+              className={`text-sm ${activePage === 'parents' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
             >
               {t('nav.parents')}
             </Link>
             <span className="h-5 w-px bg-border mx-2" aria-hidden="true" />
             <Link
               to="/instructions"
-              className={`text-sm ${currentPage === 'instructions' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
+              className={`text-sm ${activePage === 'instructions' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
             >
               {t('nav.instructions')}
             </Link>
             <Link
               to="/legal"
-              className={`text-sm ${currentPage === 'legal' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
+              className={`text-sm ${activePage === 'legal' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
             >
               {t('nav.legal')}
             </Link>
             <Link
               to="/blog"
-              className={`text-sm ${currentPage === 'blog' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
+              className={`text-sm ${activePage === 'blog' ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
             >
               {t('nav.blog')}
             </Link>
@@ -138,7 +159,7 @@ export function PublicNavbar({
                       <Link
                         to="/for-organizations"
                         onClick={closeMobileMenu}
-                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'organizations' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${activePage === 'organizations' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
                       >
                         <Building2 className="h-4 w-4" />
                         {t('nav.organizations')}
@@ -146,7 +167,7 @@ export function PublicNavbar({
                       <Link
                         to="/for-specialists"
                         onClick={closeMobileMenu}
-                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'specialists' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${activePage === 'specialists' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
                       >
                         <GraduationCap className="h-4 w-4" />
                         {t('nav.specialists')}
@@ -154,7 +175,7 @@ export function PublicNavbar({
                       <Link
                         to="/for-parents"
                         onClick={closeMobileMenu}
-                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'parents' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${activePage === 'parents' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
                       >
                         <Heart className="h-4 w-4" />
                         {t('nav.parents')}
@@ -174,7 +195,7 @@ export function PublicNavbar({
                       <Link
                         to="/blog"
                         onClick={closeMobileMenu}
-                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'blog' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${activePage === 'blog' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
                       >
                         <Newspaper className="h-4 w-4" />
                         {t('nav.blog')}
@@ -182,7 +203,7 @@ export function PublicNavbar({
                       <Link
                         to="/instructions"
                         onClick={closeMobileMenu}
-                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'instructions' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${activePage === 'instructions' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
                       >
                         <BookOpen className="h-4 w-4" />
                         {t('nav.instructions')}
@@ -190,7 +211,7 @@ export function PublicNavbar({
                       <Link
                         to="/legal"
                         onClick={closeMobileMenu}
-                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentPage === 'legal' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${activePage === 'legal' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}`}
                       >
                         <Scale className="h-4 w-4" />
                         {t('nav.legal')}
