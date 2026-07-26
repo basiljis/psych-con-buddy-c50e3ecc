@@ -18,6 +18,25 @@ interface PublicNavbarProps {
   authLink?: string;
 }
 
+type PageKey = NonNullable<PublicNavbarProps['currentPage']>;
+
+function getPageKeyFromPath(pathname: string): PageKey {
+  const path = pathname.toLowerCase();
+  if (path.startsWith('/for-organizations')) return 'organizations';
+  if (path.startsWith('/for-specialists')) return 'specialists';
+  if (path.startsWith('/for-parents')) return 'parents';
+  if (path.startsWith('/specialists')) return 'catalog-specialists';
+  if (path.startsWith('/organizations')) return 'catalog-organizations';
+  if (path.startsWith('/instructions')) return 'instructions';
+  if (path.startsWith('/legal')) return 'legal';
+  if (path.startsWith('/blog')) return 'blog';
+  if (path.startsWith('/auth')) return 'auth';
+  if (path === '/' || path.startsWith('/landing')) return 'landing';
+  if (path.startsWith('/privacy')) return 'privacy';
+  if (path.startsWith('/partnership')) return 'partnership';
+  return 'other';
+}
+
 export function PublicNavbar({
   showHomeButton = true,
   currentPage,
@@ -25,10 +44,12 @@ export function PublicNavbar({
   authLink = '/auth'
 }: PublicNavbarProps) {
   const { t } = useTranslation();
+  const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const closeMobileMenu = () => setMobileOpen(false);
-  const isSpecialistsCatalog = currentPage === 'catalog-specialists';
-  const isOrganizationsCatalog = currentPage === 'catalog-organizations';
+  const activePage = currentPage ?? getPageKeyFromPath(location.pathname);
+  const isSpecialistsCatalog = activePage === 'catalog-specialists';
+  const isOrganizationsCatalog = activePage === 'catalog-organizations';
 
   return (
     <>
