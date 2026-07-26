@@ -126,6 +126,30 @@ export default function Blog() {
           </div>
         </header>
 
+        <div className="mb-8 grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            { icon: FileText, label: isEn ? "Articles" : "Статей", value: posts.length },
+            { icon: Eye, label: isEn ? "Views" : "Просмотров", value: totalViews },
+            { icon: Users, label: isEn ? "Unique visitors" : "Уникальных читателей", value: uniqueVisitors },
+            { icon: ThumbsUp, label: isEn ? "Helpful votes" : "Оценок «полезно»", value: likesTotal },
+          ].map(({ icon: Icon, label, value }) => (
+            <Card key={label}>
+              <CardContent className="p-4 flex items-center gap-3">
+                <div className="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-2xl font-bold leading-tight tabular-nums">
+                    {value.toLocaleString(isEn ? "en-US" : "ru-RU")}
+                  </div>
+                  <div className="text-xs text-muted-foreground truncate">{label}</div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+
 
         <div className="mb-8 flex flex-col md:flex-row gap-3">
           <div className="relative flex-1">
