@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Rss, Search, ChevronLeft, ChevronRight, Clock, Eye, Users } from "lucide-react";
+import { Rss, Search, ChevronLeft, ChevronRight, Clock, Eye, Users, FileText, ThumbsUp } from "lucide-react";
 import { useBlogViewStats } from "@/hooks/useBlogViews";
 
 const PAGE_SIZE = 6;
@@ -28,6 +28,8 @@ export default function Blog() {
   const [category, setCategory] = useState<BlogCategory | "all">("all");
   const [page, setPage] = useState(1);
   const { stats } = useBlogViewStats();
+  const [likesTotal, setLikesTotal] = useState<number>(0);
+  const [uniqueVisitors, setUniqueVisitors] = useState<number>(0);
 
   useEffect(() => {
     (async () => {
@@ -41,7 +43,28 @@ export default function Blog() {
       setPosts((data ?? []) as BlogPost[]);
       setLoading(false);
     })();
+
+    (async () => {
+      const { count } = await (supabase as any)
+        .from("blog_comment_likes")
+        .select("*", { count: "exact", head: true });
+      setLikesTotal(count ?? 0);
+    })();
+
+    (async () => {
+      const { data } = await (supabase as any)
+        .from("blog_views")
+        .select("visitor_id")
+        .limit(10000);
+      const uniques = new Set((data ?? []).map((r: any) => r.visitor_id).filter(Boolean));
+      setUniqueVisitors(uniques.size);
+    })();
   }, []);
+
+  const totalViews = useMemo(
+    () => Object.values(stats).reduce((sum: number, s: any) => sum + (s?.total_views ?? 0), 0),
+    [stats]
+  );
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
@@ -102,6 +125,30 @@ export default function Blog() {
             </a>
           </div>
         </header>
+
+        <div className="mb-8 grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            { icon: FileText, label: isEn ? "Articles" : "Статей", value: posts.length },
+            { icon: Eye, label: isEn ? "Views" : "Просмотров", value: totalViews },
+            { icon: Users, label: isEn ? "Unique visitors" : "Уникальных читателей", value: uniqueVisitors },
+            { icon: ThumbsUp, label: isEn ? "Helpful votes" : "Оценок «полезно»", value: likesTotal },
+          ].map(({ icon: Icon, label, value }) => (
+            <Card key={label}>
+              <CardContent className="p-4 flex items-center gap-3">
+                <div className="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-2xl font-bold leading-tight tabular-nums">
+                    {value.toLocaleString(isEn ? "en-US" : "ru-RU")}
+                  </div>
+                  <div className="text-xs text-muted-foreground truncate">{label}</div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
 
 
         <div className="mb-8 flex flex-col md:flex-row gap-3">
