@@ -6,7 +6,7 @@ import { LanguageToggle } from "@/components/ui/language-toggle";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { NavbarBackground } from "@/components/NavbarBackground";
 import {
-  Heart, Menu, GraduationCap, Building2, Home, BookOpen, Scale
+  Heart, Menu, GraduationCap, Building2, Home, BookOpen, Scale, Newspaper, Wallet, UserPlus
 } from "lucide-react";
 import brandLogo from "@/assets/brand-logo.png";
 
