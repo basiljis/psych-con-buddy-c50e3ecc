@@ -139,6 +139,14 @@ export function useNotifications() {
       created_at: request.created_at,
       link: "administration-subscriptions",
     })),
+    ...pendingBlogComments.map((c: any) => ({
+      id: `blog-comment-${c.id}`,
+      type: "pending_blog_comment" as const,
+      title: "Новый комментарий в блоге",
+      description: `${c.author_name}${c.post?.title ? ` — «${c.post.title}»` : ""} ждёт модерации`,
+      created_at: c.created_at,
+      link: "administration-blog",
+    })),
     ...expiringSubscriptions.map((subscription) => {
       const daysLeft = Math.ceil(
         (new Date(subscription.end_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
