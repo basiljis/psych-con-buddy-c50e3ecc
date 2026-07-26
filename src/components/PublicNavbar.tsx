@@ -102,6 +102,8 @@ export function PublicNavbar({
               <SheetContent
                 side="right"
                 className="w-80 max-w-[90vw] flex flex-col p-0 gap-0"
+                onInteractOutside={closeMobileMenu}
+                onEscapeKeyDown={closeMobileMenu}
               >
                 <SheetHeader className="px-6 pt-6 pb-3 shrink-0 border-b">
                   <SheetTitle>{t('nav.menu')}</SheetTitle>
