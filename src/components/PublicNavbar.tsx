@@ -25,6 +25,8 @@ export function PublicNavbar({
   authLink = '/auth'
 }: PublicNavbarProps) {
   const { t } = useTranslation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const closeMobileMenu = () => setMobileOpen(false);
   const isSpecialistsCatalog = currentPage === 'catalog-specialists';
   const isOrganizationsCatalog = currentPage === 'catalog-organizations';
 
