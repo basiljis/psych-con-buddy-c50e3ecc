@@ -1,11 +1,11 @@
-import { useEffect, useState, FormEvent } from "react";
+import { useEffect, useMemo, useState, FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MessageSquare, Send, ShieldCheck } from "lucide-react";
+import { MessageSquare, Send, ShieldCheck, ThumbsUp, Trophy } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -48,7 +48,20 @@ const L = (isEn: boolean) => ({
   reply: isEn ? "Reply" : "Ответить",
   author: isEn ? "Author" : "Автор",
   cancel: isEn ? "Cancel" : "Отмена",
+  helpful: isEn ? "Helpful" : "Полезно",
+  topComments: isEn ? "Top comments" : "Лучшие комментарии",
+  likeError: isEn ? "Failed to save vote" : "Не удалось сохранить оценку",
 });
+
+function getVisitorId(): string {
+  const KEY = "blog_visitor_id";
+  let id = localStorage.getItem(KEY);
+  if (!id) {
+    id = (crypto.randomUUID?.() ?? `${Date.now()}-${Math.random()}`);
+    localStorage.setItem(KEY, id);
+  }
+  return id;
+}
 
 export default function BlogComments({ postId, isEn = false }: Props) {
   const labels = L(isEn);
@@ -59,6 +72,26 @@ export default function BlogComments({ postId, isEn = false }: Props) {
   const [content, setContent] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [replyTo, setReplyTo] = useState<Comment | null>(null);
+  const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
+  const [likedByMe, setLikedByMe] = useState<Set<string>>(new Set());
+  const [likeBusy, setLikeBusy] = useState<string | null>(null);
+  const visitorId = useMemo(() => (typeof window !== "undefined" ? getVisitorId() : ""), []);
+
+  async function loadLikes(ids: string[]) {
+    if (ids.length === 0) return;
+    const { data } = await (supabase as any)
+      .from("blog_comment_likes")
+      .select("comment_id, visitor_id")
+      .in("comment_id", ids);
+    const counts: Record<string, number> = {};
+    const mine = new Set<string>();
+    (data || []).forEach((row: any) => {
+      counts[row.comment_id] = (counts[row.comment_id] || 0) + 1;
+      if (row.visitor_id === visitorId) mine.add(row.comment_id);
+    });
+    setLikeCounts(counts);
+    setLikedByMe(mine);
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -71,7 +104,10 @@ export default function BlogComments({ postId, isEn = false }: Props) {
         .eq("status", "approved")
         .order("created_at", { ascending: true });
       if (!cancelled) {
-        if (!error && data) setComments(data as Comment[]);
+        if (!error && data) {
+          setComments(data as Comment[]);
+          loadLikes((data as Comment[]).map((c) => c.id));
+        }
         setLoading(false);
       }
     })();
@@ -80,6 +116,50 @@ export default function BlogComments({ postId, isEn = false }: Props) {
 
   const roots = comments.filter((c) => !c.parent_id);
   const childrenOf = (id: string) => comments.filter((c) => c.parent_id === id);
+
+  const topComments = useMemo(() => {
+    return [...comments]
+      .filter((c) => (likeCounts[c.id] || 0) > 0)
+      .sort((a, b) => (likeCounts[b.id] || 0) - (likeCounts[a.id] || 0))
+      .slice(0, 3);
+  }, [comments, likeCounts]);
+
+  async function toggleLike(commentId: string) {
+    if (likeBusy) return;
+    setLikeBusy(commentId);
+    const alreadyLiked = likedByMe.has(commentId);
+    // optimistic
+    setLikeCounts((prev) => ({ ...prev, [commentId]: Math.max(0, (prev[commentId] || 0) + (alreadyLiked ? -1 : 1)) }));
+    setLikedByMe((prev) => {
+      const next = new Set(prev);
+      if (alreadyLiked) next.delete(commentId); else next.add(commentId);
+      return next;
+    });
+
+    const { data: sessionData } = await supabase.auth.getSession();
+    const uid = sessionData.session?.user?.id ?? null;
+
+    if (alreadyLiked) {
+      const { error } = await (supabase as any)
+        .from("blog_comment_likes")
+        .delete()
+        .eq("comment_id", commentId)
+        .eq("visitor_id", visitorId);
+      if (error) {
+        toast.error(labels.likeError);
+        loadLikes(comments.map((c) => c.id));
+      }
+    } else {
+      const { error } = await (supabase as any)
+        .from("blog_comment_likes")
+        .insert({ comment_id: commentId, visitor_id: visitorId, user_id: uid });
+      if (error) {
+        toast.error(labels.likeError);
+        loadLikes(comments.map((c) => c.id));
+      }
+    }
+    setLikeBusy(null);
+  }
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -93,7 +173,7 @@ export default function BlogComments({ postId, isEn = false }: Props) {
     setSubmitting(true);
     const { data: sessionData } = await supabase.auth.getSession();
     const uid = sessionData.session?.user?.id ?? null;
-    const { data: inserted, error } = await (supabase as any).from("blog_comments").insert({
+    const { error } = await (supabase as any).from("blog_comments").insert({
       post_id: postId,
       parent_id: replyTo?.id ?? null,
       author_name: parsed.data.author_name,
@@ -101,20 +181,35 @@ export default function BlogComments({ postId, isEn = false }: Props) {
       content: parsed.data.content,
       status: "pending",
       user_id: uid,
-    }).select("id").single();
+    });
     setSubmitting(false);
     if (error) {
       toast.error(labels.error);
       return;
     }
-    if (inserted?.id) {
-      supabase.functions
-        .invoke("notify-blog-comment", { body: { kind: "new_pending", commentId: inserted.id } })
-        .catch((err) => console.warn("notify-blog-comment failed", err));
-    }
     toast.success(labels.thanks);
     setName(""); setEmail(""); setContent(""); setReplyTo(null);
   }
+
+  const LikeButton = ({ c }: { c: Comment }) => {
+    const count = likeCounts[c.id] || 0;
+    const liked = likedByMe.has(c.id);
+    return (
+      <Button
+        type="button"
+        size="sm"
+        variant={liked ? "secondary" : "ghost"}
+        className="h-8 px-2 text-xs gap-1"
+        disabled={likeBusy === c.id}
+        onClick={() => toggleLike(c.id)}
+        aria-pressed={liked}
+      >
+        <ThumbsUp className={`h-3.5 w-3.5 ${liked ? "fill-current" : ""}`} />
+        {labels.helpful}
+        {count > 0 && <span className="ml-1 font-semibold">{count}</span>}
+      </Button>
+    );
+  };
 
   const renderOne = (c: Comment, depth = 0) => (
     <div key={c.id} className={depth ? "ml-6 md:ml-10 border-l pl-4" : ""}>
@@ -132,17 +227,20 @@ export default function BlogComments({ postId, isEn = false }: Props) {
             </span>
           </div>
           <div className="text-sm whitespace-pre-wrap leading-relaxed">{c.content}</div>
-          {depth === 0 && (
-            <Button
-              size="sm" variant="ghost" className="mt-2 h-8 px-2 text-xs"
-              onClick={() => {
-                setReplyTo(c);
-                document.getElementById("blog-comment-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
-              }}
-            >
-              {labels.reply}
-            </Button>
-          )}
+          <div className="mt-2 flex items-center gap-1 flex-wrap">
+            <LikeButton c={c} />
+            {depth === 0 && (
+              <Button
+                size="sm" variant="ghost" className="h-8 px-2 text-xs"
+                onClick={() => {
+                  setReplyTo(c);
+                  document.getElementById("blog-comment-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
+                }}
+              >
+                {labels.reply}
+              </Button>
+            )}
+          </div>
         </CardContent>
       </Card>
       {childrenOf(c.id).map((ch) => renderOne(ch, depth + 1))}
@@ -155,6 +253,29 @@ export default function BlogComments({ postId, isEn = false }: Props) {
         <MessageSquare className="h-6 w-6" /> {labels.title}
         {comments.length > 0 && <span className="text-base font-normal text-muted-foreground">({comments.length})</span>}
       </h2>
+
+      {topComments.length > 0 && (
+        <div className="mb-8">
+          <h3 className="text-sm font-semibold mb-3 flex items-center gap-2 text-muted-foreground uppercase tracking-wide">
+            <Trophy className="h-4 w-4 text-amber-500" /> {labels.topComments}
+          </h3>
+          <div className="grid gap-3 md:grid-cols-3">
+            {topComments.map((c) => (
+              <Card key={`top-${c.id}`} className="bg-amber-50/40 border-amber-200/60 dark:bg-amber-950/10">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-2 mb-1.5 text-xs">
+                    <span className="font-semibold">{c.author_name}</span>
+                    <span className="ml-auto flex items-center gap-1 text-amber-700 dark:text-amber-400 font-semibold">
+                      <ThumbsUp className="h-3 w-3" /> {likeCounts[c.id] || 0}
+                    </span>
+                  </div>
+                  <div className="text-sm line-clamp-4 whitespace-pre-wrap leading-relaxed">{c.content}</div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="space-y-3 mb-8">
         {loading ? (
