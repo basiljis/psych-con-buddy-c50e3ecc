@@ -47,10 +47,11 @@ export default function Blog() {
     })();
 
     (async () => {
-      const { count } = await (supabase as any)
-        .from("blog_comment_likes")
-        .select("*", { count: "exact", head: true });
-      setLikesTotal(count ?? 0);
+      const [comments, posts] = await Promise.all([
+        (supabase as any).from("blog_comment_likes").select("*", { count: "exact", head: true }),
+        (supabase as any).from("blog_post_likes").select("*", { count: "exact", head: true }),
+      ]);
+      setLikesTotal((comments.count ?? 0) + (posts.count ?? 0));
     })();
 
     (async () => {
