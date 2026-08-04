@@ -133,6 +133,16 @@
     --input: 210 30% 85%;
     --ring: 210 100% 20%;
 
+    /* Blog audience markers */
+    --cat-specialists: 210 100% 32%;
+    --cat-specialists-soft: 210 100% 94%;
+    --cat-admins: 265 55% 42%;
+    --cat-admins-soft: 265 70% 95%;
+    --cat-parents: 150 55% 28%;
+    --cat-parents-soft: 150 50% 93%;
+    --cat-product: 25 90% 38%;
+    --cat-product-soft: 25 100% 93%;
+
     --radius: 0.75rem;
 
     /* Gradients for educational system */
