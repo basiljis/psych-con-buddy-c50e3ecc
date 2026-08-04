@@ -29,6 +29,7 @@ export default function Blog() {
   const [category, setCategory] = useState<BlogCategory | "all">("all");
   const [page, setPage] = useState(1);
   const { stats } = useBlogViewStats();
+  const { likes: postLikes } = useBlogPostLikeStats();
   const [likesTotal, setLikesTotal] = useState<number>(0);
   const [uniqueVisitors, setUniqueVisitors] = useState<number>(0);
 
