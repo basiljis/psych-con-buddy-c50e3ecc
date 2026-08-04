@@ -52,6 +52,22 @@ export default {
 					DEFAULT: 'hsl(var(--success))',
 					foreground: 'hsl(var(--success-foreground))'
 				},
+				'cat-specialists': {
+					DEFAULT: 'hsl(var(--cat-specialists))',
+					soft: 'hsl(var(--cat-specialists-soft))'
+				},
+				'cat-admins': {
+					DEFAULT: 'hsl(var(--cat-admins))',
+					soft: 'hsl(var(--cat-admins-soft))'
+				},
+				'cat-parents': {
+					DEFAULT: 'hsl(var(--cat-parents))',
+					soft: 'hsl(var(--cat-parents-soft))'
+				},
+				'cat-product': {
+					DEFAULT: 'hsl(var(--cat-product))',
+					soft: 'hsl(var(--cat-product-soft))'
+				},
 				popover: {
 					DEFAULT: 'hsl(var(--popover))',
 					foreground: 'hsl(var(--popover-foreground))'
