@@ -3661,6 +3661,18 @@ export type Database = {
         Args: { _user_id: string }
         Returns: string
       }
+      get_organizations_directory: {
+        Args: { _region_id?: string }
+        Returns: {
+          district: string
+          external_id: string
+          id: string
+          is_manual: boolean
+          name: string
+          region_id: string
+          type: string
+        }[]
+      }
       get_user_organization: { Args: { _user_id: string }; Returns: string }
       get_user_organization_id: { Args: { user_id: string }; Returns: string }
       get_user_region: { Args: { _user_id: string }; Returns: string }
