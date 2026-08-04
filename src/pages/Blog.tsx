@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Rss, Search, ChevronLeft, ChevronRight, Clock, Eye, Users, FileText, ThumbsUp } from "lucide-react";
 import { useBlogViewStats } from "@/hooks/useBlogViews";
+import { useBlogPostLikeStats } from "@/hooks/useBlogPostLikes";
 
 const PAGE_SIZE = 6;
 const BASE_URL = "https://unvrsm.ru";
