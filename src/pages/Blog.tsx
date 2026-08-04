@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import type { BlogPost, BlogCategory } from "@/types/blog";
-import { BLOG_CATEGORIES, blogCategoryLabel, localizedPost } from "@/types/blog";
+import { BLOG_CATEGORIES, blogCategoryLabel, blogCategoryClass, blogCategoryDot, localizedPost } from "@/types/blog";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
 import { PublicNavbar } from "@/components/PublicNavbar";
 import LandingFooter from "@/components/LandingFooter";
