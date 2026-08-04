@@ -45,6 +45,28 @@ export const blogCategoryLabel = (c: BlogCategory, lang?: string): string => {
   return BLOG_CATEGORIES.find((x) => x.value === c)?.label ?? c;
 };
 
+/** Colour marker classes per audience (semantic tokens, theme-aware). */
+const BLOG_CATEGORY_CLASSES: Record<BlogCategory, string> = {
+  specialists: "bg-cat-specialists-soft text-cat-specialists border border-cat-specialists/25",
+  admins: "bg-cat-admins-soft text-cat-admins border border-cat-admins/25",
+  parents: "bg-cat-parents-soft text-cat-parents border border-cat-parents/25",
+  product: "bg-cat-product-soft text-cat-product border border-cat-product/25",
+};
+
+export const blogCategoryClass = (c: BlogCategory): string =>
+  BLOG_CATEGORY_CLASSES[c] ?? "bg-muted text-muted-foreground border border-border";
+
+/** Solid dot / accent-bar colour per audience. */
+const BLOG_CATEGORY_DOTS: Record<BlogCategory, string> = {
+  specialists: "bg-cat-specialists",
+  admins: "bg-cat-admins",
+  parents: "bg-cat-parents",
+  product: "bg-cat-product",
+};
+
+export const blogCategoryDot = (c: BlogCategory): string =>
+  BLOG_CATEGORY_DOTS[c] ?? "bg-muted-foreground";
+
 /** Pick title/excerpt/content in the active language, falling back to Russian. */
 export function localizedPost<T extends Partial<BlogPost>>(
   post: T,
