@@ -133,6 +133,16 @@
     --input: 210 30% 85%;
     --ring: 210 100% 20%;
 
+    /* Blog audience markers */
+    --cat-specialists: 210 100% 32%;
+    --cat-specialists-soft: 210 100% 94%;
+    --cat-admins: 265 55% 42%;
+    --cat-admins-soft: 265 70% 95%;
+    --cat-parents: 150 55% 28%;
+    --cat-parents-soft: 150 50% 93%;
+    --cat-product: 25 90% 38%;
+    --cat-product-soft: 25 100% 93%;
+
     --radius: 0.75rem;
 
     /* Gradients for educational system */
@@ -191,6 +201,17 @@
     --border: 210 15% 20%;
     --input: 210 15% 20%;
     --ring: 210 80% 55%;
+
+    /* Blog audience markers (dark) */
+    --cat-specialists: 210 90% 70%;
+    --cat-specialists-soft: 210 60% 18%;
+    --cat-admins: 265 80% 78%;
+    --cat-admins-soft: 265 40% 20%;
+    --cat-parents: 150 60% 65%;
+    --cat-parents-soft: 150 35% 16%;
+    --cat-product: 25 90% 68%;
+    --cat-product-soft: 25 50% 18%;
+
 
     /* Enhanced gradients for dark mode */
     --gradient-primary: linear-gradient(135deg, hsl(210 80% 55%), hsl(210 70% 45%));

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import type { BlogPost, BlogCategory } from "@/types/blog";
-import { BLOG_CATEGORIES, blogCategoryLabel, localizedPost } from "@/types/blog";
+import { BLOG_CATEGORIES, blogCategoryLabel, blogCategoryClass, blogCategoryDot, localizedPost } from "@/types/blog";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
 import { PublicNavbar } from "@/components/PublicNavbar";
 import LandingFooter from "@/components/LandingFooter";
@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Rss, Search, ChevronLeft, ChevronRight, Clock, Eye, Users, FileText, ThumbsUp } from "lucide-react";
 import { useBlogViewStats } from "@/hooks/useBlogViews";
+import { useBlogPostLikeStats } from "@/hooks/useBlogPostLikes";
 
 const PAGE_SIZE = 6;
 const BASE_URL = "https://unvrsm.ru";
@@ -28,6 +29,7 @@ export default function Blog() {
   const [category, setCategory] = useState<BlogCategory | "all">("all");
   const [page, setPage] = useState(1);
   const { stats } = useBlogViewStats();
+  const { likes: postLikes } = useBlogPostLikeStats();
   const [likesTotal, setLikesTotal] = useState<number>(0);
   const [uniqueVisitors, setUniqueVisitors] = useState<number>(0);
 
@@ -45,10 +47,11 @@ export default function Blog() {
     })();
 
     (async () => {
-      const { count } = await (supabase as any)
-        .from("blog_comment_likes")
-        .select("*", { count: "exact", head: true });
-      setLikesTotal(count ?? 0);
+      const [comments, posts] = await Promise.all([
+        (supabase as any).from("blog_comment_likes").select("*", { count: "exact", head: true }),
+        (supabase as any).from("blog_post_likes").select("*", { count: "exact", head: true }),
+      ]);
+      setLikesTotal((comments.count ?? 0) + (posts.count ?? 0));
     })();
 
     (async () => {
@@ -174,8 +177,10 @@ export default function Blog() {
                 key={c.value}
                 variant={category === c.value ? "default" : "outline"}
                 size="sm"
+                className="gap-1.5"
                 onClick={() => { setCategory(c.value); setPage(1); }}
               >
+                <span className={`h-2 w-2 rounded-full ${blogCategoryDot(c.value)}`} />
                 {blogCategoryLabel(c.value, lang)}
               </Button>
             ))}
@@ -197,10 +202,17 @@ export default function Blog() {
                 const loc = localizedPost(p, lang);
                 return (
                 <Link key={p.id} to={`/blog/${p.slug}`} className="group">
-                  <Card className="h-full transition-shadow group-hover:shadow-md">
+                  <Card className="h-full transition-shadow group-hover:shadow-md overflow-hidden relative">
+                    <span
+                      aria-hidden
+                      className={`absolute left-0 top-0 h-full w-1 ${blogCategoryDot(p.category)}`}
+                    />
                     <CardHeader>
                       <div className="flex items-center justify-between mb-2">
-                        <Badge variant="secondary">{blogCategoryLabel(p.category, lang)}</Badge>
+                        <Badge className={`gap-1.5 hover:opacity-90 ${blogCategoryClass(p.category)}`}>
+                          <span className={`h-2 w-2 rounded-full ${blogCategoryDot(p.category)}`} />
+                          {blogCategoryLabel(p.category, lang)}
+                        </Badge>
                         <span className="text-xs text-muted-foreground inline-flex items-center gap-1">
                           <Clock className="h-3 w-3" /> {p.reading_minutes} {t("blogPage.minutes")}
                         </span>
@@ -223,6 +235,9 @@ export default function Blog() {
                           </span>
                           <span className="inline-flex items-center gap-1" title={t("blogPage.uniqueViews")}>
                             <Users className="h-3.5 w-3.5" /> {stats[p.slug]?.unique_views ?? 0}
+                          </span>
+                          <span className="inline-flex items-center gap-1" title={t("blogPage.helpfulVotes")}>
+                            <ThumbsUp className="h-3.5 w-3.5" /> {postLikes[p.slug] ?? 0}
                           </span>
                         </span>
                       </div>

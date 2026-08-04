@@ -277,6 +277,27 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_post_likes: {
+        Row: {
+          created_at: string
+          id: string
+          post_slug: string
+          visitor_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_slug: string
+          visitor_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_slug?: string
+          visitor_id?: string
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           author: string
@@ -3587,6 +3608,13 @@ export type Database = {
           unique_views: number
           views_30d: number
           views_7d: number
+        }[]
+      }
+      get_blog_post_like_stats: {
+        Args: never
+        Returns: {
+          likes: number
+          post_slug: string
         }[]
       }
       get_blog_sources: {

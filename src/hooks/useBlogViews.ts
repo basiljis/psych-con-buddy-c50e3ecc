@@ -11,7 +11,7 @@ const VISITOR_KEY = "blog_visitor_id";
 const THROTTLE_PREFIX = "blog_view_ts_";
 const THROTTLE_MS = 60 * 60 * 1000; // 1 hour per slug
 
-function getVisitorId(): string {
+export function getVisitorId(): string {
   try {
     let id = localStorage.getItem(VISITOR_KEY);
     if (!id) {

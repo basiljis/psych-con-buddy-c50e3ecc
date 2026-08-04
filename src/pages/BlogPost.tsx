@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import type { BlogPost as BlogPostType } from "@/types/blog";
-import { blogCategoryLabel, stripHtml, localizedPost } from "@/types/blog";
+import { blogCategoryLabel, blogCategoryClass, blogCategoryDot, stripHtml, localizedPost } from "@/types/blog";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
 import { PublicNavbar } from "@/components/PublicNavbar";
 import LandingFooter from "@/components/LandingFooter";
@@ -13,9 +13,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ArrowLeft, ArrowRight, Clock, Calendar, Eye, Users,
-  Share2, Link2, ListOrdered, Check,
+  Share2, Link2, ListOrdered, Check, ThumbsUp,
 } from "lucide-react";
 import { useLogBlogView, useBlogViewStats, useLogBlogClick } from "@/hooks/useBlogViews";
+import { useBlogPostRating } from "@/hooks/useBlogPostLikes";
 import { toast } from "sonner";
 import DevelopmentBlocksComparison from "@/components/blog/DevelopmentBlocksComparison";
 import BlogComments from "@/components/blog/BlogComments";
@@ -65,6 +66,7 @@ export default function BlogPost() {
   const { stats } = useBlogViewStats();
   useLogBlogView(post ? slug : undefined);
   const logClick = useLogBlogClick(post ? slug : undefined);
+  const rating = useBlogPostRating(post ? slug : undefined);
 
   // Delegate clicks on links inside the rendered article HTML
   useEffect(() => {
@@ -274,7 +276,8 @@ export default function BlogPost() {
                 </Link>
 
                 <div className="flex flex-wrap items-center gap-2 mb-5">
-                  <Badge className="bg-primary/10 text-primary hover:bg-primary/15 border-0">
+                  <Badge className={`gap-1.5 hover:opacity-90 ${blogCategoryClass(post.category)}`}>
+                    <span className={`h-2 w-2 rounded-full ${blogCategoryDot(post.category)}`} />
                     {blogCategoryLabel(post.category, lang)}
                   </Badge>
                   {post.keywords.slice(0, 2).map((k) => (
@@ -338,6 +341,30 @@ export default function BlogPost() {
                       ))}
                     </div>
                   )}
+
+                  {/* Rating */}
+                  <Card className="mt-10">
+                    <CardContent className="p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+                      <div className="flex-1">
+                        <h3 className="font-semibold mb-1">{t("blogPost.ratingQuestion")}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          {rating.count > 0
+                            ? t("blogPost.ratingCount", { count: rating.count })
+                            : t("blogPost.ratingCount_zero")}
+                        </p>
+                      </div>
+                      <Button
+                        variant={rating.liked ? "default" : "outline"}
+                        className="gap-2"
+                        disabled={rating.loading || rating.saving}
+                        onClick={rating.toggle}
+                      >
+                        <ThumbsUp className={`h-4 w-4 ${rating.liked ? "fill-current" : ""}`} />
+                        {t("blogPost.ratingHelpful")}
+                        <span className="tabular-nums">{rating.count}</span>
+                      </Button>
+                    </CardContent>
+                  </Card>
 
                   {/* CTA */}
                   <Card className="mt-10 border-primary/30 bg-gradient-to-br from-primary/5 via-accent/30 to-transparent">
@@ -410,7 +437,8 @@ export default function BlogPost() {
                       <Link key={r.id} to={`/blog/${r.slug}`} className="group" onClick={() => logClick(`/blog/${r.slug}`, "related")}>
                         <Card className="h-full transition-shadow group-hover:shadow-md">
                           <CardContent className="p-5">
-                            <Badge variant="secondary" className="mb-3">
+                            <Badge className={`mb-3 gap-1.5 hover:opacity-90 ${blogCategoryClass(r.category)}`}>
+                              <span className={`h-2 w-2 rounded-full ${blogCategoryDot(r.category)}`} />
                               {blogCategoryLabel(r.category, lang)}
                             </Badge>
                             <h3 className="font-semibold leading-snug mb-2 group-hover:text-primary transition-colors line-clamp-3">
