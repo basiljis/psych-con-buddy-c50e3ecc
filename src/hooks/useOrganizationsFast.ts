@@ -11,7 +11,7 @@ export interface FastOrganization {
   is_manual?: boolean;
 }
 
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const CACHE_TTL_MS = 1000 * 60 * 60 * 6; // 6 hours
 
 const cacheKey = (regionId?: string) =>
@@ -66,18 +66,13 @@ export const useOrganizationsFast = (regionId?: string) => {
 
     const load = async () => {
       try {
-        let query = supabase
-          .from('organizations')
-          .select('id, name, district, type, external_id, region_id, is_manual')
-          .eq('is_archived', false)
-          .order('name')
-          .limit(2000);
-
-        if (regionId) {
-          query = query.eq('region_id', regionId);
-        }
-
-        const { data, error } = await query;
+        // Public directory RPC: returns only selector fields for all
+        // non-archived organizations (RLS on the table itself limits anon
+        // users to published orgs only, which broke the registration form).
+        const { data, error } = await (supabase as any).rpc(
+          'get_organizations_directory',
+          { _region_id: regionId ?? null }
+        );
         if (cancelled) return;
         if (error) throw error;
 
