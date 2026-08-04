@@ -202,10 +202,17 @@ export default function Blog() {
                 const loc = localizedPost(p, lang);
                 return (
                 <Link key={p.id} to={`/blog/${p.slug}`} className="group">
-                  <Card className="h-full transition-shadow group-hover:shadow-md">
+                  <Card className="h-full transition-shadow group-hover:shadow-md overflow-hidden relative">
+                    <span
+                      aria-hidden
+                      className={`absolute left-0 top-0 h-full w-1 ${blogCategoryDot(p.category)}`}
+                    />
                     <CardHeader>
                       <div className="flex items-center justify-between mb-2">
-                        <Badge variant="secondary">{blogCategoryLabel(p.category, lang)}</Badge>
+                        <Badge className={`gap-1.5 hover:opacity-90 ${blogCategoryClass(p.category)}`}>
+                          <span className={`h-2 w-2 rounded-full ${blogCategoryDot(p.category)}`} />
+                          {blogCategoryLabel(p.category, lang)}
+                        </Badge>
                         <span className="text-xs text-muted-foreground inline-flex items-center gap-1">
                           <Clock className="h-3 w-3" /> {p.reading_minutes} {t("blogPage.minutes")}
                         </span>
@@ -228,6 +235,9 @@ export default function Blog() {
                           </span>
                           <span className="inline-flex items-center gap-1" title={t("blogPage.uniqueViews")}>
                             <Users className="h-3.5 w-3.5" /> {stats[p.slug]?.unique_views ?? 0}
+                          </span>
+                          <span className="inline-flex items-center gap-1" title={t("blogPage.helpfulVotes")}>
+                            <ThumbsUp className="h-3.5 w-3.5" /> {postLikes[p.slug] ?? 0}
                           </span>
                         </span>
                       </div>
