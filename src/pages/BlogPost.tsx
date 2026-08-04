@@ -437,7 +437,8 @@ export default function BlogPost() {
                       <Link key={r.id} to={`/blog/${r.slug}`} className="group" onClick={() => logClick(`/blog/${r.slug}`, "related")}>
                         <Card className="h-full transition-shadow group-hover:shadow-md">
                           <CardContent className="p-5">
-                            <Badge variant="secondary" className="mb-3">
+                            <Badge className={`mb-3 gap-1.5 hover:opacity-90 ${blogCategoryClass(r.category)}`}>
+                              <span className={`h-2 w-2 rounded-full ${blogCategoryDot(r.category)}`} />
                               {blogCategoryLabel(r.category, lang)}
                             </Badge>
                             <h3 className="font-semibold leading-snug mb-2 group-hover:text-primary transition-colors line-clamp-3">
