@@ -342,6 +342,30 @@ export default function BlogPost() {
                     </div>
                   )}
 
+                  {/* Rating */}
+                  <Card className="mt-10">
+                    <CardContent className="p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+                      <div className="flex-1">
+                        <h3 className="font-semibold mb-1">{t("blogPost.ratingQuestion")}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          {rating.count > 0
+                            ? t("blogPost.ratingCount", { count: rating.count })
+                            : t("blogPost.ratingCount_zero")}
+                        </p>
+                      </div>
+                      <Button
+                        variant={rating.liked ? "default" : "outline"}
+                        className="gap-2"
+                        disabled={rating.loading || rating.saving}
+                        onClick={rating.toggle}
+                      >
+                        <ThumbsUp className={`h-4 w-4 ${rating.liked ? "fill-current" : ""}`} />
+                        {t("blogPost.ratingHelpful")}
+                        <span className="tabular-nums">{rating.count}</span>
+                      </Button>
+                    </CardContent>
+                  </Card>
+
                   {/* CTA */}
                   <Card className="mt-10 border-primary/30 bg-gradient-to-br from-primary/5 via-accent/30 to-transparent">
                     <CardContent className="p-6 md:p-8">
