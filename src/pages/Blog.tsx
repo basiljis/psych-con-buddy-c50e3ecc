@@ -177,8 +177,10 @@ export default function Blog() {
                 key={c.value}
                 variant={category === c.value ? "default" : "outline"}
                 size="sm"
+                className="gap-1.5"
                 onClick={() => { setCategory(c.value); setPage(1); }}
               >
+                <span className={`h-2 w-2 rounded-full ${blogCategoryDot(c.value)}`} />
                 {blogCategoryLabel(c.value, lang)}
               </Button>
             ))}
