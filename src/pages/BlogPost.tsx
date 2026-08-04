@@ -13,9 +13,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ArrowLeft, ArrowRight, Clock, Calendar, Eye, Users,
-  Share2, Link2, ListOrdered, Check,
+  Share2, Link2, ListOrdered, Check, ThumbsUp,
 } from "lucide-react";
 import { useLogBlogView, useBlogViewStats, useLogBlogClick } from "@/hooks/useBlogViews";
+import { useBlogPostRating } from "@/hooks/useBlogPostLikes";
 import { toast } from "sonner";
 import DevelopmentBlocksComparison from "@/components/blog/DevelopmentBlocksComparison";
 import BlogComments from "@/components/blog/BlogComments";
