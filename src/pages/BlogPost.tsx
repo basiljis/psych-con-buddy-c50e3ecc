@@ -276,7 +276,8 @@ export default function BlogPost() {
                 </Link>
 
                 <div className="flex flex-wrap items-center gap-2 mb-5">
-                  <Badge className="bg-primary/10 text-primary hover:bg-primary/15 border-0">
+                  <Badge className={`gap-1.5 hover:opacity-90 ${blogCategoryClass(post.category)}`}>
+                    <span className={`h-2 w-2 rounded-full ${blogCategoryDot(post.category)}`} />
                     {blogCategoryLabel(post.category, lang)}
                   </Badge>
                   {post.keywords.slice(0, 2).map((k) => (
