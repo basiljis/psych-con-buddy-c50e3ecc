@@ -66,6 +66,7 @@ export default function BlogPost() {
   const { stats } = useBlogViewStats();
   useLogBlogView(post ? slug : undefined);
   const logClick = useLogBlogClick(post ? slug : undefined);
+  const rating = useBlogPostRating(post ? slug : undefined);
 
   // Delegate clicks on links inside the rendered article HTML
   useEffect(() => {
