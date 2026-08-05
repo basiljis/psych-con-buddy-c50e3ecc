@@ -46,28 +46,18 @@ export default function Blog() {
       setLoading(false);
     })();
 
+    // Единый источник сводных цифр — та же RPC, что и в админ-панели
     (async () => {
-      const [comments, posts] = await Promise.all([
-        (supabase as any).from("blog_comment_likes").select("*", { count: "exact", head: true }),
-        (supabase as any).from("blog_post_likes").select("*", { count: "exact", head: true }),
-      ]);
-      setLikesTotal((comments.count ?? 0) + (posts.count ?? 0));
-    })();
-
-    (async () => {
-      const { data } = await (supabase as any)
-        .from("blog_views")
-        .select("visitor_id")
-        .limit(10000);
-      const uniques = new Set((data ?? []).map((r: any) => r.visitor_id).filter(Boolean));
-      setUniqueVisitors(uniques.size);
+      const { data } = await (supabase as any).rpc("get_blog_totals");
+      const t = Array.isArray(data) ? data[0] : data;
+      if (!t) return;
+      setViewsTotal(Number(t.total_views) || 0);
+      setUniqueVisitors(Number(t.unique_visitors) || 0);
+      setLikesTotal((Number(t.post_likes) || 0) + (Number(t.comment_likes) || 0));
     })();
   }, []);
 
-  const totalViews = useMemo(
-    () => Object.values(stats).reduce((sum: number, s: any) => sum + (s?.total_views ?? 0), 0),
-    [stats]
-  );
+  const totalViews = viewsTotal;
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
