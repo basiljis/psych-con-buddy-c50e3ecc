@@ -64,14 +64,28 @@ export function BlogAnalyticsDashboard() {
   const [slugFilter, setSlugFilter] = useState<string>("__all__");
   const [loading, setLoading] = useState(true);
 
+  const [globalTotals, setGlobalTotals] = useState<{
+    total_views: number; unique_visitors: number; views_7d: number; clicks_total: number;
+  } | null>(null);
+
   useEffect(() => {
     (async () => {
-      const [{ data: postsData }, { data: aData }] = await Promise.all([
+      const [{ data: postsData }, { data: aData }, { data: tData }] = await Promise.all([
         supabase.from("blog_posts").select("slug,title,category").order("published_at", { ascending: false }),
         supabase.rpc("get_blog_analytics"),
+        (supabase as any).rpc("get_blog_totals"),
       ]);
       setPosts((postsData ?? []) as typeof posts);
       setAnalytics(((aData ?? []) as AnalyticsRow[]).sort((a, b) => b.total_views - a.total_views));
+      const g = Array.isArray(tData) ? tData[0] : tData;
+      if (g) {
+        setGlobalTotals({
+          total_views: Number(g.total_views) || 0,
+          unique_visitors: Number(g.unique_visitors) || 0,
+          views_7d: Number(g.views_7d) || 0,
+          clicks_total: Number(g.clicks_total) || 0,
+        });
+      }
       setLoading(false);
     })();
   }, []);
@@ -97,19 +111,17 @@ export function BlogAnalyticsDashboard() {
   }, [posts]);
 
   const totals = useMemo(() => {
-    const t = analytics.reduce(
-      (acc, r) => {
-        acc.views += r.total_views;
-        acc.unique += r.unique_views;
-        acc.v7 += r.views_7d;
-        acc.clicks += r.clicks_total;
-        return acc;
-      },
-      { views: 0, unique: 0, v7: 0, clicks: 0 },
-    );
+    // Уникальные читатели считаются глобально (без двойного счёта по статьям),
+    // как и на публичной странице блога.
+    const t = {
+      views: globalTotals?.total_views ?? 0,
+      unique: globalTotals?.unique_visitors ?? 0,
+      v7: globalTotals?.views_7d ?? 0,
+      clicks: globalTotals?.clicks_total ?? 0,
+    };
     const ctr = t.views > 0 ? Math.round((t.clicks / t.views) * 10000) / 100 : 0;
     return { ...t, ctr };
-  }, [analytics]);
+  }, [globalTotals]);
 
   const filteredAnalytics = useMemo(() => {
     if (slugFilter === "__all__") return analytics;
