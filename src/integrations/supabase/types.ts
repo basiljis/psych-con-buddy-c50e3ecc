@@ -3633,6 +3633,17 @@ export type Database = {
           url: string
         }[]
       }
+      get_blog_totals: {
+        Args: never
+        Returns: {
+          clicks_total: number
+          comment_likes: number
+          post_likes: number
+          total_views: number
+          unique_visitors: number
+          views_7d: number
+        }[]
+      }
       get_blog_view_stats: {
         Args: never
         Returns: {
