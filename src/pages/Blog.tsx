@@ -32,6 +32,7 @@ export default function Blog() {
   const { likes: postLikes } = useBlogPostLikeStats();
   const [likesTotal, setLikesTotal] = useState<number>(0);
   const [uniqueVisitors, setUniqueVisitors] = useState<number>(0);
+  const [viewsTotal, setViewsTotal] = useState<number>(0);
 
   useEffect(() => {
     (async () => {
