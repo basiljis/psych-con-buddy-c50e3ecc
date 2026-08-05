@@ -10,6 +10,7 @@ interface TypewriterProps {
 
 /**
  * Циклически печатает слова по буквам с эффектом мигающего курсора.
+ * Ширина/высота зарезервированы по самому длинному слову — верстка не «прыгает».
  */
 export function Typewriter({
   words,
@@ -48,13 +49,24 @@ export function Typewriter({
     return () => clearTimeout(t);
   }, [text, deleting, index, words, typingSpeed, deletingSpeed, pauseMs]);
 
+  const longest = words.reduce((a, b) => (b.length > a.length ? b : a), "");
+
   return (
-    <span className={className} aria-live="polite">
-      {text}
+    <span className="inline-grid align-bottom" aria-live="polite">
+      {/* Невидимый «распорка»: резервирует место под самое длинное слово */}
       <span
-        className="inline-block w-[0.08em] h-[0.9em] align-[-0.1em] ml-1 bg-current animate-pulse"
         aria-hidden="true"
-      />
+        className="invisible col-start-1 row-start-1 whitespace-pre-wrap"
+      >
+        {longest}
+      </span>
+      <span className={`col-start-1 row-start-1 whitespace-pre-wrap ${className}`}>
+        {text}
+        <span
+          className="inline-block w-[0.08em] h-[0.9em] align-[-0.1em] ml-1 bg-current animate-pulse"
+          aria-hidden="true"
+        />
+      </span>
     </span>
   );
 }
