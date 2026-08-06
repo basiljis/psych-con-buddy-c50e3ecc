@@ -58,23 +58,32 @@ export function PublicNavbar({
   useEffect(() => {
     let mounted = true;
 
-    const resolve = (session: unknown | null) => {
+    const resolve = async (userId: string | null) => {
       if (!mounted) return;
-      if (!session) {
+      if (!userId) {
         setCabinetPath(null);
         return;
       }
-      setCabinetPath(localStorage.getItem('parentSession') ? '/parent' : '/app');
+      const { data: roles } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId);
+      if (!mounted) return;
+      const isParent = roles?.some((r: { role: string }) => r.role === "parent");
+      setCabinetPath(isParent ? "/parent" : "/app");
     };
 
-    supabase.auth.getSession().then(({ data }) => resolve(data?.session ?? null));
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => resolve(session));
+    supabase.auth.getSession().then(({ data }) => resolve(data?.session?.user?.id ?? null));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      resolve(session?.user?.id ?? null);
+    });
 
     return () => {
       mounted = false;
       sub.subscription.unsubscribe();
     };
   }, []);
+
 
 
   return (
