@@ -106,6 +106,27 @@ export function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 }
 
+/** Теги для Дзена: категория + ключевые слова, без пробелов и спецсимволов, максимум 10. */
+export function zenTags(post: BlogPost): string[] {
+  const raw = [blogCategoryLabel(post.category, "ru"), ...(post.keywords ?? [])];
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const item of raw) {
+    const tag = String(item ?? "")
+      .trim()
+      .replace(/[^\p{L}\p{N}\s-]/gu, "")
+      .replace(/[\s-]+/g, "");
+    if (!tag) continue;
+    const key = tag.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(tag);
+    if (out.length >= 10) break;
+  }
+  return out;
+}
+
+
 /**
  * Format a post as plain text (fallback for editors without HTML paste).
  * Сохраняем URL рядом с якорями: «текст (https://…)».
