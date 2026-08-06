@@ -11,6 +11,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import Preloader from "@/components/Preloader";
 import RootGate from "./pages/RootGate";
 import Home from "./pages/Home";
+import { SessionTimeoutGuard } from "@/components/SessionTimeoutGuard";
 
 // Helper: retry lazy import once on chunk load failure (handles stale build cache)
 const lazyWithRetry = <T extends React.ComponentType<unknown>>(
