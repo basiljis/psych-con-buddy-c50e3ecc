@@ -1,4 +1,4 @@
-import { Baby, ClipboardList, CalendarDays, User, BookOpen, Gamepad2, Library } from "lucide-react";
+import { Baby, ClipboardList, CalendarDays, User, BookOpen, Gamepad2, Library, Globe } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
   Sidebar,
