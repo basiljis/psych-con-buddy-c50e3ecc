@@ -161,7 +161,7 @@ export default function BlogPost() {
       : t("blogPost.fallbackTitle"),
     description,
     canonical,
-    keywords: post?.keywords.join(", "),
+    keywords: tags.join(", "),
     ogImage,
     ogType: post ? "article" : "website",
     locale: isEn ? "en_US" : "ru_RU",
@@ -171,7 +171,7 @@ export default function BlogPost() {
           modifiedTime: post.updated_at,
           author: post.author || "universum.",
           section: blogCategoryLabel(post.category, lang),
-          tags: post.keywords,
+          tags,
         }
       : undefined,
     jsonLd: post
@@ -202,7 +202,7 @@ export default function BlogPost() {
               "@type": "WebPage",
               "@id": canonical,
             },
-            keywords: post.keywords.join(", "),
+            keywords: tags.join(", "),
             articleSection: blogCategoryLabel(post.category, lang),
             inLanguage: isEn ? "en-US" : "ru-RU",
           },
