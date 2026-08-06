@@ -52,6 +52,31 @@ export function PublicNavbar({
   const isSpecialistsCatalog = activePage === 'catalog-specialists';
   const isOrganizationsCatalog = activePage === 'catalog-organizations';
 
+  // Если пользователь уже вошёл — показываем возврат в кабинет вместо «Войти»
+  const [cabinetPath, setCabinetPath] = useState<string | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const resolve = (session: unknown | null) => {
+      if (!mounted) return;
+      if (!session) {
+        setCabinetPath(null);
+        return;
+      }
+      setCabinetPath(localStorage.getItem('parentSession') ? '/parent' : '/app');
+    };
+
+    supabase.auth.getSession().then(({ data }) => resolve(data?.session ?? null));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => resolve(session));
+
+    return () => {
+      mounted = false;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
+
+
   return (
     <>
       {/* Main Header */}
