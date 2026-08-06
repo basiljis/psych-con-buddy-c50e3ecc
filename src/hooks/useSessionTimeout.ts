@@ -30,6 +30,9 @@ export const useSessionTimeout = () => {
 
         // Установить таймер на оставшуюся минуту
         timeoutRef.current = setTimeout(async () => {
+          const { data } = await supabase.auth.getSession();
+          if (!data?.session) return;
+
           toast({
             title: "Сессия завершена",
             description: "Вы были автоматически выведены из системы по истечении времени сессии.",

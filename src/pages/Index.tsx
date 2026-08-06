@@ -19,7 +19,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { NotificationsDialog } from "@/components/NotificationsDialog";
 import { TestModeDialog } from "@/components/TestModeDialog";
 import { TrialPeriodIndicator } from "@/components/TrialPeriodIndicator";
-import { useSessionTimeout } from "@/hooks/useSessionTimeout";
 import { useSubscriptionAccess } from "@/hooks/useSubscriptionAccess";
 import { useOrganizationSubscription } from "@/hooks/useOrganizationSubscription";
 import { useQuery } from "@tanstack/react-query";
@@ -108,7 +107,7 @@ const Index = () => {
     organizationSettings?.allow_employee_publishing === true;
   
   // Автоматический таймаут сессии 15 минут
-  useSessionTimeout();
+  // Таймаут бездействия теперь глобальный (SessionTimeoutGuard в App.tsx)
 
   // Redirect to auth if not logged in
   useEffect(() => {

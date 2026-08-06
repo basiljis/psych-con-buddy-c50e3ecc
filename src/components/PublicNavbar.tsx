@@ -1,13 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { LanguageToggle } from "@/components/ui/language-toggle";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { NavbarBackground } from "@/components/NavbarBackground";
+import { supabase } from "@/integrations/supabase/client";
 import {
-  Heart, Menu, GraduationCap, Building2, Home, BookOpen, Scale, Newspaper, Wallet, UserPlus
+  Heart, Menu, GraduationCap, Building2, Home, BookOpen, Scale, Newspaper, Wallet, UserPlus, LayoutDashboard
 } from "lucide-react";
 import brandLogo from "@/assets/brand-logo.png";
 
@@ -50,6 +51,40 @@ export function PublicNavbar({
   const activePage = currentPage ?? getPageKeyFromPath(location.pathname);
   const isSpecialistsCatalog = activePage === 'catalog-specialists';
   const isOrganizationsCatalog = activePage === 'catalog-organizations';
+
+  // Если пользователь уже вошёл — показываем возврат в кабинет вместо «Войти»
+  const [cabinetPath, setCabinetPath] = useState<string | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const resolve = async (userId: string | null) => {
+      if (!mounted) return;
+      if (!userId) {
+        setCabinetPath(null);
+        return;
+      }
+      const { data: roles } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId);
+      if (!mounted) return;
+      const isParent = roles?.some((r: { role: string }) => r.role === "parent");
+      setCabinetPath(isParent ? "/parent" : "/app");
+    };
+
+    supabase.auth.getSession().then(({ data }) => resolve(data?.session?.user?.id ?? null));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      resolve(session?.user?.id ?? null);
+    });
+
+    return () => {
+      mounted = false;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
+
+
 
   return (
     <>
@@ -105,9 +140,18 @@ export function PublicNavbar({
           <div className="hidden md:flex items-center gap-3">
             <LanguageToggle />
             <ThemeToggle />
-            <Link to={authLink}>
-              <Button size="sm">{t('nav.login')}</Button>
-            </Link>
+            {cabinetPath ? (
+              <Link to={cabinetPath}>
+                <Button size="sm" className="gap-2">
+                  <LayoutDashboard className="h-4 w-4" />
+                  {t('nav.cabinet', 'В кабинет')}
+                </Button>
+              </Link>
+            ) : (
+              <Link to={authLink}>
+                <Button size="sm">{t('nav.login')}</Button>
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu */}
@@ -228,15 +272,26 @@ export function PublicNavbar({
                     )}
 
                     <div className="border-t pt-4 space-y-2">
-                      <Link to={authLink} onClick={closeMobileMenu} className="block">
-                        <Button className="w-full">{t('nav.login')}</Button>
-                      </Link>
-                      <Link to="/register" onClick={closeMobileMenu} className="block">
-                        <Button variant="outline" className="w-full gap-2">
-                          <UserPlus className="h-4 w-4" />
-                          {t('nav.register', 'Регистрация')}
-                        </Button>
-                      </Link>
+                      {cabinetPath ? (
+                        <Link to={cabinetPath} onClick={closeMobileMenu} className="block">
+                          <Button className="w-full gap-2">
+                            <LayoutDashboard className="h-4 w-4" />
+                            {t('nav.cabinet', 'В кабинет')}
+                          </Button>
+                        </Link>
+                      ) : (
+                        <>
+                          <Link to={authLink} onClick={closeMobileMenu} className="block">
+                            <Button className="w-full">{t('nav.login')}</Button>
+                          </Link>
+                          <Link to="/register" onClick={closeMobileMenu} className="block">
+                            <Button variant="outline" className="w-full gap-2">
+                              <UserPlus className="h-4 w-4" />
+                              {t('nav.register', 'Регистрация')}
+                            </Button>
+                          </Link>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>

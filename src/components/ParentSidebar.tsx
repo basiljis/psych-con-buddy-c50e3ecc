@@ -1,4 +1,4 @@
-import { Baby, ClipboardList, CalendarDays, User, BookOpen, Gamepad2, Library } from "lucide-react";
+import { Baby, ClipboardList, CalendarDays, User, BookOpen, Gamepad2, Library, Globe } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
   Sidebar,
@@ -46,6 +46,33 @@ export function ParentSidebar({ activeTab, onTabChange, childrenCount = 0 }: Par
     <TooltipProvider>
       <Sidebar className={`${state === "collapsed" ? "w-14" : "w-60"} pt-16`} collapsible="icon">
         <SidebarContent>
+          {/* Переход на публичный сайт без выхода из системы */}
+          <SidebarGroup>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <SidebarMenuButton
+                        onClick={() => navigate("/home")}
+                        className="w-full justify-start gap-3 hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <Globe className="h-4 w-4" />
+                        {state !== "collapsed" && <span>На сайт</span>}
+                      </SidebarMenuButton>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                      <p>На сайт</p>
+                      <p className="text-xs text-muted-foreground">Вы остаётесь в системе</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+
+          <Separator className="my-2" />
+
           {/* Main menu items */}
           <SidebarGroup>
             <SidebarGroupLabel className="flex items-center gap-2">

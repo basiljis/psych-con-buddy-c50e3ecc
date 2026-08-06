@@ -11,6 +11,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import Preloader from "@/components/Preloader";
 import RootGate from "./pages/RootGate";
 import Home from "./pages/Home";
+import { SessionTimeoutGuard } from "@/components/SessionTimeoutGuard";
 
 // Helper: retry lazy import once on chunk load failure (handles stale build cache)
 const lazyWithRetry = <T extends React.ComponentType<unknown>>(
@@ -81,6 +82,8 @@ const App = () => {
                 <OfflineIndicator />
               </Suspense>
               <BrowserRouter>
+                <SessionTimeoutGuard />
+
                 <a
                   href="#main-content"
                   className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
