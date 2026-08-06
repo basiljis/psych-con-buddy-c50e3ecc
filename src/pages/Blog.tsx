@@ -54,7 +54,8 @@ export default function Blog() {
       if (!t) return;
       setViewsTotal(Number(t.total_views) || 0);
       setUniqueVisitors(Number(t.unique_visitors) || 0);
-      setLikesTotal((Number(t.post_likes) || 0) + (Number(t.comment_likes) || 0));
+      // Считаем только оценки самих статей, без лайков комментариев
+      setLikesTotal(Number(t.post_likes) || 0);
     })();
   }, []);
 
