@@ -106,16 +106,17 @@ export function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 }
 
-/** Теги для Дзена: категория + ключевые слова, без пробелов и спецсимволов, максимум 10. */
-export function zenTags(post: BlogPost): string[] {
-  const raw = [blogCategoryLabel(post.category, "ru"), ...(post.keywords ?? [])];
+/**
+ * Единый источник тегов для статьи: категория + ключевые слова,
+ * с дедупликацией и ограничением в 10 штук.
+ * Используется и в SEO-мета странице, и в копии для Дзена.
+ */
+export function postTags(post: BlogPost, lang = "ru"): string[] {
+  const raw = [blogCategoryLabel(post.category, lang), ...(post.keywords ?? [])];
   const seen = new Set<string>();
   const out: string[] = [];
   for (const item of raw) {
-    const tag = String(item ?? "")
-      .trim()
-      .replace(/[^\p{L}\p{N}\s-]/gu, "")
-      .replace(/[\s-]+/g, "");
+    const tag = String(item ?? "").trim();
     if (!tag) continue;
     const key = tag.toLowerCase();
     if (seen.has(key)) continue;
@@ -125,6 +126,18 @@ export function zenTags(post: BlogPost): string[] {
   }
   return out;
 }
+
+/** Теги для Дзена: те же теги, но без пробелов и спецсимволов (хештеги). */
+export function zenTags(post: BlogPost): string[] {
+  return postTags(post, "ru")
+    .map((t) =>
+      t
+        .replace(/[^\p{L}\p{N}\s-]/gu, "")
+        .replace(/[\s-]+/g, "")
+    )
+    .filter(Boolean);
+}
+
 
 
 /**

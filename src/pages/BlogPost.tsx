@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import type { BlogPost as BlogPostType } from "@/types/blog";
-import { blogCategoryLabel, blogCategoryClass, blogCategoryDot, stripHtml, localizedPost } from "@/types/blog";
+import { blogCategoryLabel, blogCategoryClass, blogCategoryDot, stripHtml, localizedPost, postTags } from "@/types/blog";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
 import { PublicNavbar } from "@/components/PublicNavbar";
 import LandingFooter from "@/components/LandingFooter";
@@ -141,6 +141,7 @@ export default function BlogPost() {
   );
 
   const canonical = `${BASE_URL}/blog/${slug}`;
+  const tags = useMemo(() => (post ? postTags(post, lang) : []), [post, lang]);
   const seoTitleOverride = post ? (isEn ? post.seo_title_en : post.seo_title) : null;
   const seoDescOverride = post ? (isEn ? post.seo_description_en : post.seo_description) : null;
   const ogImageOverride = post ? (isEn ? post.og_image_en : post.og_image) : null;
@@ -160,7 +161,7 @@ export default function BlogPost() {
       : t("blogPost.fallbackTitle"),
     description,
     canonical,
-    keywords: post?.keywords.join(", "),
+    keywords: tags.join(", "),
     ogImage,
     ogType: post ? "article" : "website",
     locale: isEn ? "en_US" : "ru_RU",
@@ -170,7 +171,7 @@ export default function BlogPost() {
           modifiedTime: post.updated_at,
           author: post.author || "universum.",
           section: blogCategoryLabel(post.category, lang),
-          tags: post.keywords,
+          tags,
         }
       : undefined,
     jsonLd: post
@@ -201,7 +202,7 @@ export default function BlogPost() {
               "@type": "WebPage",
               "@id": canonical,
             },
-            keywords: post.keywords.join(", "),
+            keywords: tags.join(", "),
             articleSection: blogCategoryLabel(post.category, lang),
             inLanguage: isEn ? "en-US" : "ru-RU",
           },
