@@ -1,13 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { LanguageToggle } from "@/components/ui/language-toggle";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { NavbarBackground } from "@/components/NavbarBackground";
+import { supabase } from "@/integrations/supabase/client";
 import {
-  Heart, Menu, GraduationCap, Building2, Home, BookOpen, Scale, Newspaper, Wallet, UserPlus
+  Heart, Menu, GraduationCap, Building2, Home, BookOpen, Scale, Newspaper, Wallet, UserPlus, LayoutDashboard
 } from "lucide-react";
 import brandLogo from "@/assets/brand-logo.png";
 
