@@ -141,6 +141,7 @@ export default function BlogPost() {
   );
 
   const canonical = `${BASE_URL}/blog/${slug}`;
+  const tags = useMemo(() => (post ? postTags(post, lang) : []), [post, lang]);
   const seoTitleOverride = post ? (isEn ? post.seo_title_en : post.seo_title) : null;
   const seoDescOverride = post ? (isEn ? post.seo_description_en : post.seo_description) : null;
   const ogImageOverride = post ? (isEn ? post.og_image_en : post.og_image) : null;
