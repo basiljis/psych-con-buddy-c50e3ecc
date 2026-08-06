@@ -123,7 +123,9 @@ export function postToZenText(post: BlogPost): string {
     .replace(/<li[^>]*>/gi, "• ");
   const text = stripHtml(withBreaks);
   const cover = post.cover_url ? `[Обложка: ${post.cover_url}]\n\n` : "";
-  return `${post.title}\n\n${cover}${post.excerpt}\n\n${text}`
+  const tags = zenTags(post);
+  const tagsLine = tags.length ? `\n\n${tags.map((k) => `#${k}`).join(" ")}` : "";
+  return `${post.title}\n\n${cover}${post.excerpt}\n\n${text}${tagsLine}`
     .replace(/\n{3,}/g, "\n\n").trim();
 }
 
