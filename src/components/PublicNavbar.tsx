@@ -272,15 +272,26 @@ export function PublicNavbar({
                     )}
 
                     <div className="border-t pt-4 space-y-2">
-                      <Link to={authLink} onClick={closeMobileMenu} className="block">
-                        <Button className="w-full">{t('nav.login')}</Button>
-                      </Link>
-                      <Link to="/register" onClick={closeMobileMenu} className="block">
-                        <Button variant="outline" className="w-full gap-2">
-                          <UserPlus className="h-4 w-4" />
-                          {t('nav.register', 'Регистрация')}
-                        </Button>
-                      </Link>
+                      {cabinetPath ? (
+                        <Link to={cabinetPath} onClick={closeMobileMenu} className="block">
+                          <Button className="w-full gap-2">
+                            <LayoutDashboard className="h-4 w-4" />
+                            {t('nav.cabinet', 'В кабинет')}
+                          </Button>
+                        </Link>
+                      ) : (
+                        <>
+                          <Link to={authLink} onClick={closeMobileMenu} className="block">
+                            <Button className="w-full">{t('nav.login')}</Button>
+                          </Link>
+                          <Link to="/register" onClick={closeMobileMenu} className="block">
+                            <Button variant="outline" className="w-full gap-2">
+                              <UserPlus className="h-4 w-4" />
+                              {t('nav.register', 'Регистрация')}
+                            </Button>
+                          </Link>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
