@@ -171,11 +171,16 @@ export function postToZenHtml(post: BlogPost): string {
     (m, attrs) => (/target=/i.test(attrs) ? m : `<a${attrs} target="_blank" rel="noopener">`)
   );
   const lead = post.excerpt ? `<p><strong>${escapeHtml(post.excerpt)}</strong></p>` : "";
+  const tags = zenTags(post);
+  const tagsBlock = tags.length
+    ? `<p>${tags.map((k) => `#${escapeHtml(k)}`).join(" ")}</p>`
+    : "";
   return [
     `<h1>${escapeHtml(post.title)}</h1>`,
     lead,
     body,
     `<p><em>Источник: <a href="${SITE_ORIGIN}/blog/${post.slug}" target="_blank" rel="noopener">${SITE_ORIGIN}/blog/${post.slug}</a></em></p>`,
+    tagsBlock,
   ].filter(Boolean).join("\n");
 }
 
