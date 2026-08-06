@@ -106,6 +106,27 @@ export function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 }
 
+/** Теги для Дзена: категория + ключевые слова, без пробелов и спецсимволов, максимум 10. */
+export function zenTags(post: BlogPost): string[] {
+  const raw = [blogCategoryLabel(post.category, "ru"), ...(post.keywords ?? [])];
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const item of raw) {
+    const tag = String(item ?? "")
+      .trim()
+      .replace(/[^\p{L}\p{N}\s-]/gu, "")
+      .replace(/[\s-]+/g, "");
+    if (!tag) continue;
+    const key = tag.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(tag);
+    if (out.length >= 10) break;
+  }
+  return out;
+}
+
+
 /**
  * Format a post as plain text (fallback for editors without HTML paste).
  * Сохраняем URL рядом с якорями: «текст (https://…)».
@@ -123,7 +144,9 @@ export function postToZenText(post: BlogPost): string {
     .replace(/<li[^>]*>/gi, "• ");
   const text = stripHtml(withBreaks);
   const cover = post.cover_url ? `[Обложка: ${post.cover_url}]\n\n` : "";
-  return `${post.title}\n\n${cover}${post.excerpt}\n\n${text}`
+  const tags = zenTags(post);
+  const tagsLine = tags.length ? `\n\n${tags.map((k) => `#${k}`).join(" ")}` : "";
+  return `${post.title}\n\n${cover}${post.excerpt}\n\n${text}${tagsLine}`
     .replace(/\n{3,}/g, "\n\n").trim();
 }
 
@@ -148,11 +171,16 @@ export function postToZenHtml(post: BlogPost): string {
     (m, attrs) => (/target=/i.test(attrs) ? m : `<a${attrs} target="_blank" rel="noopener">`)
   );
   const lead = post.excerpt ? `<p><strong>${escapeHtml(post.excerpt)}</strong></p>` : "";
+  const tags = zenTags(post);
+  const tagsBlock = tags.length
+    ? `<p>${tags.map((k) => `#${escapeHtml(k)}`).join(" ")}</p>`
+    : "";
   return [
     `<h1>${escapeHtml(post.title)}</h1>`,
     lead,
     body,
     `<p><em>Источник: <a href="${SITE_ORIGIN}/blog/${post.slug}" target="_blank" rel="noopener">${SITE_ORIGIN}/blog/${post.slug}</a></em></p>`,
+    tagsBlock,
   ].filter(Boolean).join("\n");
 }
 
