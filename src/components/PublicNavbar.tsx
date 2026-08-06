@@ -140,9 +140,18 @@ export function PublicNavbar({
           <div className="hidden md:flex items-center gap-3">
             <LanguageToggle />
             <ThemeToggle />
-            <Link to={authLink}>
-              <Button size="sm">{t('nav.login')}</Button>
-            </Link>
+            {cabinetPath ? (
+              <Link to={cabinetPath}>
+                <Button size="sm" className="gap-2">
+                  <LayoutDashboard className="h-4 w-4" />
+                  {t('nav.cabinet', 'В кабинет')}
+                </Button>
+              </Link>
+            ) : (
+              <Link to={authLink}>
+                <Button size="sm">{t('nav.login')}</Button>
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu */}
