@@ -12,7 +12,7 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Button } from "@/components/ui/button";
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, Globe } from "lucide-react";
 import { AdminViewSwitcher, ViewMode } from "@/components/AdminViewSwitcher";
 import { AdminTestDataBanner } from "@/components/AdminTestDataBanner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
