@@ -471,6 +471,16 @@ const Index = () => {
                   adminViewMode={adminViewMode}
                 />
                 <NotificationsDialog onNavigate={setActiveTab} />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate("/home")}
+                  className="gap-2"
+                  title="Перейти на сайт без выхода из системы"
+                >
+                  <Globe className="h-4 w-4" />
+                  <span className="hidden sm:inline">На сайт</span>
+                </Button>
                 <button
                   onClick={() => navigate("/profile")}
                   className="flex items-center gap-2 p-2 hover:bg-accent rounded-md transition-colors"
