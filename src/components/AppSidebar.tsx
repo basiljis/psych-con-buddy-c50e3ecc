@@ -1,4 +1,4 @@
-import { ClipboardList, Database, BarChart3, BookOpen, Settings, Calendar, Users, Wallet, Cog, Info, FileText, Building, Download, Crown, Sparkles } from "lucide-react";
+import { ClipboardList, Database, BarChart3, BookOpen, Settings, Calendar, Users, Wallet, Cog, Info, FileText, Building, Download, Crown, Sparkles, Globe } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
   Sidebar,
