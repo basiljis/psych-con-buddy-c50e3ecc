@@ -1018,7 +1018,18 @@ export default function ParentDashboard() {
               
               {/* Notifications bell */}
               <ParentNotificationsDialog onNavigate={setActiveTab} />
-              
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate("/home")}
+                className="gap-2"
+                title="Перейти на сайт без выхода из системы"
+              >
+                <Globe className="h-4 w-4" />
+                <span className="hidden sm:inline">На сайт</span>
+              </Button>
+
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setActiveTab("profile")}
