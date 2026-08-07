@@ -15,7 +15,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { ParentSidebar } from "@/components/ParentSidebar";
-import { Loader2, Plus, Baby, LogOut, User, Copy, Check, Info, Phone, GraduationCap, Users, Shield, Pencil, BarChart3, Search, X, BookOpen, Gamepad2, Link2 } from "lucide-react";
+import { Loader2, Plus, Baby, LogOut, User, Copy, Check, Info, Phone, GraduationCap, Users, Shield, Pencil, BarChart3, Search, X, BookOpen, Gamepad2, Link2, Globe } from "lucide-react";
 import { differenceInYears, differenceInMonths } from "date-fns";
 import { ru } from "date-fns/locale";
 import { cn } from "@/lib/utils";
@@ -1018,7 +1018,18 @@ export default function ParentDashboard() {
               
               {/* Notifications bell */}
               <ParentNotificationsDialog onNavigate={setActiveTab} />
-              
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate("/home")}
+                className="gap-2"
+                title="Перейти на сайт без выхода из системы"
+              >
+                <Globe className="h-4 w-4" />
+                <span className="hidden sm:inline">На сайт</span>
+              </Button>
+
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setActiveTab("profile")}

@@ -12,7 +12,7 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Button } from "@/components/ui/button";
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, Globe } from "lucide-react";
 import { AdminViewSwitcher, ViewMode } from "@/components/AdminViewSwitcher";
 import { AdminTestDataBanner } from "@/components/AdminTestDataBanner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -471,6 +471,16 @@ const Index = () => {
                   adminViewMode={adminViewMode}
                 />
                 <NotificationsDialog onNavigate={setActiveTab} />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate("/home")}
+                  className="gap-2"
+                  title="Перейти на сайт без выхода из системы"
+                >
+                  <Globe className="h-4 w-4" />
+                  <span className="hidden sm:inline">На сайт</span>
+                </Button>
                 <button
                   onClick={() => navigate("/profile")}
                   className="flex items-center gap-2 p-2 hover:bg-accent rounded-md transition-colors"
