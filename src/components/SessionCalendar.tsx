@@ -149,6 +149,71 @@ export function SessionCalendar() {
     enabled: !!user?.id,
   });
 
+  // Participants of group sessions for the current week
+  const sessionIds = useMemo(() => sessions.map((s) => s.id), [sessions]);
+  const { data: sessionChildren = [] } = useQuery({
+    queryKey: ["session-children-week", sessionIds],
+    queryFn: async () => {
+      if (sessionIds.length === 0) return [];
+      const { data, error } = await supabase
+        .from("session_children")
+        .select("session_id, child_id, attended, children(full_name)")
+        .in("session_id", sessionIds);
+      if (error) throw error;
+      return data as Array<{
+        session_id: string;
+        child_id: string;
+        attended: boolean;
+        children: { full_name: string } | null;
+      }>;
+    },
+    enabled: sessionIds.length > 0,
+  });
+
+  const participantsBySession = useMemo(() => {
+    const map: Record<
+      string,
+      { names: string[]; count: number; hasAbsence: boolean }
+    > = {};
+    sessionChildren.forEach((sc) => {
+      const entry = map[sc.session_id] || { names: [], count: 0, hasAbsence: false };
+      if (sc.children?.full_name) entry.names.push(sc.children.full_name);
+      entry.count += 1;
+      if (sc.attended === false) entry.hasAbsence = true;
+      map[sc.session_id] = entry;
+    });
+    return map;
+  }, [sessionChildren]);
+
+  const deleteSessionMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await supabase.from("session_children").delete().eq("session_id", id);
+      const { error } = await supabase.from("sessions").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["sessions"] });
+      queryClient.invalidateQueries({ queryKey: ["session-children-week"] });
+      setSessionToDelete(null);
+      toast({ title: "Удалено", description: "Занятие удалено из расписания" });
+    },
+    onError: (error) => {
+      toast({ title: "Ошибка", description: error.message, variant: "destructive" });
+    },
+  });
+
+  // A session can be deleted only if it has not happened yet and has no attendance marks
+  const canDeleteSession = (session: Session) => {
+    const statusName = session.session_statuses?.name?.toLowerCase() || "";
+    const isConducted =
+      statusName.includes("провед") || statusName.includes("выполн");
+    if (isConducted) return false;
+    const start = new Date(`${session.scheduled_date}T${session.start_time}`);
+    if (start.getTime() <= Date.now()) return false;
+    if (participantsBySession[session.id]?.hasAbsence) return false;
+    return true;
+  };
+
   // Fetch all session statuses for legend
   const { data: sessionStatuses = [] } = useQuery({
     queryKey: ["session-statuses-legend"],
@@ -162,6 +227,7 @@ export function SessionCalendar() {
       return data;
     },
   });
+
 
   // Fetch all session types for filter
   const { data: sessionTypes = [] } = useQuery({
