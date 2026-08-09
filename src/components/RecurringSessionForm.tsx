@@ -686,37 +686,61 @@ export function RecurringSessionForm({
             </Alert>
           )}
 
+          {/* Duplicate slots warning */}
+          {duplicateSlots.length > 0 && (
+            <Alert>
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription>
+                Найдено {duplicateSlots.length} одинаковых слотов (тот же день недели и время) —
+                они объединены, чтобы занятия не дублировались.
+              </AlertDescription>
+            </Alert>
+          )}
+
           {/* Preview */}
-          {scheduledSessions.length > 0 && (
+          {scheduledSessions.length > 0 ? (
             <div className="space-y-2">
-              <Label>Предпросмотр ({scheduledSessions.length} занятий)</Label>
-              <div className="max-h-[150px] overflow-y-auto border rounded-lg p-2 bg-muted/20">
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1">
-                  {scheduledSessions.slice(0, 20).map(({ date, slot }, i) => (
+              <Label>
+                Предпросмотр дат — {scheduledSessions.length} занятий:{" "}
+                {format(scheduledSessions[0].date, "d MMMM yyyy", { locale: ru })} –{" "}
+                {format(
+                  scheduledSessions[scheduledSessions.length - 1].date,
+                  "d MMMM yyyy",
+                  { locale: ru }
+                )}
+              </Label>
+              <div className="max-h-[220px] overflow-y-auto border rounded-lg p-2 bg-muted/20">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+                  {scheduledSessions.map(({ date, slot }, i) => (
                     <div
-                      key={i}
-                      className="text-xs px-2 py-1 rounded bg-background border"
+                      key={`${format(date, "yyyy-MM-dd")}-${slot.startTime}`}
+                      className="flex items-center justify-between gap-2 text-xs px-2 py-1.5 rounded bg-background border"
                     >
-                      <span className="font-medium">
-                        {format(date, "d MMM", { locale: ru })}
+                      <span className="flex items-center gap-2">
+                        <Badge variant="outline" className="h-5 px-1.5 text-[10px]">
+                          {i + 1}
+                        </Badge>
+                        <span className="font-medium">
+                          {format(date, "d MMMM yyyy", { locale: ru })}
+                        </span>
+                        <span className="text-muted-foreground">
+                          {format(date, "EEEEEE", { locale: ru })}
+                        </span>
                       </span>
-                      <span className="text-muted-foreground ml-1">
-                        {WEEKDAYS[slot.dayOfWeek].short}
-                      </span>
-                      <span className="text-muted-foreground block">
-                        {slot.startTime}
+                      <span className="text-muted-foreground whitespace-nowrap">
+                        {slot.startTime}–{slot.endTime}
                       </span>
                     </div>
                   ))}
-                  {scheduledSessions.length > 20 && (
-                    <div className="text-xs px-2 py-1 text-muted-foreground">
-                      +{scheduledSessions.length - 20} ещё...
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
+          ) : (
+            <div className="text-sm text-muted-foreground border border-dashed rounded-lg p-3">
+              Предпросмотр дат появится после добавления слотов на неделю.
+            </div>
           )}
+
         </div>
 
         <DialogFooter>
