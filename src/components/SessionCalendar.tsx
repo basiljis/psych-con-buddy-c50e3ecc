@@ -823,6 +823,41 @@ export function SessionCalendar() {
           isGroupSession={selectedSession.is_group}
         />
       )}
+
+      <AlertDialog
+        open={!!sessionToDelete}
+        onOpenChange={(open) => !open && setSessionToDelete(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Удалить занятие?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {sessionToDelete && (
+                <>
+                  {sessionToDelete.is_group ? "Групповое занятие" : "Занятие"} —{" "}
+                  {format(parseISO(sessionToDelete.scheduled_date), "d MMMM yyyy", {
+                    locale: ru,
+                  })}
+                  , {sessionToDelete.start_time.slice(0, 5)}. Действие нельзя отменить.
+                  Проведённые занятия и занятия с отметками посещаемости удалить нельзя.
+                </>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Отмена</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() =>
+                sessionToDelete && deleteSessionMutation.mutate(sessionToDelete.id)
+              }
+            >
+              Удалить
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
+
   );
 }
