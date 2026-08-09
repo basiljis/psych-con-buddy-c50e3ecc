@@ -8,6 +8,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
+
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -34,6 +45,8 @@ import {
   X,
   Users,
   UserCheck,
+  Trash2,
+
 } from "lucide-react";
 import {
   format,
@@ -117,6 +130,8 @@ export function SessionCalendar() {
     time: string;
   } | null>(null);
   const [draggedSession, setDraggedSession] = useState<Session | null>(null);
+  const [sessionToDelete, setSessionToDelete] = useState<Session | null>(null);
+
 
   const weekDays = useMemo(() => {
     return Array.from({ length: 7 }, (_, i) => addDays(currentWeekStart, i));
@@ -149,6 +164,71 @@ export function SessionCalendar() {
     enabled: !!user?.id,
   });
 
+  // Participants of group sessions for the current week
+  const sessionIds = useMemo(() => sessions.map((s) => s.id), [sessions]);
+  const { data: sessionChildren = [] } = useQuery({
+    queryKey: ["session-children-week", sessionIds],
+    queryFn: async () => {
+      if (sessionIds.length === 0) return [];
+      const { data, error } = await supabase
+        .from("session_children")
+        .select("session_id, child_id, attended, children(full_name)")
+        .in("session_id", sessionIds);
+      if (error) throw error;
+      return data as Array<{
+        session_id: string;
+        child_id: string;
+        attended: boolean;
+        children: { full_name: string } | null;
+      }>;
+    },
+    enabled: sessionIds.length > 0,
+  });
+
+  const participantsBySession = useMemo(() => {
+    const map: Record<
+      string,
+      { names: string[]; count: number; hasAbsence: boolean }
+    > = {};
+    sessionChildren.forEach((sc) => {
+      const entry = map[sc.session_id] || { names: [], count: 0, hasAbsence: false };
+      if (sc.children?.full_name) entry.names.push(sc.children.full_name);
+      entry.count += 1;
+      if (sc.attended === false) entry.hasAbsence = true;
+      map[sc.session_id] = entry;
+    });
+    return map;
+  }, [sessionChildren]);
+
+  const deleteSessionMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await supabase.from("session_children").delete().eq("session_id", id);
+      const { error } = await supabase.from("sessions").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["sessions"] });
+      queryClient.invalidateQueries({ queryKey: ["session-children-week"] });
+      setSessionToDelete(null);
+      toast({ title: "Удалено", description: "Занятие удалено из расписания" });
+    },
+    onError: (error) => {
+      toast({ title: "Ошибка", description: error.message, variant: "destructive" });
+    },
+  });
+
+  // A session can be deleted only if it has not happened yet and has no attendance marks
+  const canDeleteSession = (session: Session) => {
+    const statusName = session.session_statuses?.name?.toLowerCase() || "";
+    const isConducted =
+      statusName.includes("провед") || statusName.includes("выполн");
+    if (isConducted) return false;
+    const start = new Date(`${session.scheduled_date}T${session.start_time}`);
+    if (start.getTime() <= Date.now()) return false;
+    if (participantsBySession[session.id]?.hasAbsence) return false;
+    return true;
+  };
+
   // Fetch all session statuses for legend
   const { data: sessionStatuses = [] } = useQuery({
     queryKey: ["session-statuses-legend"],
@@ -162,6 +242,7 @@ export function SessionCalendar() {
       return data;
     },
   });
+
 
   // Fetch all session types for filter
   const { data: sessionTypes = [] } = useQuery({
@@ -256,8 +337,13 @@ export function SessionCalendar() {
   const handleSessionClick = (session: Session) => {
     setSelectedSession(session);
     setSelectedSlot(null);
-    setShowSessionForm(true);
+    if (session.is_group) {
+      setShowGroupSessionForm(true);
+    } else {
+      setShowSessionForm(true);
+    }
   };
+
 
   const getSessionsForSlot = (date: Date, time: string) => {
     const dateStr = format(date, "yyyy-MM-dd");
@@ -619,11 +705,23 @@ export function SessionCalendar() {
                                 <GripVertical className="h-3 w-3 text-muted-foreground flex-shrink-0 mt-0.5" />
                                 <div className="flex-1 min-w-0">
                                   <div className="font-medium truncate flex items-center gap-1">
-                                    {session.children?.full_name}
-                                    {session.is_group && (
-                                      <Users className="h-3 w-3 text-muted-foreground" />
+                                    {session.is_group ? (
+                                      <>
+                                        <Users className="h-3 w-3 text-muted-foreground" />
+                                        <span className="truncate">
+                                          Группа ({participantsBySession[session.id]?.count ?? 0})
+                                        </span>
+                                      </>
+                                    ) : (
+                                      session.children?.full_name
                                     )}
                                   </div>
+                                  {session.is_group &&
+                                    participantsBySession[session.id]?.names.length > 0 && (
+                                      <div className="text-[10px] text-muted-foreground truncate">
+                                        {participantsBySession[session.id].names.join(", ")}
+                                      </div>
+                                    )}
                                   <div className="text-muted-foreground">
                                     {session.start_time.slice(0, 5)} –{" "}
                                     {session.end_time.slice(0, 5)}
@@ -646,12 +744,29 @@ export function SessionCalendar() {
                                         handleAttendanceClick(session);
                                       }}
                                       aria-label="Отметить посещаемость"
+                                      title="Отметить, кто был на занятии"
                                     >
                                       <UserCheck className="h-3 w-3" />
                                     </Button>
+                                    {canDeleteSession(session) && (
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-5 w-5 text-destructive hover:text-destructive"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setSessionToDelete(session);
+                                        }}
+                                        aria-label="Удалить занятие"
+                                        title="Удалить занятие"
+                                      >
+                                        <Trash2 className="h-3 w-3" />
+                                      </Button>
+                                    )}
                                   </div>
                                 </div>
                               </div>
+
                             </div>
                           );
                         })}
@@ -719,6 +834,41 @@ export function SessionCalendar() {
           isGroupSession={selectedSession.is_group}
         />
       )}
+
+      <AlertDialog
+        open={!!sessionToDelete}
+        onOpenChange={(open) => !open && setSessionToDelete(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Удалить занятие?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {sessionToDelete && (
+                <>
+                  {sessionToDelete.is_group ? "Групповое занятие" : "Занятие"} —{" "}
+                  {format(parseISO(sessionToDelete.scheduled_date), "d MMMM yyyy", {
+                    locale: ru,
+                  })}
+                  , {sessionToDelete.start_time.slice(0, 5)}. Действие нельзя отменить.
+                  Проведённые занятия и занятия с отметками посещаемости удалить нельзя.
+                </>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Отмена</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() =>
+                sessionToDelete && deleteSessionMutation.mutate(sessionToDelete.id)
+              }
+            >
+              Удалить
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
+
   );
 }

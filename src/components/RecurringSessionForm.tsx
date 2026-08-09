@@ -196,6 +196,18 @@ export function RecurringSessionForm({
     return Math.ceil(totalSessions / weeklySlots.length);
   }, [totalSessions, weeklySlots.length]);
 
+  // Duplicate weekly slots (same weekday + same start time) — cause of duplicated sessions
+  const duplicateSlots = useMemo(() => {
+    const seen = new Set<string>();
+    const dups: WeeklySlot[] = [];
+    weeklySlots.forEach((s) => {
+      const key = `${s.dayOfWeek}-${s.startTime}`;
+      if (seen.has(key)) dups.push(s);
+      else seen.add(key);
+    });
+    return dups;
+  }, [weeklySlots]);
+
   // Generate preview of scheduled sessions (excluding holidays)
   const { scheduledSessions, holidayConflicts } = useMemo(() => {
     if (weeklySlots.length === 0) return { scheduledSessions: [], holidayConflicts: [] };
@@ -205,14 +217,20 @@ export function RecurringSessionForm({
     const start = new Date(startDate);
     const weekStart = startOfWeek(start, { weekStartsOn: 1 });
 
+    // Deduplicate slots: one session per weekday + start time
+    const uniqueSlots = Array.from(
+      new Map(weeklySlots.map((s) => [`${s.dayOfWeek}-${s.startTime}`, s])).values()
+    );
+
     let weekOffset = 0;
     let sessionCount = 0;
+    const usedKeys = new Set<string>();
 
     while (sessionCount < totalSessions) {
       const currentWeekStart = addWeeks(weekStart, weekOffset);
 
       // Sort slots by day of week
-      const sortedSlots = [...weeklySlots].sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+      const sortedSlots = [...uniqueSlots].sort((a, b) => a.dayOfWeek - b.dayOfWeek);
 
       for (const slot of sortedSlots) {
         if (sessionCount >= totalSessions) break;
@@ -221,6 +239,9 @@ export function RecurringSessionForm({
 
         // Skip if session date is before start date
         if (sessionDate < start) continue;
+
+        const key = `${format(sessionDate, "yyyy-MM-dd")}-${slot.startTime}`;
+        if (usedKeys.has(key)) continue;
 
         // Check if date is a holiday
         if (isHoliday(sessionDate)) {
@@ -232,6 +253,7 @@ export function RecurringSessionForm({
           continue; // Skip this date, don't count as a session
         }
 
+        usedKeys.add(key);
         sessions.push({ date: sessionDate, slot });
         sessionCount++;
       }
@@ -242,6 +264,7 @@ export function RecurringSessionForm({
 
     return { scheduledSessions: sessions, holidayConflicts: conflicts };
   }, [weeklySlots, totalSessions, startDate, isHoliday, getHolidayInfo]);
+
 
   const addWeeklySlot = () => {
     const newSlot: WeeklySlot = {
@@ -663,37 +686,61 @@ export function RecurringSessionForm({
             </Alert>
           )}
 
+          {/* Duplicate slots warning */}
+          {duplicateSlots.length > 0 && (
+            <Alert>
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription>
+                Найдено {duplicateSlots.length} одинаковых слотов (тот же день недели и время) —
+                они объединены, чтобы занятия не дублировались.
+              </AlertDescription>
+            </Alert>
+          )}
+
           {/* Preview */}
-          {scheduledSessions.length > 0 && (
+          {scheduledSessions.length > 0 ? (
             <div className="space-y-2">
-              <Label>Предпросмотр ({scheduledSessions.length} занятий)</Label>
-              <div className="max-h-[150px] overflow-y-auto border rounded-lg p-2 bg-muted/20">
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1">
-                  {scheduledSessions.slice(0, 20).map(({ date, slot }, i) => (
+              <Label>
+                Предпросмотр дат — {scheduledSessions.length} занятий:{" "}
+                {format(scheduledSessions[0].date, "d MMMM yyyy", { locale: ru })} –{" "}
+                {format(
+                  scheduledSessions[scheduledSessions.length - 1].date,
+                  "d MMMM yyyy",
+                  { locale: ru }
+                )}
+              </Label>
+              <div className="max-h-[220px] overflow-y-auto border rounded-lg p-2 bg-muted/20">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+                  {scheduledSessions.map(({ date, slot }, i) => (
                     <div
-                      key={i}
-                      className="text-xs px-2 py-1 rounded bg-background border"
+                      key={`${format(date, "yyyy-MM-dd")}-${slot.startTime}`}
+                      className="flex items-center justify-between gap-2 text-xs px-2 py-1.5 rounded bg-background border"
                     >
-                      <span className="font-medium">
-                        {format(date, "d MMM", { locale: ru })}
+                      <span className="flex items-center gap-2">
+                        <Badge variant="outline" className="h-5 px-1.5 text-[10px]">
+                          {i + 1}
+                        </Badge>
+                        <span className="font-medium">
+                          {format(date, "d MMMM yyyy", { locale: ru })}
+                        </span>
+                        <span className="text-muted-foreground">
+                          {format(date, "EEEEEE", { locale: ru })}
+                        </span>
                       </span>
-                      <span className="text-muted-foreground ml-1">
-                        {WEEKDAYS[slot.dayOfWeek].short}
-                      </span>
-                      <span className="text-muted-foreground block">
-                        {slot.startTime}
+                      <span className="text-muted-foreground whitespace-nowrap">
+                        {slot.startTime}–{slot.endTime}
                       </span>
                     </div>
                   ))}
-                  {scheduledSessions.length > 20 && (
-                    <div className="text-xs px-2 py-1 text-muted-foreground">
-                      +{scheduledSessions.length - 20} ещё...
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
+          ) : (
+            <div className="text-sm text-muted-foreground border border-dashed rounded-lg p-3">
+              Предпросмотр дат появится после добавления слотов на неделю.
+            </div>
           )}
+
         </div>
 
         <DialogFooter>
