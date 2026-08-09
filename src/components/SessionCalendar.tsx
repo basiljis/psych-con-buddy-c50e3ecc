@@ -692,11 +692,23 @@ export function SessionCalendar() {
                                 <GripVertical className="h-3 w-3 text-muted-foreground flex-shrink-0 mt-0.5" />
                                 <div className="flex-1 min-w-0">
                                   <div className="font-medium truncate flex items-center gap-1">
-                                    {session.children?.full_name}
-                                    {session.is_group && (
-                                      <Users className="h-3 w-3 text-muted-foreground" />
+                                    {session.is_group ? (
+                                      <>
+                                        <Users className="h-3 w-3 text-muted-foreground" />
+                                        <span className="truncate">
+                                          Группа ({participantsBySession[session.id]?.count ?? 0})
+                                        </span>
+                                      </>
+                                    ) : (
+                                      session.children?.full_name
                                     )}
                                   </div>
+                                  {session.is_group &&
+                                    participantsBySession[session.id]?.names.length > 0 && (
+                                      <div className="text-[10px] text-muted-foreground truncate">
+                                        {participantsBySession[session.id].names.join(", ")}
+                                      </div>
+                                    )}
                                   <div className="text-muted-foreground">
                                     {session.start_time.slice(0, 5)} –{" "}
                                     {session.end_time.slice(0, 5)}
@@ -719,12 +731,29 @@ export function SessionCalendar() {
                                         handleAttendanceClick(session);
                                       }}
                                       aria-label="Отметить посещаемость"
+                                      title="Отметить, кто был на занятии"
                                     >
                                       <UserCheck className="h-3 w-3" />
                                     </Button>
+                                    {canDeleteSession(session) && (
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-5 w-5 text-destructive hover:text-destructive"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setSessionToDelete(session);
+                                        }}
+                                        aria-label="Удалить занятие"
+                                        title="Удалить занятие"
+                                      >
+                                        <Trash2 className="h-3 w-3" />
+                                      </Button>
+                                    )}
                                   </div>
                                 </div>
                               </div>
+
                             </div>
                           );
                         })}
