@@ -196,6 +196,18 @@ export function RecurringSessionForm({
     return Math.ceil(totalSessions / weeklySlots.length);
   }, [totalSessions, weeklySlots.length]);
 
+  // Duplicate weekly slots (same weekday + same start time) — cause of duplicated sessions
+  const duplicateSlots = useMemo(() => {
+    const seen = new Set<string>();
+    const dups: WeeklySlot[] = [];
+    weeklySlots.forEach((s) => {
+      const key = `${s.dayOfWeek}-${s.startTime}`;
+      if (seen.has(key)) dups.push(s);
+      else seen.add(key);
+    });
+    return dups;
+  }, [weeklySlots]);
+
   // Generate preview of scheduled sessions (excluding holidays)
   const { scheduledSessions, holidayConflicts } = useMemo(() => {
     if (weeklySlots.length === 0) return { scheduledSessions: [], holidayConflicts: [] };
@@ -205,14 +217,20 @@ export function RecurringSessionForm({
     const start = new Date(startDate);
     const weekStart = startOfWeek(start, { weekStartsOn: 1 });
 
+    // Deduplicate slots: one session per weekday + start time
+    const uniqueSlots = Array.from(
+      new Map(weeklySlots.map((s) => [`${s.dayOfWeek}-${s.startTime}`, s])).values()
+    );
+
     let weekOffset = 0;
     let sessionCount = 0;
+    const usedKeys = new Set<string>();
 
     while (sessionCount < totalSessions) {
       const currentWeekStart = addWeeks(weekStart, weekOffset);
 
       // Sort slots by day of week
-      const sortedSlots = [...weeklySlots].sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+      const sortedSlots = [...uniqueSlots].sort((a, b) => a.dayOfWeek - b.dayOfWeek);
 
       for (const slot of sortedSlots) {
         if (sessionCount >= totalSessions) break;
@@ -221,6 +239,9 @@ export function RecurringSessionForm({
 
         // Skip if session date is before start date
         if (sessionDate < start) continue;
+
+        const key = `${format(sessionDate, "yyyy-MM-dd")}-${slot.startTime}`;
+        if (usedKeys.has(key)) continue;
 
         // Check if date is a holiday
         if (isHoliday(sessionDate)) {
@@ -232,6 +253,7 @@ export function RecurringSessionForm({
           continue; // Skip this date, don't count as a session
         }
 
+        usedKeys.add(key);
         sessions.push({ date: sessionDate, slot });
         sessionCount++;
       }
@@ -242,6 +264,7 @@ export function RecurringSessionForm({
 
     return { scheduledSessions: sessions, holidayConflicts: conflicts };
   }, [weeklySlots, totalSessions, startDate, isHoliday, getHolidayInfo]);
+
 
   const addWeeklySlot = () => {
     const newSlot: WeeklySlot = {
