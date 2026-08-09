@@ -324,8 +324,13 @@ export function SessionCalendar() {
   const handleSessionClick = (session: Session) => {
     setSelectedSession(session);
     setSelectedSlot(null);
-    setShowSessionForm(true);
+    if (session.is_group) {
+      setShowGroupSessionForm(true);
+    } else {
+      setShowSessionForm(true);
+    }
   };
+
 
   const getSessionsForSlot = (date: Date, time: string) => {
     const dateStr = format(date, "yyyy-MM-dd");
