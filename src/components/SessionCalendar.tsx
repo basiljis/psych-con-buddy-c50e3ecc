@@ -117,6 +117,8 @@ export function SessionCalendar() {
     time: string;
   } | null>(null);
   const [draggedSession, setDraggedSession] = useState<Session | null>(null);
+  const [sessionToDelete, setSessionToDelete] = useState<Session | null>(null);
+
 
   const weekDays = useMemo(() => {
     return Array.from({ length: 7 }, (_, i) => addDays(currentWeekStart, i));
