@@ -18,9 +18,12 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Pencil, Trash2, Copy, ExternalLink, Rss, ImageDown, BarChart3, MessageSquare } from "lucide-react";
+import { Plus, Pencil, Trash2, Copy, ExternalLink, Rss, ImageDown, BarChart3, MessageSquare, CalendarClock, Map, Languages } from "lucide-react";
 import { Link } from "react-router-dom";
 import { downloadZenCover } from "@/lib/zen-cover";
+import {
+  PUBLISH_STEP_DAYS, nextPublishSlot, rebuildQueue, toLocalInput, seoCompleteness, buildSitemap,
+} from "@/lib/blog-schedule";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BlogAnalyticsDashboard } from "@/components/BlogAnalyticsDashboard";
 import { BlogCommentsModeration } from "@/components/BlogCommentsModeration";
@@ -36,6 +39,7 @@ const empty = {
   author: "Команда universum.",
   reading_minutes: 5,
   published: true,
+  published_at: "",
   seo_title: "",
   seo_description: "",
   og_image: "",
@@ -81,7 +85,8 @@ export function BlogManagement() {
 
   const openCreate = () => {
     setEditing(null);
-    setForm(empty);
+    // Автокадансация: следующая статья выходит через 2 дня после последней запланированной.
+    setForm({ ...empty, published_at: toLocalInput(nextPublishSlot(posts)) });
     setOpenDialog(true);
   };
 
@@ -98,6 +103,7 @@ export function BlogManagement() {
       author: p.author,
       reading_minutes: p.reading_minutes,
       published: p.published,
+      published_at: toLocalInput(p.published_at),
       seo_title: p.seo_title ?? "",
       seo_description: p.seo_description ?? "",
       og_image: p.og_image ?? "",
@@ -124,8 +130,12 @@ export function BlogManagement() {
       author: form.author.trim() || "Команда universum.",
       reading_minutes: Number(form.reading_minutes) || 5,
       published: form.published,
-      seo_title: form.seo_title.trim() || null,
-      seo_description: form.seo_description.trim() || null,
+      published_at: form.published_at
+        ? new Date(form.published_at).toISOString()
+        : nextPublishSlot(posts).toISOString(),
+      // SEO-поля не оставляем пустыми: подставляем заголовок/описание статьи.
+      seo_title: form.seo_title.trim() || form.title.trim(),
+      seo_description: form.seo_description.trim() || form.excerpt.trim() || null,
       og_image: form.og_image.trim() || null,
       seo_title_en: form.seo_title_en.trim() || null,
       seo_description_en: form.seo_description_en.trim() || null,
@@ -203,6 +213,51 @@ export function BlogManagement() {
     }
   };
 
+  const applyQueue = async () => {
+    const plan = rebuildQueue(posts);
+    if (plan.length === 0) {
+      toast({ title: "Нет запланированных статей", description: "Очередь выстраивается по будущим публикациям." });
+      return;
+    }
+    const changed = plan.filter((x) => new Date(x.from).toISOString() !== x.to);
+    if (changed.length === 0) {
+      toast({ title: "Очередь уже с шагом в 2 дня" });
+      return;
+    }
+    for (const item of changed) {
+      const { error } = await supabase
+        .from("blog_posts")
+        .update({ published_at: item.to })
+        .eq("id", item.id);
+      if (error) {
+        toast({ title: "Не удалось обновить очередь", description: error.message, variant: "destructive" });
+        return;
+      }
+    }
+    toast({
+      title: `Очередь выстроена: каждые ${PUBLISH_STEP_DAYS} дня`,
+      description: `Обновлено статей: ${changed.length}.`,
+    });
+    load();
+  };
+
+  const downloadSitemap = () => {
+    const published = posts.filter(
+      (p) => p.published && new Date(p.published_at) <= new Date()
+    );
+    const xml = buildSitemap(published);
+    const url = URL.createObjectURL(new Blob([xml], { type: "application/xml" }));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "sitemap.xml";
+    a.click();
+    URL.revokeObjectURL(url);
+    toast({
+      title: "sitemap.xml сгенерирован",
+      description: `Маршрутов со статьями: ${published.length}. Замените файл в public/ или используйте динамический /sitemap.xml.`,
+    });
+  };
+
   const copyRss = async () => {
     const url = `https://unvrsm.ru/rss.xml`;
     try {
@@ -237,6 +292,12 @@ export function BlogManagement() {
             </p>
           </div>
           <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={applyQueue} title={`Выстроить будущие публикации с шагом в ${PUBLISH_STEP_DAYS} дня`}>
+              <CalendarClock className="h-4 w-4 mr-2" /> Очередь 2 дня
+            </Button>
+            <Button variant="outline" size="sm" onClick={downloadSitemap} title="Сгенерировать sitemap.xml со всеми статьями и hreflang">
+              <Map className="h-4 w-4 mr-2" /> sitemap.xml
+            </Button>
             <Button variant="outline" size="sm" onClick={copyRss}>
               <Rss className="h-4 w-4 mr-2" /> RSS
             </Button>
@@ -263,6 +324,19 @@ export function BlogManagement() {
                           Запланирована на {new Date(p.published_at).toLocaleDateString("ru-RU")}
                         </Badge>
                       )}
+                      {(() => {
+                        const seo = seoCompleteness(p);
+                        return (
+                          <Badge
+                            variant="outline"
+                            className={seo.ru && seo.en ? "border-primary/40 text-primary" : "border-destructive/40 text-destructive"}
+                            title={seo.ru && seo.en ? "SEO заполнено на RU и EN" : `Не хватает: ${seo.missing.join(", ")}`}
+                          >
+                            <Languages className="h-3 w-3 mr-1" />
+                            SEO {seo.ru ? "RU" : "—"}/{seo.en ? "EN" : "—"}
+                          </Badge>
+                        );
+                      })()}
                       <span className="text-xs text-muted-foreground">
                         {new Date(p.published_at).toLocaleDateString("ru-RU")}
                       </span>
