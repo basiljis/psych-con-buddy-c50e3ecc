@@ -1,0 +1,1 @@
+ALTER TYPE public.blog_category ADD VALUE IF NOT EXISTS 'news';

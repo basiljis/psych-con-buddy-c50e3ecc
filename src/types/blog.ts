@@ -1,4 +1,4 @@
-export type BlogCategory = "specialists" | "admins" | "parents" | "product";
+export type BlogCategory = "specialists" | "admins" | "parents" | "product" | "news";
 
 export interface BlogPost {
   id: string;
@@ -31,6 +31,7 @@ export const BLOG_CATEGORIES: { value: BlogCategory; label: string }[] = [
   { value: "admins", label: "Для администраторов" },
   { value: "parents", label: "Для родителей" },
   { value: "product", label: "О продукте" },
+  { value: "news", label: "Новости" },
 ];
 
 const BLOG_CATEGORIES_EN: Record<BlogCategory, string> = {
@@ -38,6 +39,7 @@ const BLOG_CATEGORIES_EN: Record<BlogCategory, string> = {
   admins: "For administrators",
   parents: "For parents",
   product: "About the product",
+  news: "News",
 };
 
 export const blogCategoryLabel = (c: BlogCategory, lang?: string): string => {
@@ -51,6 +53,7 @@ const BLOG_CATEGORY_CLASSES: Record<BlogCategory, string> = {
   admins: "bg-cat-admins-soft text-cat-admins border border-cat-admins/25",
   parents: "bg-cat-parents-soft text-cat-parents border border-cat-parents/25",
   product: "bg-cat-product-soft text-cat-product border border-cat-product/25",
+  news: "bg-cat-news-soft text-cat-news border border-cat-news/25",
 };
 
 export const blogCategoryClass = (c: BlogCategory): string =>
@@ -62,6 +65,7 @@ const BLOG_CATEGORY_DOTS: Record<BlogCategory, string> = {
   admins: "bg-cat-admins",
   parents: "bg-cat-parents",
   product: "bg-cat-product",
+  news: "bg-cat-news",
 };
 
 export const blogCategoryDot = (c: BlogCategory): string =>
