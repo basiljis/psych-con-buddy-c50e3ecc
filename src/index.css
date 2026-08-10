@@ -142,6 +142,8 @@
     --cat-parents-soft: 150 50% 93%;
     --cat-product: 25 90% 38%;
     --cat-product-soft: 25 100% 93%;
+    --cat-news: 345 75% 42%;
+    --cat-news-soft: 345 80% 95%;
 
     --radius: 0.75rem;
 
@@ -211,6 +213,8 @@
     --cat-parents-soft: 150 35% 16%;
     --cat-product: 25 90% 68%;
     --cat-product-soft: 25 50% 18%;
+    --cat-news: 345 85% 72%;
+    --cat-news-soft: 345 40% 20%;
 
 
     /* Enhanced gradients for dark mode */

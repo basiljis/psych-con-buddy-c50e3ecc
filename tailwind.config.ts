@@ -68,6 +68,10 @@ export default {
 					DEFAULT: 'hsl(var(--cat-product))',
 					soft: 'hsl(var(--cat-product-soft))'
 				},
+				'cat-news': {
+					DEFAULT: 'hsl(var(--cat-news))',
+					soft: 'hsl(var(--cat-news-soft))'
+				},
 				popover: {
 					DEFAULT: 'hsl(var(--popover))',
 					foreground: 'hsl(var(--popover-foreground))'
