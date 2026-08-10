@@ -465,6 +465,26 @@ export function BlogManagement() {
               </div>
             </div>
 
+            <div className="grid gap-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="published_at">Дата и время публикации</Label>
+                <Button
+                  type="button" variant="ghost" size="sm"
+                  onClick={() => setForm({ ...form, published_at: toLocalInput(nextPublishSlot(posts)) })}
+                >
+                  <CalendarClock className="h-4 w-4 mr-1.5" /> Следующий слот (+{PUBLISH_STEP_DAYS} дня)
+                </Button>
+              </div>
+              <Input
+                id="published_at" type="datetime-local" value={form.published_at}
+                onChange={(e) => setForm({ ...form, published_at: e.target.value })}
+              />
+              <p className="text-xs text-muted-foreground">
+                Новая статья по умолчанию встаёт в очередь через {PUBLISH_STEP_DAYS} дня после последней публикации
+                и появится в блоге автоматически в указанное время.
+              </p>
+            </div>
+
             <div className="border-t pt-4 mt-2 space-y-4">
               <div>
                 <h4 className="text-sm font-semibold">SEO и социальные превью</h4>
