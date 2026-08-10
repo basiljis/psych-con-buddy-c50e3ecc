@@ -3,5 +3,8 @@ project_id = "oxyjmeslnmhewlpgzlmf"
 [functions.blog-rss]
 verify_jwt = false
 
+[functions.blog-sitemap]
+verify_jwt = false
+
 [functions.notify-blog-comment]
 verify_jwt = false
